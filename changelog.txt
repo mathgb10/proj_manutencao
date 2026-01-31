@@ -1,0 +1,4 @@
+Dia 1:
+    Matheus
+        Acabei de organizar as pastas (eu acho), acho que fiz boa parte da logica de login, comecei a SideBar, e fiz a tela de Login.
+    

@@ -17,6 +17,15 @@ body {
     min-height: 100vh;
 }
 
+:root {
+    --text-4xl: 48px;
+    --text-2xl: 24px;
+    --text-xl: 20px;
+    --text-lg: 18px;
+    --text-base: 16px;
+    --text-sm: 14px;
+}
+
 html[data-tema='escuro'] {
     --corFundo: #0f0f0f;
     --corFundo2: #181818;
@@ -25,12 +34,11 @@ html[data-tema='escuro'] {
 
     --corTxt: #FFFFFF;
     --corTxt2: #000000;
+    --corTxt3: #FFF;
     --corBase: #fc2323;
     --corDestaque: #ba2323;
 
-    --corBordas: #d3d3d3;
-    --fontLg: 20px;
-    --fontMd: 15px;
+    --corBordas: #e6e6e6;
 }
 
 html[data-tema='claro'] {
@@ -39,16 +47,16 @@ html[data-tema='claro'] {
     --sombra: 0px 0px 5px 7px rgba(0, 0, 0, 0.1);
     --sombra2: 0px 0px 5px 1px rgba(0, 0, 0, 0.05);
 
-    --corTxt: #1e1e1e;
-    --corTxt2: #FFFFFF;
+    --corTxt2: #1e1e1e;
+    --corTxt: #FFFFFF;
+    --corTxt3: #000;
     --corBase: #ff3e3e;
     --corDestaque: #b82b2b;
 
     --corBordas: #cccccc;
-    --fontLg: 20px;
-    --fontMd: 15px;
 }
 
+/* Tela De Login */
 .login-bg {
     width: 100%;
     height: 100%;
@@ -89,7 +97,7 @@ html[data-tema='claro'] {
     justify-content: center;
 }
 
-.div-img img {
+img {
     width: 100%;
 }
 
@@ -117,17 +125,17 @@ html[data-tema='claro'] {
 
     &:focus-within {
         background: var(--corDestaque);
-        color: var(--corTxt2);
+        color: var(--corTxt);
     }
 }
 
 .div-input button {
     border-radius: 50%;
     cursor: pointer;
-    font-size: var(--fontLg);
+    font-size: var(--text-xl);
     background: transparent;
     border: none;
-    color: var(--corTxt2);
+    color: var(--corTxt);
 }
 
 .input {
@@ -138,13 +146,16 @@ html[data-tema='claro'] {
     border: none;
     outline: none;
     font-weight: bold;
+    color: var(--corTxt2);
+    border-bottom: 2px solid transparent;
 
     &::placeholder {
-        color: var(--corTxt);
+        color: var(--corTxt2);
     }
 
     &:focus {
-        border-bottom: 2px solid var(--corBase);
+        border-color: var(--corBase);
+        color: var(--corTxt);
     }
 }
 
@@ -157,14 +168,240 @@ html[data-tema='claro'] {
 
 .btn {
     padding: 6px 15px;
+    width: 120px;
+    height: 45px;
     cursor: pointer;
     border-radius: 5px;
-    border: 1px solid var(--corDestaque);
+    border: none;
     font-weight: bold;
-    color: var(--corTxt2);
+    color: var(--corTxt);
     background: var(--corBase);
-    
-    &:hover{
+    font-size: var(--text-base);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:hover {
         background: var(--corDestaque);
+    }
+}
+
+/* NavBar (SideBar nossa) */
+.sidebar {
+    width: 275px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    background: var(--corFundo2);
+    box-shadow: var(--sombra2);
+    padding: 40px 0px;
+}
+
+.div-links {
+    width: 90%;
+    padding: 12px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    border-radius: 5px;
+    background: var(--corFundo);
+    border: 1px solid var(--corBordas);
+    box-shadow: var(--sombra2);
+}
+
+.links {
+    width: 90%;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: var(--text-lg);
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    color: var(--corBase);
+    font-weight: bold;
+
+    &:hover {
+        background: var(--corDestaque);
+    }
+}
+
+.ativo {
+    background: var(--corBase);
+    color: var(--corTxt);
+}
+
+.div-configs {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#tema {
+    font-size: var(--text-4xl);
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    color: var(--corTxt3);
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+        rotate: 360deg;
+        color: var(--corBase);
+    }
+}
+
+
+/* Tela Padrão */
+.sec-main {
+    width: 100%;
+    height: 100%;
+    background: var(--corFundo);
+    padding-left: 16%;
+    padding-top: 3%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3%;
+}
+
+.div-header {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 2px solid var(--corBordas);
+    font-size: var(--text-lg);
+    color: var(--corTxt3);
+    cursor: default;
+}
+
+.div-img-header {
+    color: var(--corBase);
+}
+
+.div-txt-header {
+    display: flex;
+    text-align: right;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 10px;
+    width: 75px;
+    height: 75px;
+    font-size: var(--text-4xl);
+    color: var(--corBase);
+    /* background: linear-gradient(180deg, var(--corBase), var(--corDestaque)); */
+    cursor: default;
+}
+
+/* Cards da Página Principal dos Guri */
+.card-box {
+    width: 90%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.card {
+    padding: 10px;
+    width: 31%;
+    height: 100%;
+    border-radius: 10px;
+    background: var(--corFundo2);
+    box-shadow: var(--sombra);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-top: 3px solid var(--corBase);
+
+    &:hover {
+        background: var(--corBase);
+        border-color: var(--corDestaque);
+    }
+}
+
+.card-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    border-bottom: 2px solid var(--corBordas);
+    color: var(--corTxt3);
+}
+
+.card-info {
+    color: var(--corTxt3);
+    font-size: var(--text-4xl);
+}
+
+/* Tabela */
+.div-tabelas {
+    width: 90%;
+    box-shadow: var(--sombra);
+    border-radius: 15px;
+    height: 55%;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-around;
+    overflow: auto;
+    gap: 20px;
+    padding: 20px;
+}
+
+.tabela-bg {
+    width: 32%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--corFundo2);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.tabela-bg table {
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
+
+.tabela-bg table thead {
+    background: linear-gradient(180deg, var(--corDestaque), var(--corBase));
+    color: var(--corTxt);
+}
+
+.tabela-bg table thead th {
+    padding: 7px;
+    max-width: 31%;
+    min-width: 31%;
+}
+
+.tabela-bg table tbody tr {
+    height: 30px;
+    color: var(--corTxt3);
+    &:nth-child(even) {
+        background-color: var(--corBase);
+        color: var(--corTxt);
+    }
+
+    &:hover {
+        background: var(--corDestaque);
+        color: var(--corTxt);
     }
 }

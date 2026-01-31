@@ -1,0 +1,11 @@
+Dia 1:
+    Matheus
+        Acabei de organizar as pastas (eu acho), acho que fiz boa parte da logica de login, comecei a SideBar, e fiz a tela de Login.
+Dia 2:
+    Matheus
+        Primeiro "bug" não tá aparencendo o resto do txt que era para aparecer no "header", era por causa de uma tag não fechada 💀.
+        Tá ficando bonitinho a tela da dashboard (espero n ter q usar o css daquele NR12).
+        terminei a sidebar, tem um detalhe bobo que ngm vai notar mas coloquei uma funcao para fechar e abrir a porta, conforme o cursor entra e sai.
+        terminei os cards (eu acho, vamo ve se a rapaziada tmb acha).
+        tive q pesquisa pra colocar o numero impar de tr com outra estilizacao no tailwind eu so colocaria even:bg-red-300 😢.
+        comecei a estilizacao das tabelas

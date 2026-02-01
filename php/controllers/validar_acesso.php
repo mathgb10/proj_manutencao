@@ -5,9 +5,17 @@ session_start();
 // Então mando ele de volta pra tela de login com um aviso de erro.
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../../index.php?acesso=negado");
-}
+} else {
+    $id_usuario = $_SESSION['user_id'];
+    $nome_usuario = $_SESSION['user_nome'];
+    $permissao_usuario = $_SESSION['user_permissao'];
 
-$id_usuario = $_SESSION['user_id'];
-$nome_usuario = $_SESSION['user_nome'];
-$permissao_usuario = $_SESSION['user_permissao'];
-?>
+    $atualmente_em = basename($_SERVER['PHP_SELF']);
+
+    // Bloqueio o acesso a tela de controle de usuários se o nível de permissão não for ADMIN
+    if ($atualmente_em == 'usuarios.php') {
+        if ($permissao_usuario != "ADMIN") {
+            header("Location: dashboard.php?acesso=negado");
+        }
+    }
+}

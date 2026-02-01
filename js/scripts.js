@@ -80,5 +80,11 @@ function changeSairBtn(oc) {
     } else{
         btnSair.innerHTML = 'Sair <i class="bi bi-door-closed-fill"></i>';
     }
+}
 
+function closeModal(qual){
+    if(qual == 'acesso'){
+        document.getElementById('acesso').style.display = 'none';
+        // Seria Legal tirar o ?acesso=negado dps que fechar
+    }
 }

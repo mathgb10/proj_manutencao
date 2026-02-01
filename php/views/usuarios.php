@@ -3,11 +3,10 @@
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="claro">
 <!-- NÃO TIRA O DATA-TEMA DE JEITO NENHUM -->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SENAI MANUTENÇÃO</title>
+    <title>Gestão de Usuários - SENAI MANUTENÇÃO</title>
 
     <!-- Estilização, BootstrapIcons e Favicon -->
     <link rel="stylesheet" href="../../css/style.css">

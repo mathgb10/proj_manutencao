@@ -14,7 +14,7 @@ $atualmente_em = basename($_SERVER['PHP_SELF']);
         <?php
         if ($permissao_usuario == "ADMIN") {
         ?>
-            <a href="../views/usuarios.php" class="<?php if ($atualmente_em == 'usuarios.php') echo "ativo" ?> links">Usuários</a>
+            <a href="../views/usuarios.php" class="<?php if ($atualmente_em == 'usuarios.php') echo "ativo" ?> links">Painel de Usuários<i class="bi bi-file-earmark-person-fill"></i></a>
         <?php
         }
         ?>

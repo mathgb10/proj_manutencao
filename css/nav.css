@@ -1,0 +1,104 @@
+/* NavBar (SideBar nossa) */
+.sidebar {
+    width: 275px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    background: var(--corFundo2);
+    box-shadow: var(--sombra2);
+    padding: 40px 0px;
+}
+
+.div-links {
+    width: 90%;
+    padding: 12px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    border-radius: 5px;
+    background: var(--corFundo);
+    border: 1px solid var(--corBordas);
+    box-shadow: var(--sombra2);
+}
+
+.links {
+    width: 90%;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: var(--text-lg);
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    color: var(--corBase);
+    font-weight: bold;
+
+    &:hover {
+        background: var(--corDestaque);
+    }
+}
+
+.ativo {
+    background: linear-gradient(360deg, var(--corDestaque), var(--corBase));
+    color: var(--corTxt);
+}
+
+.div-configs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.div-configs div{
+    display: flex;
+    width: 100%;
+}
+
+#notificacao {
+    font-size: var(--text-4xl);
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    color: var(--corTxt3);
+    background: none;
+    cursor: pointer;
+    display: flex;
+    position: relative;
+
+    &:hover {
+        color: var(--corBase);
+    }
+}
+
+.div-noti {
+    border-radius: 50%;
+    position: absolute;
+    left: 40px;
+    top: 45px;
+    background: var(--corBase);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--corTxt);
+    font-size: var(--text-base);
+    max-width: 23px;
+}
+
+#tema {
+    font-size: var(--text-4xl);
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    color: var(--corTxt3);
+    background: none;
+    cursor: pointer;
+
+    &:hover {
+        rotate: 360deg;
+        color: var(--corBase);
+    }
+}

@@ -13,3 +13,10 @@ Dia 2:
         resolvi tinha duas tags com ids iguais
         perdi papo de 5 minutos kkkkkkkkkkkkkkk por hj deu
         fiz o icone de notificacao e ajustei o css agr ss por hj chega
+Dia 3:
+    Matheus:
+        como mandei por get os erros vou começar a tratar
+        acabei de fazer a modal de acesso negado, nem vai aparecer provavelmente, mas casooo alguem sem permissão tente entrar nas paginas vai aparecer.
+        vo colocar o parametro acesso nos botoes dela pra tratar na funcao closeModal
+        exibi o erro de email e o de senha no login
+        acho que por hj vou fzr so isso msm, vo fica dboa, adiantei bastante coisa já i think.

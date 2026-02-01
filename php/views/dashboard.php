@@ -11,12 +11,21 @@
 
     <!-- Estilização, BootstrapIcons e Favicon -->
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="../../css/nav.css">
+    <link rel="stylesheet" href="../../css/header.css">
+    <link rel="stylesheet" href="../../css/modal_acesso.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
 
 </head>
 
 <body>
+    <?php
+    if (isset($_GET['acesso']) && $_GET['acesso'] == 'negado') {
+        require '../components/modal_acesso.php';
+    }
+    ?>
+
     <?php require '../components/nav.php'; ?>
     <!-- Colocando a Nav(SideBar) na página -->
 

@@ -8,7 +8,7 @@
 
     box-sizing: border-box;
     font-family: "TASA Orbiter", sans-serif;
-    transition: all 0.4s ease-in-out;
+    transition: all 0.3s linear;
     outline: none;
 }
 
@@ -28,6 +28,13 @@ body {
 
     --corBase: #fc2323;
     --corDestaque: #ba2323;
+
+    /* Esses aqui peguei do Tailwind é Emerald e Sky */
+    --confirmar: oklch(76.5% 0.177 163.223);
+    --confirmarHover: oklch(59.6% 0.145 163.225);
+
+    --editar: oklch(74.6% 0.16 232.661);
+    --editarHover: oklch(58.8% 0.158 241.966);
 }
 
 html[data-tema='escuro'] {
@@ -98,6 +105,16 @@ html[data-tema='claro'] {
 
 img {
     width: 100%;
+}
+
+.div-msg-erro{
+    width: 75%;
+    border-radius: 15px 15px 0px 0px;
+    padding: 20px;
+    color: var(--corTxt);
+    font-weight: bold;
+    background: var(--corBase);
+    text-align: center;
 }
 
 .div-inputs-chefe {
@@ -193,163 +210,6 @@ img {
     }
 }
 
-/* NavBar (SideBar nossa) */
-.sidebar {
-    width: 275px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    background: var(--corFundo2);
-    box-shadow: var(--sombra2);
-    padding: 40px 0px;
-}
-
-.div-links {
-    width: 90%;
-    padding: 12px 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 7px;
-    border-radius: 5px;
-    background: var(--corFundo);
-    border: 1px solid var(--corBordas);
-    box-shadow: var(--sombra2);
-}
-
-.links {
-    width: 90%;
-    padding: 15px;
-    border-radius: 5px;
-    font-size: var(--text-lg);
-    text-decoration: none;
-    display: flex;
-    justify-content: space-between;
-    color: var(--corBase);
-    font-weight: bold;
-
-    &:hover {
-        background: var(--corDestaque);
-    }
-}
-
-.ativo {
-    background: linear-gradient(360deg, var(--corDestaque), var(--corBase));
-    color: var(--corTxt);
-}
-
-.div-configs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-}
-
-.div-configs div{
-    display: flex;
-    width: 100%;
-}
-
-#notificacao {
-    font-size: var(--text-4xl);
-    padding: 10px;
-    border-radius: 50%;
-    border: none;
-    color: var(--corTxt3);
-    background: none;
-    cursor: pointer;
-    display: flex;
-    position: relative;
-
-    &:hover {
-        color: var(--corBase);
-    }
-}
-
-.div-noti {
-    border-radius: 50%;
-    position: absolute;
-    left: 40px;
-    top: 45px;
-    background: var(--corBase);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--corTxt);
-    font-size: var(--text-base);
-    max-width: 23px;
-}
-
-#tema {
-    font-size: var(--text-4xl);
-    padding: 10px;
-    border-radius: 50%;
-    border: none;
-    color: var(--corTxt3);
-    background: none;
-    cursor: pointer;
-
-    &:hover {
-        rotate: 360deg;
-        color: var(--corBase);
-    }
-}
-
-
-/* Tela Padrão */
-.sec-main {
-    width: 100%;
-    height: 100%;
-    background: var(--corFundo);
-    padding-left: 16%;
-    padding-top: 3%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3%;
-}
-
-.div-header {
-    width: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    border-bottom: 2px solid var(--corBordas);
-    font-size: var(--text-lg);
-    color: var(--corTxt3);
-    cursor: default;
-}
-
-.div-img-header {
-    color: var(--corBase);
-}
-
-.div-txt-header {
-    display: flex;
-    text-align: right;
-    align-items: center;
-    justify-content: space-around;
-    gap: 20px;
-}
-
-.avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    border-radius: 10px;
-    width: 75px;
-    height: 75px;
-    font-size: var(--text-4xl);
-    color: var(--corBase);
-    /* background: linear-gradient(180deg, var(--corBase), var(--corDestaque)); */
-    cursor: default;
-}
-
 /* Cards da Página Principal dos Guri */
 .card-box {
     width: 90%;
@@ -434,7 +294,7 @@ img {
 
 .tabela-bg table thead th {
     padding: 7px;
-    min-width: 100px;
+    min-width: 160px;
 
 }
 
@@ -450,4 +310,15 @@ img {
         background: var(--corDestaque);
         color: var(--corTxt);
     }
+}
+
+.modal-fundo{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.7);
+    z-index: 3;
 }

@@ -1,4 +1,4 @@
-<?php require '../controllers/validate_access.php'; ?>
+<?php require '../controllers/validar_acesso.php'; ?>
 <!-- Validando se o cara está realmente logado -->
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="claro">
@@ -23,19 +23,7 @@
     <section class="sec-main">
 
         <!-- Header -->
-        <div class="div-header">
-            <div class="div-img-header">
-                <h2>Sistema de Manutenção</h2>
-            </div>
-            <div class="div-txt-header">
-                <p>
-                    <span id="msg_especial"></span> <?php echo $nome_usuario; ?>
-                    <br>
-                    Espero que o tenha uma ótima experiencia em nosso sistema.
-                </p>
-                <div class="avatar"><i class="bi bi-person"></i></div>
-            </div>
-        </div>
+        <?php require '../components/header.php' ?>
 
         <!-- Cards -->
         <div class="card-box">
@@ -79,17 +67,18 @@
                         <th>Coluna 1</th>
                         <th>Coluna 2</th>
                         <th>Coluna 3</th>
+                        <th>Coluna 4</th>
+                        <th>Coluna 5</th>
+                        <th>Coluna 6</th>
+                        <th>Coluna 7</th>
+                        <th>Coluna 8</th>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>REG</td>
-                            <td>REG</td>
-                            <td>REG</td>
+                            <td colspan="8">REG</td>
                         </tr>
                         <tr>
-                            <td>REG</td>
-                            <td>REG</td>
-                            <td>REG</td>
+                            <td colspan="8">REG</td>
                         </tr>
                     </tbody>
                 </table>
@@ -100,43 +89,22 @@
                         <th>Coluna 1</th>
                         <th>Coluna 2</th>
                         <th>Coluna 3</th>
+                        <th>Coluna 4</th>
+                        <th>Coluna 5</th>
+                        <th>Coluna 6</th>
+                        <th>Coluna 7</th>
+                        <th>Coluna 8</th>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>REG</td>
-                            <td>REG</td>
-                            <td>REG</td>
+                            <td colspan="8">REG</td>
                         </tr>
                         <tr>
-                            <td>REG</td>
-                            <td>REG</td>
-                            <td>REG</td>
+                            <td colspan="8">REG</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="tabela-bg">
-                <table>
-                    <thead>
-                        <th>Coluna 1</th>
-                        <th>Coluna 2</th>
-                        <th>Coluna 3</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>REG</td>
-                            <td>REG</td>
-                            <td>REG</td>
-                        </tr>
-                        <tr>
-                            <td>REG</td>
-                            <td>REG</td>
-                            <td>REG</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
         </div>
 
     </section>

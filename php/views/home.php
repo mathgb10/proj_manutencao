@@ -1,4 +1,4 @@
-<?php require '../controllers/validate_access.php'; ?>
+<?php require '../controllers/validar_acesso.php'; ?>
 <!-- Validando se o cara está realmente logado -->
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="claro">
@@ -23,19 +23,7 @@
     <section class="sec-main">
 
         <!-- Header -->
-        <div class="div-header">
-            <div class="div-img-header">
-                <h2>Sistema de Manutenção</h2>
-            </div>
-            <div class="div-txt-header">
-                <p>
-                    <span id="msg_especial"></span>! <?php echo $nome_usuario; ?>
-                    <br>
-                    Espero que o tenha uma ótima experiencia em nosso sistema.
-                </p>
-                <div class="avatar"><?php echo substr($nome_usuario, 0, 2); ?></div>
-            </div>
-        </div>
+        <?php require '../components/header.php' ?>
 
 
     </section>

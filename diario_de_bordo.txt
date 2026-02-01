@@ -9,3 +9,7 @@ Dia 2:
         terminei os cards (eu acho, vamo ve se a rapaziada tmb acha).
         tive q pesquisa pra colocar o numero impar de tr com outra estilizacao no tailwind eu so colocaria even:bg-red-300 😢.
         comecei a estilizacao das tabelas
+        Mais um "bug" o botão não está trocando para o olho fechado de jeito nenhum
+        resolvi tinha duas tags com ids iguais
+        perdi papo de 5 minutos kkkkkkkkkkkkkkk por hj deu
+        fiz o icone de notificacao e ajustei o css agr ss por hj chega

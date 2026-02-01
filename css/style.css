@@ -8,7 +8,8 @@
 
     box-sizing: border-box;
     font-family: "TASA Orbiter", sans-serif;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.4s ease-in-out;
+    outline: none;
 }
 
 body {
@@ -24,19 +25,20 @@ body {
     --text-lg: 18px;
     --text-base: 16px;
     --text-sm: 14px;
+
+    --corBase: #fc2323;
+    --corDestaque: #ba2323;
 }
 
 html[data-tema='escuro'] {
-    --corFundo: #0f0f0f;
-    --corFundo2: #181818;
+    --corFundo2: #0f0f0f;
+    --corFundo: #181818;
     --sombra: 0px 0px 5px 7px rgba(20, 20, 20, 0.15);
     --sombra2: 0px 0px 5px 1px rgba(255, 255, 255, 0.15);
 
     --corTxt: #FFFFFF;
     --corTxt2: #000000;
     --corTxt3: #FFF;
-    --corBase: #fc2323;
-    --corDestaque: #ba2323;
 
     --corBordas: #e6e6e6;
 }
@@ -50,8 +52,6 @@ html[data-tema='claro'] {
     --corTxt2: #1e1e1e;
     --corTxt: #FFFFFF;
     --corTxt3: #000;
-    --corBase: #ff3e3e;
-    --corDestaque: #b82b2b;
 
     --corBordas: #cccccc;
 }
@@ -78,7 +78,6 @@ html[data-tema='claro'] {
     border-radius: 25px;
     background: var(--corFundo);
     box-shadow: var(--sombra);
-    border: 2px solid var(--corBordas);
 }
 
 .login-form {
@@ -127,6 +126,14 @@ img {
         background: var(--corDestaque);
         color: var(--corTxt);
     }
+
+    &:focus-within button {
+        color: var(--corTxt);
+    }
+
+    &:focus-within .input::placeholder {
+        color: var(--corTxt);
+    }
 }
 
 .div-input button {
@@ -135,7 +142,7 @@ img {
     font-size: var(--text-xl);
     background: transparent;
     border: none;
-    color: var(--corTxt);
+    color: var(--corDestaque);
 }
 
 .input {
@@ -230,14 +237,50 @@ img {
 }
 
 .ativo {
-    background: var(--corBase);
+    background: linear-gradient(360deg, var(--corDestaque), var(--corBase));
     color: var(--corTxt);
 }
 
 .div-configs {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 30px;
+}
+
+.div-configs div{
+    display: flex;
+    width: 100%;
+}
+
+#notificacao {
+    font-size: var(--text-4xl);
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    color: var(--corTxt3);
+    background: none;
+    cursor: pointer;
+    display: flex;
+    position: relative;
+
+    &:hover {
+        color: var(--corBase);
+    }
+}
+
+.div-noti {
+    border-radius: 50%;
+    position: absolute;
+    left: 40px;
+    top: 45px;
+    background: var(--corBase);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--corTxt);
+    font-size: var(--text-base);
+    max-width: 23px;
 }
 
 #tema {
@@ -353,9 +396,8 @@ img {
 /* Tabela */
 .div-tabelas {
     width: 90%;
-    box-shadow: var(--sombra);
     border-radius: 15px;
-    height: 55%;
+    height: 720px;
     flex-wrap: wrap;
     display: flex;
     justify-content: space-around;
@@ -365,39 +407,43 @@ img {
 }
 
 .tabela-bg {
-    width: 32%;
+    width: 49%;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     background: var(--corFundo2);
     border-radius: 10px;
-    overflow: hidden;
+    overflow: auto;
+    position: relative;
+    box-shadow: var(--sombra);
 }
 
 .tabela-bg table {
     border-collapse: collapse;
     text-align: center;
     width: 100%;
+    overflow: hidden;
+    position: absolute;
 }
 
 .tabela-bg table thead {
-    background: linear-gradient(180deg, var(--corDestaque), var(--corBase));
+    background: linear-gradient(360deg, var(--corDestaque), var(--corBase));
     color: var(--corTxt);
 }
 
 .tabela-bg table thead th {
     padding: 7px;
-    max-width: 31%;
-    min-width: 31%;
+    min-width: 100px;
+
 }
 
 .tabela-bg table tbody tr {
     height: 30px;
     color: var(--corTxt3);
+
     &:nth-child(even) {
-        background-color: var(--corBase);
-        color: var(--corTxt);
+        background-color: var(--corFundo);
     }
 
     &:hover {

@@ -23,7 +23,7 @@
                     <div class="div-input">
                         <i class="bi bi-envelope-fill"></i>
                         <input type="email" id="email" name="email" placeholder="E-mail" class="input">
-                        <button style="visibility: hidden;" type="button" onclick="showPass()" id="btnEye"><i class="bi bi-eye-fill"></i></button>
+                        <button style="visibility: hidden;"><i class="bi bi-eye-fill"></i></button>
                     </div>
                     <div class="div-input">
                         <i class="bi bi-shield-fill"></i>
@@ -31,7 +31,7 @@
                         <button type="button" onclick="showPass()" id="btnEye"><i class="bi bi-eye-fill"></i></button>
                     </div>
                     <div class="div-btn">
-                        <button type="submit" class="btn">Entrar</button>
+                        <button type="submit" class="btn">Entrar <i class="bi bi-box-arrow-in-right"></i></button>
                     </div>
                 </div>
             </form>

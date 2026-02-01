@@ -52,7 +52,7 @@ function showPass() {
         eye.innerHTML = '<i class="bi bi-eye-fill"></i>';
         inputPass.type = "password";
     }
-
+    console.log(eye.innerHTML);
 }
 
 // Muda o Tema atual e armazena no LocalStorage

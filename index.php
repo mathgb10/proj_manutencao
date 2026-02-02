@@ -15,7 +15,7 @@
 
 </head>
 
-<body>
+<body class="body_login">
 
     <?php
     if (isset($_GET['acesso']) && $_GET['acesso'] == 'negado') {

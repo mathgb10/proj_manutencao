@@ -9,4 +9,11 @@ CREATE TABLE IF NOT EXISTS usuarios(
     permissao ENUM('ADMIN','GESTOR','NORMAL') NOT NULL DEFAULT 'NORMAL'
 );
 
---- ISSO AQ É SÓ A BASE PARA EU CONSEGUIR TESTAR O LOGIN E TAL, DPS ADICIONEM AQ O RESTANTE. ---
+INSERT INTO `manutencao_tds2026`.`usuarios` (`nome`, `email`, `senha`, `permissao`) VALUES ('Mathues', 'matheus@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN');
+INSERT INTO `manutencao_tds2026`.`usuarios` (`nome`, `email`, `senha`, `permissao`) VALUES ('Miguel', 'miguel@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN');
+INSERT INTO `manutencao_tds2026`.`usuarios` (`nome`, `email`, `senha`, `permissao`) VALUES ('Ruan Duas Torres', 'ruan@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN');
+INSERT INTO `manutencao_tds2026`.`usuarios` (`nome`, `email`, `senha`, `permissao`) VALUES ('Pereira', 'pereira@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN');
+INSERT INTO `manutencao_tds2026`.`usuarios` (`nome`, `email`, `senha`, `permissao`) VALUES ('Lais', 'lais@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN');
+INSERT INTO `manutencao_tds2026`.`usuarios` (`nome`, `email`, `senha`, `permissao`) VALUES ('Gideao', 'gideao@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN');
+INSERT INTO `manutencao_tds2026`.`usuarios` (`nome`, `email`, `senha`, `permissao`) VALUES ('Pedro', 'pedro@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN');
+INSERT INTO `manutencao_tds2026`.`usuarios` (`nome`, `email`, `senha`, `permissao`) VALUES ('Kaua Reis', 'kaua@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN');

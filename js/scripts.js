@@ -56,7 +56,8 @@ function showPass() {
 }
 
 // Muda o Tema atual e armazena no LocalStorage
-// A rapaziada com todo respeito n vou comentar if nisso aq n, acho q vcs ja entenderam 
+// A rapaziada com todo respeito n vou comentar if nisso aq n, acho q vcs ja entenderam R: Tendi nada não kkkkk
+
 function changeTheme() {
     let tema_atual = document.documentElement.getAttribute("data-tema")
 
@@ -77,14 +78,43 @@ function changeSairBtn(oc) {
     let btnSair = document.querySelector(".sair");
     if (oc == "open") {
         btnSair.innerHTML = 'Sair <i class="bi bi-door-open-fill"></i>';
-    } else{
+    } else {
         btnSair.innerHTML = 'Sair <i class="bi bi-door-closed-fill"></i>';
     }
 }
 
-function closeModal(qual){
-    if(qual == 'acesso'){
+function closeModal(qual) {
+    if (qual == 'acesso') {
         document.getElementById('acesso').style.display = 'none';
         // Seria Legal tirar o ?acesso=negado dps que fechar
     }
+}
+
+// botoes de tema | notificação e suas respectivas animações ou funcionalidades
+
+const notificacao = document.getElementById("notificacao");
+const fechar = document.getElementById("fechar-modal");
+
+notificacao.addEventListener('mouseover', () => {
+    notificacao.style.animation = 'animTremendo 0.25s linear';
+})
+
+notificacao.addEventListener('mouseout', () => {
+    notificacao.style.animation = 'none';
+})
+
+notificacao.addEventListener('click', () => {
+    let fundo = document.querySelector(".modal-fundo").style.display = 'flex';
+    let modal = document.querySelector(".modal-notificacao").style.display = 'flex';
+})
+
+fechar.addEventListener('click', () => {
+    let fundo = document.querySelector(".modal-fundo").style.display = 'none';
+    let modal = document.querySelector(".modal-notificacao").style.display = 'none';
+})
+
+
+function showModal(qual, id){
+    return 
+    // Colocar a exibição de Modal aqui
 }

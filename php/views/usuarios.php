@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="claro">
 <!-- NÃO TIRA O DATA-TEMA DE JEITO NENHUM -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,8 +25,66 @@
     <section class="sec-main">
 
         <!-- Header -->
-        <?php require '../components/header.php' ?>
+        <div class="div-header">
+            <div class="div-img-header">
+                <h2>Painel de Controle de Usuários</h2>
+            </div>
+            <div class="div-txt-header">
+                <p>
+                    <span id="msg_especial"></span> <?php echo $nome_usuario; ?>
+                    <br>
+                    Esperamos que tenha uma ótima experiência em nosso sistema.
+                </p>
+                <div class="avatar"><i class="bi bi-person"></i></div>
+            </div>
+        </div>
 
+        <!-- Btns -->
+        <div class="div-btns-pages">
+            <button class="btn">Adicionar Usuário <i class="bi bi-person-add"></i></button>
+        </div>
+
+        <!-- Tabela -->
+        <div class="tabela-bg2">
+            <table class="tabela-main">
+                <thead>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Senha</th>
+                    <th>Permissão</th>
+                    <th>Ações</th>
+                </thead>
+                <tbody>
+                    <?php
+                    require '../configs/conexao.php';
+                    $sql = "SELECT * FROM usuarios ";
+                    $resultado = $conn->query($sql);
+
+                    if ($resultado && $resultado->num_rows > 0) {
+                        while ($linha = $resultado->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $linha["nome"] . "</td>";
+                            echo "<td>" . $linha["email"] . "</td>";
+                            echo "<td>******" . "</td>";
+                            echo "<td>" . $linha["permissao"] . "</td>";
+                            echo "<td>
+                                        <button class='btnAcao editar' type='button' onclick='showModal('editar',". $linha['id'].")'><i class='bi bi-pencil-square'></i></button>
+                                        <button class='btnAcao deletar' type='button' onclick='showModal('deletar',".$linha['id'].")'><i class='bi bi-trash'></i></button>
+                                        <button class='btnAcao confirmar' type='button' onclick='showModal('visualizar',".$linha['id'].")'><i class='bi bi-eye'></i></button></td>";
+                            echo "</tr>";
+                        }
+                    } else{
+                        echo "<tr><td colspan=4>Não exite Registro</td></tr>";
+                    }
+
+                    ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="div-btns-change">
+            <button type="button"><i class="bi bi-arrow-left"></i></button>
+            <button type="button"><i class="bi bi-arrow-right"></i></button>
+        </div>
 
     </section>
 

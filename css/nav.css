@@ -9,7 +9,7 @@
     position: fixed;
     background: var(--corFundo2);
     box-shadow: var(--sombra2);
-    padding: 40px 0px;
+    padding: 20px 0px;
 }
 
 .div-links {
@@ -23,6 +23,7 @@
     background: var(--corFundo);
     border: 1px solid var(--corBordas);
     box-shadow: var(--sombra2);
+    padding: 20px 0px;
 }
 
 .links {
@@ -53,26 +54,11 @@
     gap: 30px;
 }
 
-.div-configs div{
+.div-configs div {
     display: flex;
     width: 100%;
 }
 
-#notificacao {
-    font-size: var(--text-4xl);
-    padding: 10px;
-    border-radius: 50%;
-    border: none;
-    color: var(--corTxt3);
-    background: none;
-    cursor: pointer;
-    display: flex;
-    position: relative;
-
-    &:hover {
-        color: var(--corBase);
-    }
-}
 
 .div-noti {
     border-radius: 50%;
@@ -88,17 +74,28 @@
     max-width: 23px;
 }
 
-#tema {
-    font-size: var(--text-4xl);
-    padding: 10px;
-    border-radius: 50%;
-    border: none;
-    color: var(--corTxt3);
-    background: none;
-    cursor: pointer;
-
-    &:hover {
-        rotate: 360deg;
-        color: var(--corBase);
+@media (max-width: 720px){
+    .sidebar {
+        width: 37px;
+        overflow: auto;
+    }
+    .div-links{
+        background: none;
+        border: none;
+        box-shadow: none;
+    }
+    .links {
+        font-size: 0px;
+    }
+    .links i{
+        font-size: var(--text-base);
+    }
+    
+    .div-configs{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .div-configs div i{
+        font-size: var(--text-sm);
     }
 }

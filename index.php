@@ -19,7 +19,7 @@
 
     <?php
     if (isset($_GET['acesso']) && $_GET['acesso'] == 'negado') {
-        require 'php/components/modal_acesso.php';
+        require 'php/components/modals/modal_acesso.php';
     }
 
     if (isset($_GET['erro'])) {
@@ -55,12 +55,17 @@
                         <button type="submit" class="btn">Entrar <i class="bi bi-box-arrow-in-right"></i></button>
                     </div>
                 </div>
+                <div class="btn-remember-me">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">0
+                    <label for="rememberMe">Lembrar-me</label>
+                </div>
             </form>
         </div>
     </div>
 
     <!-- Carregando Js na página -->
-    <script src="js/scripts.js" defer></script>
+    <script src="js/scripts.js" defer>
+    </script>
 </body>
 
 </html>

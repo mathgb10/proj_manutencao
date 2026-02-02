@@ -1,5 +1,7 @@
 <?php
+require_once "../configs/conexao.php";
 $atualmente_em = basename($_SERVER['PHP_SELF']);
+$permissao_usuario = $_SESSION['user_permissao'];
 ?>
 <nav class="sidebar">
     <div class="div-img">
@@ -19,11 +21,29 @@ $atualmente_em = basename($_SERVER['PHP_SELF']);
         }
         ?>
     </div>
+
     <div class="div-configs">
         <div>
             <button onclick="changeTheme()" id="tema"></button>
-            <button id="notificacao"><i class="bi bi-bell-fill"></i><div class="div-noti">0</div></button>
+            <button id="notificacao">
+                <i class="bi bi-bell-fill"></i>
+                <div class="div-noti">0</div>
+            </button>
+
         </div>
         <button onclick="window.location.href='../actions/logout.php'" class="btn sair" onmouseover="changeSairBtn('open')" onmouseleave="changeSairBtn('closed')">Sair <i class="bi bi-door-closed-fill"></i></button>
     </div>
 </nav>
+
+<div class="modal-fundo" style="display: none;">
+    <div class="modal-notificacao">
+        <div class="modal-header"> 
+            <h3>Notificações</h3>
+            <button id="fechar-modal" onclick="closeModal('notificao')"><i class='bi bi-x-circle-fill'></i></button>
+        </div>
+        <div class="modal-notificao-corpo">
+
+        </div>
+    </div>
+</div>
+<script src="../../assets/js/nav.js"></script>

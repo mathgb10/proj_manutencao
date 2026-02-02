@@ -40,7 +40,9 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    border-radius: 10px;
+    border-radius: 50%;
+    background: var(--corFundo2);
+    box-shadow: var(--sombra2);
     width: 75px;
     height: 75px;
     font-size: var(--text-4xl);

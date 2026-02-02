@@ -87,6 +87,8 @@ function closeModal(qual) {
     if (qual == 'acesso') {
         document.getElementById('acesso').style.display = 'none';
         // Seria Legal tirar o ?acesso=negado dps que fechar
+    } else if (qual == 'adicaoUser'){
+        document.getElementById('adicaoUser').style.display = 'none';
     }
 }
 
@@ -117,4 +119,29 @@ fechar.addEventListener('click', () => {
 function showModal(qual, id){
     return 
     // Colocar a exibição de Modal aqui
+}
+
+function excluirUser(id) {
+    if (confirm("Tem certeza que deseja excluir este usuário?")) {
+        fetch('../actions/user/delete_users.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id=' + id
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Usuário excluído com sucesso!');
+                    location.reload();
+                } else {
+                    alert('Erro ao excluir usuário: ' + (data.message || 'Erro desconhecido'));
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao processar a solicitação.');
+            });
+    }
 }

@@ -1,4 +1,4 @@
-.modal-box-acesso{
+.modal-box-acesso {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,7 +12,7 @@
     color: var(--corTxt);
 }
 
-.modal-header-acesso{
+.modal-header-acesso {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,34 +22,166 @@
     color: var(--corBase);
 }
 
-.modal-header-acesso button{
+.modal-header-acesso button {
     font-size: var(--text-xl);
     background: none;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     color: var(--corTxt3);
-    &:hover{
+
+    &:hover {
         color: var(--corBase);
     }
 }
 
-.modal-txt-acesso{
+.modal-txt-acesso {
     width: 100%;
     text-align: center;
     color: var(--corTxt3);
 }
 
-.modal-btn-acesso{
+.modal-btn-acesso {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.modal-btn-acesso button{
+.modal-btn-acesso button {
     background: var(--confirmar);
     color: var(--corTxt);
-    &:hover{
+
+    &:hover {
         background: var(--confirmarHover);
     }
+}
+
+.modal-fundo {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 3;
+}
+
+.modal-notificacao {
+    width: 40dvw;
+    height: 90dvh;
+    position: fixed;
+    display: none;
+    align-items: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    justify-content: center;
+    background: #b8b7b7;
+    z-index: 999;
+}
+
+.modal-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: space-between; */
+    width: 30%;
+    min-width: 420px;
+    height: auto;
+    padding: 10px;
+    border-radius: 25px;
+    background: var(--corFundo);
+    color: var(--corTxt3);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    border-bottom: 2px solid var(--corBordas);
+    padding: 5px;
+    color: var(--corBase);
+}
+
+.modal-header button{
+    padding: 5px;
+    color: var(--corTxt3);
+    border: none;
+    background: none;
+    font-size: var(--text-xl);
+    cursor: pointer;
+    border-radius: 50%;
+    &:hover{
+        color: var(--corBase);
+    }
+}
+
+.modal-form {
+    width: 100%;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.modal-input {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-input input,
+.modal-input select {
+    width: 95%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--corBordas);
+    background: var(--corFundo);
+
+    &::placeholder {
+        color: var(--corTxt3);
+    }
+                
+    &:focus{
+        background: var(--hoverTr);
+    }
+}
+
+.modal-input label{
+    width: 93%;
+    text-align: left;
+}
+
+.input-senha {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-senha input {
+    width: 89%;
+}
+
+.input-senha button{
+    font-size: var(--text-xl);
+}
+
+
+.modal-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.modal-btn {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    border-top: 2px solid var(--corBordas);
+    padding: 10px;
 }

@@ -7,7 +7,7 @@
     align-items: center;
     justify-content: space-between;
     position: fixed;
-    background: var(--corFundo2);
+    background: var(--corDestaque);
     box-shadow: var(--sombra2);
     padding: 20px 0px;
 }
@@ -51,7 +51,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 25px;
+}
+
+.div-configs #tema,
+.div-configs #notificacao {
+    position: relative;
+    left: 28%;
 }
 
 .div-configs div {
@@ -59,43 +65,107 @@
     width: 100%;
 }
 
-
 .div-noti {
     border-radius: 50%;
     position: absolute;
-    left: 40px;
-    top: 45px;
+    left: 24px;
+    top: 24px;
     background: var(--corBase);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--corTxt);
+    color: var(--txtClaro);
     font-size: var(--text-base);
-    max-width: 23px;
+    max-width: 26px;
+    height: 24px;
 }
 
-@media (max-width: 720px){
+
+#notificacao {
+    font-size: var(--text-2xl);
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    color: var(--txtClaro);
+    background: none;
+    cursor: pointer;
+    display: flex;
+    position: relative;
+    left: 5%;
+
+    &:hover {
+        color: var(--txtEscuro);
+    }
+}
+
+
+
+#tema {
+    font-size: var(--text-2xl);
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    color: var(--txtClaro);
+    background: none;
+    cursor: pointer;
+    transition: 0.25s;
+
+    &:hover {
+        color: var(--txtEscuro);
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes animTremendo {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(25deg);
+    }
+
+    50% {
+        transform: rotate(0deg);
+    }
+
+    75% {
+        transform: rotate(-25deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+
+}
+
+@media (max-width: 720px) {
     .sidebar {
         width: 37px;
         overflow: auto;
     }
-    .div-links{
+
+    .div-links {
         background: none;
         border: none;
         box-shadow: none;
     }
+
     .links {
         font-size: 0px;
     }
-    .links i{
+
+    .links i {
         font-size: var(--text-base);
     }
-    
-    .div-configs{
+
+    .div-configs {
         display: flex;
         justify-content: flex-end;
     }
-    .div-configs div i{
+
+    .div-configs div i {
         font-size: var(--text-sm);
     }
 }

@@ -29,18 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     } else {
         header("Location: ../../index.php?erro=email");
     }
-
-    if ($lembrar === 'checked') {
-        $gerar_token = bin2hex(random_bytes(16));
-
-        $atualizar_token = "UPDATE usuarios SET token = ? WHERE email = ?";
-        $stmt_token = mysqli_prepare($conn, $atualizar_token);
-        $stmt_token->bind_param("ss", $gerar_token, $email);
-        $stmt_token->execute();
-        $stmt_token->get_result();
-        setcookie("rememberMe", $gerar_token, time() + (86400 * 30), "/");
-        
-    }
     // qnd o banco tiver ok nois testa, por enquanto eu vo pedir pro se pq se vai dar conta ai dos seus jeitos
     // deixa a navbar responsiva
 }

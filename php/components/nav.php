@@ -37,7 +37,7 @@ $permissao_usuario = $_SESSION['user_permissao'];
 
 <div class="modal-fundo" style="display: none;">
     <div class="modal-notificacao">
-        <div class="modal-header"> 
+        <div class="modal-header">
             <h3>Notificações</h3>
             <button id="fechar-modal" onclick="closeModal('notificao')"><i class='bi bi-x-circle-fill'></i></button>
         </div>
@@ -46,4 +46,3 @@ $permissao_usuario = $_SESSION['user_permissao'];
         </div>
     </div>
 </div>
-<script src="../../assets/js/nav.js"></script>

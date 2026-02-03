@@ -1,4 +1,7 @@
 <?php require '../controllers/validar_acesso.php'; ?>
+<?php require '../configs/conexao.php'; ?>
+<?php require '../components/modals/modais_add_usuario.php' ?>
+
 <!-- Validando se o cara está realmente logado -->
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="claro">
@@ -13,9 +16,9 @@
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/nav.css">
     <link rel="stylesheet" href="../../css/header.css">
+    <link rel="stylesheet" href="../../css/modal_acesso.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
-
 </head>
 
 <body>
@@ -41,7 +44,7 @@
 
         <!-- Btns -->
         <div class="div-btns-pages">
-            <button class="btn">Adicionar Usuário <i class="bi bi-person-add"></i></button>
+            <button class="btn" onclick="document.getElementById('adicaoUser').style.display='flex'">Adicionar Usuário <i class="bi bi-person-add"></i></button>
         </div>
 
         <!-- Tabela -->
@@ -56,7 +59,6 @@
                 </thead>
                 <tbody>
                     <?php
-                    require '../configs/conexao.php';
                     $sql = "SELECT * FROM usuarios ";
                     $resultado = $conn->query($sql);
 
@@ -66,14 +68,14 @@
                             echo "<td>" . $linha["nome"] . "</td>";
                             echo "<td>" . $linha["email"] . "</td>";
                             echo "<td>******" . "</td>";
-                            echo "<td>" . $linha["permissao"] . "</td>";
+                            echo "<td> <div class='div-permissao'>" . $linha["permissao"] . "</div></td>";
                             echo "<td>
-                                        <button class='btnAcao editar' type='button' onclick='showModal('editar',". $linha['id'].")'><i class='bi bi-pencil-square'></i></button>
-                                        <button class='btnAcao deletar' type='button' onclick='showModal('deletar',".$linha['id'].")'><i class='bi bi-trash'></i></button>
-                                        <button class='btnAcao confirmar' type='button' onclick='showModal('visualizar',".$linha['id'].")'><i class='bi bi-eye'></i></button></td>";
+                                        <button class='btnAcao editar' type='button' onclick='showModal('editar'," . $linha['id'] . ")'><i class='bi bi-pencil-square'></i></button>
+                                        <button class='btnAcao deletar' type='button' onclick='excluirUser(" . $linha['id'] . ")'><i class='bi bi-trash'></i></button>
+                                        <button class='btnAcao confirmar' type='button' onclick='showModal('visualizar'," . $linha['id'] . ")'><i class='bi bi-eye'></i></button></td>";
                             echo "</tr>";
                         }
-                    } else{
+                    } else {
                         echo "<tr><td colspan=4>Não exite Registro</td></tr>";
                     }
 

@@ -12,6 +12,18 @@
     padding: 20px 0px;
 }
 
+.botao-fechar button {
+    position: absolute;
+    left: 87%;
+    top: 1.5%;
+    font-size: 3rem;
+    background-color: #ffffff00;
+    border: none;
+    color: var(--corBordas);
+    cursor: pointer;
+}
+
+
 .div-links {
     width: 90%;
     padding: 12px 0px;
@@ -139,6 +151,52 @@
     }
 
 }
+
+
+@keyframes arrow {
+    0% {
+        left: 87%;
+    }
+
+    25% {
+        left: 85%;
+    }
+
+    50% {
+        left: 87%;
+    }
+
+    75% {
+        left: 89%;
+    }
+
+    100% {
+        left: 87%;
+    }
+}
+
+@keyframes arrowSwapanim {
+    from {
+        transform: rotate(0%);
+    }
+
+    to {
+        transform: rotate(360%);
+    }
+}
+
+
+@keyframes navbarAnim {
+    from {
+        width: 275px;
+    }
+
+    to {
+        width: 0px;
+    }
+}
+
+
 
 @media (max-width: 720px) {
     .sidebar {

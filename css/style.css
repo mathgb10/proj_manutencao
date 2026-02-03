@@ -29,6 +29,7 @@ body {
     --corBase: #fc2323;
     --corDestaque: #ca2525;
     --corEscura: #646464;
+    --corBranca: #FFFFFF;
 
     /* Esses aqui peguei do Tailwind é Emerald e Sky */
     --confirmar: oklch(76.5% 0.177 163.223);
@@ -135,6 +136,8 @@ html[data-tema='claro'] {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    top: -6%;
 }
 
 img {
@@ -428,6 +431,27 @@ img {
 .div-btns-pages {
     width: 90%;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
+}
+
+.div-btns-pages div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+    background: var(--corFundo2);
+    border-radius: 5px;
+    width: 75%;
+    box-shadow: var(--sombra);
+    color: var(--corTxt3);
+}
+
+.div-btns-pages div input {
+    width: 90%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid var(--corBordas);
+    border-radius: 5px 5px 0px 0px;
+    background: var(--corFundo);
 }

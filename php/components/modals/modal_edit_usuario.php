@@ -1,22 +1,21 @@
-<div class="modal-fundo" id="adicaoUser">
+<div class="modal-fundo" id="edicaoUser">
     <div class="modal-box">
         <div class="modal-header">
-            <h3>Registrar</h3>
-            <button class="" onclick="closeModal('adicaoUser')"><i class="bi bi-x-lg"></i></button>
+            <h3>Editar</h3>
+            <button class="" onclick="closeModal('edicaoUser')"><i class="bi bi-x-lg"></i></button>
         </div>
-        <form action="../actions/user/register_user.php" class="modal-form" method="POST">
+        <form action="../actions/user/update_users.php" class="modal-form" method="POST">
+            <div style="display: none;">
+                <input type="number" id="id" name="id">
+            </div>
             <div class="modal-row">
                 <div class="modal-input">
                     <label for="nome">Nome:</label>
-                    <div class="input-nome">
-                        <input type="text" name="nome" id="nome" placeholder="Exemplo da Silva">
-                    </div>
+                    <input type="text" name="nome" id="nome" placeholder="Exemplo da Silva" value="">
                 </div>
                 <div class="modal-input">
                     <label for="email">E-mail</label>
-                    <div class="input-Email">
-                        <input type="email" name="email" id="email" placeholder="exemplo@email.com">
-                    </div>
+                    <input type="email" name="email" id="email" placeholder="exemplo@email.com">
                 </div>
             </div>
             <div class="modal-input">
@@ -29,7 +28,7 @@
             <div class="modal-input">
                 <label for="permissao">Nível Permissão</label>
                 <select name="permissao" id="permissao">
-                    <option value="semValor" disabled selected>Selecione uma Opção</option>
+                    <option value="semValor">Selecione uma Opção</option>
                     <option value="NORMAL">Normal</option>
                     <option value="GESTOR">Gestor</option>
                     <option value="ADMIN">Admin</option>

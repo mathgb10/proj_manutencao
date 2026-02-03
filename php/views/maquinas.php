@@ -1,8 +1,7 @@
 <?php require '../controllers/validar_acesso.php'; ?>
 <?php require '../configs/conexao.php'; ?>
 <?php require '../components/modals/modais_add_usuario.php' ?>
-<?php require '../components/modals/modal_edit_usuario.php' ?>
-
+<?php require '../components/modals/modal_edit_machine.php' ?>
 
 <!-- Validando se o cara está realmente logado -->
 <!DOCTYPE html>
@@ -12,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestão de Usuários - SENAI MANUTENÇÃO</title>
+    <title>Gestão de Máquinas - SENAI MANUTENÇÃO</title>
 
     <!-- Estilização, BootstrapIcons e Favicon -->
     <link rel="stylesheet" href="../../css/style.css">
@@ -32,7 +31,7 @@
         <!-- Header -->
         <div class="div-header">
             <div class="div-img-header">
-                <h2>Painel de Controle de Usuários</h2>
+                <h2>Painel de Controle de Máquinas</h2>
             </div>
             <div class="div-txt-header">
                 <p>
@@ -50,39 +49,49 @@
                 <label for="pesquisa"><i class="bi bi-search"></i></label>
                 <input type="text" name="pesquisa" id="pesquisa">
             </div>
-            <button class="btn" onclick="showModal('adicaoUser')">Adicionar Usuário <i class="bi bi-person-add"></i></button>
+            <button class="btn" onclick="showModal('adicaoMaquia')">
+                Adicionar Máquinas <i class="bi bi-gear"></i>
+            </button>
         </div>
 
         <!-- Tabela -->
         <div class="tabela-bg2">
             <table class="tabela-main">
                 <thead>
-                    <th>Nome</th>
-                    <th>E-mail</th>
-                    <th>Senha</th>
-                    <th>Permissão</th>
+                    <th>Denominação</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Número de Identificação</th>
+                    <th>Número de Série</th>
+                    <th>Ano de Fabricação</th>
+                    <th>Setor</th>
+                    <th>Criado em</th>
                     <th>Ações</th>
                 </thead>
                 <tbody>
                     <?php
-                    $sql = "SELECT * FROM usuarios ";
+                    $sql = "SELECT * FROM maquinas ";
                     $resultado = $conn->query($sql);
 
                     if ($resultado && $resultado->num_rows > 0) {
                         while ($linha = $resultado->fetch_assoc()) {
                             echo "<tr>";
-                            echo "<td>" . $linha["nome"] . "</td>";
-                            echo "<td>" . $linha["email"] . "</td>";
-                            echo "<td>******" . "</td>";
-                            echo "<td> <div class='div-permissao'>" . $linha["permissao"] . "</div></td>";
+                            echo "<td>" . $linha["denominacao"] . "</td>";
+                            echo "<td>" . $linha["marca"] . "</td>";
+                            echo "<td>" . $linha["modelo"] . "</td>";
+                            echo "<td>" . $linha["numero_identificacao"] . "</td>";
+                            echo "<td>" . $linha["numero_serie"] . "</td>";
+                            echo "<td>" . $linha["ano_fabricacao"] . "</td>";
+                            echo "<td>" . $linha["setor"] . "</td>";
+                            echo "<td>" . $linha["criado_em"] . "</td>";
                             echo "<td>
-                                        <button class='btnAcao editar' type='button' onclick='showModal(`edicaoUser`," . $linha['id'] . ")'><i class='bi bi-pencil-square'></i></button>
-                                        <button class='btnAcao deletar' type='button' onclick='excluirUser(" . $linha['id'] . ")'><i class='bi bi-trash'></i></button>
-                                    </td>";
+                                        <button class='btnAcao editar' type='button' onclick='showModal('   '," . $linha['id'] . ")'><i class='bi bi-pencil-square'></i></button>
+                                        <button class='btnAcao deletar' type='button' onclick='excluirMaquina(" . $linha['id'] . ")'><i class='bi bi-trash'></i></button>
+                                        <button class='btnAcao confirmar' type='button' onclick='showModal('visualizar'," . $linha['id'] . ")'><i class='bi bi-eye'></i></button></td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan=4>Não existe Registro</td></tr>";
+                        echo "<tr><td colspan=10>Não existe Registro</td></tr>";
                     }
 
                     ?>

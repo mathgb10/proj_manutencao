@@ -34,8 +34,8 @@
     <div class="login-bg">
         <div class="login-box">
             <form class="login-form" action="php/actions/auth_login.php" method="POST">
-                <div class="div-img">
-                    <img src="assets/imgs/senailogo.png" alt="Logo Senai">
+                <div class="div-img" id="">
+                    <img src="assets/imgs/senailogo.png" alt="Logo Senai" id="senai-logo" style="width: 70%;">
                 </div>
                 <?php if (isset($erro_pass_msg)) echo $erro_pass_msg; ?>
                 <?php if (isset($erro_email_msg)) echo $erro_email_msg; ?>
@@ -51,14 +51,11 @@
                         <button type="button" onclick="showPass()" id="btnEye"><i class="bi bi-eye-fill"></i></button>
                     </div>
 
-                    <div class="div-btn">
+                    <div class=" div-btn">
                         <button type="submit" class="btn">Entrar <i class="bi bi-box-arrow-in-right"></i></button>
                     </div>
                 </div>
-                <div class="btn-remember-me">
-                    <input type="checkbox" id="rememberMe" name="rememberMe">0
-                    <label for="rememberMe">Lembrar-me</label>
-                </div>
+
             </form>
         </div>
     </div>

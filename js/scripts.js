@@ -3,16 +3,33 @@ window.onload = () => {
     // Se tiver tema no LocalStorage eu pego ele se não coloca "claro" mesmo
     let tema = localStorage.getItem('tema') || 'claro';
 
+    // document.getElementById("img-Senai").innerHTML = '<img src="assets/imgs/senailogo.png" alt="Logo Senai" id="imagem-senai">';
+
     // Definindo atributo "data-tema" com valor da minha variavel tema
     document.documentElement.setAttribute("data-tema", tema);
 
     // Isso é para mudar o icone dos btns, mas tive que colocar uma condicional para verificar se eles existem ou não
     let btnTema = document.getElementById("tema");
+    let imgSenai = document.getElementById("senai-logo");
+    let imgSenai2 = document.getElementById("senai-logo2");
     if (tema == 'escuro') {
+        if (imgSenai != undefined) {
+            imgSenai.src = 'assets/imgs/senaiEscuro.png';
+        }
+        if (imgSenai2 != undefined) {
+            imgSenai2.src = '../../assets/imgs/senaiEscuro.png';
+        }
         if (btnTema != undefined) {
             document.getElementById("tema").innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
         }
     } else {
+        if (imgSenai != undefined) {
+            imgSenai.src = 'assets/imgs/senailogo.png';
+
+        }
+        if (imgSenai2 != undefined) {
+            imgSenai2.src = '../../assets/imgs/senailogo.png';
+        }
         if (btnTema != undefined) {
             document.getElementById("tema").innerHTML = '<i class="bi bi-brightness-high-fill"></i>';
         }
@@ -60,17 +77,25 @@ function showPass() {
 
 function changeTheme() {
     let tema_atual = document.documentElement.getAttribute("data-tema")
+    let imgSenai2 = document.getElementById("senai-logo2");
 
     if (tema_atual == "escuro") {
-        localStorage.removeItem('tema')
+        localStorage.removeItem('tema');
         document.documentElement.setAttribute("data-tema", "claro");
         document.getElementById("tema").innerHTML = '<i class="bi bi-brightness-high-fill"></i>';
-        localStorage.setItem('tema', 'claro')
+        localStorage.setItem('tema', 'claro');
+        imgSenai2.src = '../../assets/imgs/senailogo';
+        if (imgSenai2 != undefined) {
+            imgSenai2.src = '../../assets/imgs/senailogo.png';
+        }
     } else {
-        localStorage.removeItem('tema')
+        localStorage.removeItem('tema');
         document.documentElement.setAttribute("data-tema", "escuro");
         document.getElementById("tema").innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
-        localStorage.setItem('tema', 'escuro')
+        localStorage.setItem('tema', 'escuro');
+        if (imgSenai2 != undefined) {
+            imgSenai2.src = '../../assets/imgs/senaiEscuro.png';
+        }
     }
 }
 
@@ -87,8 +112,10 @@ function closeModal(qual) {
     if (qual == 'acesso') {
         document.getElementById('acesso').style.display = 'none';
         // Seria Legal tirar o ?acesso=negado dps que fechar
-    } else if (qual == 'adicaoUser'){
+    } else if (qual == 'adicaoUser') {
         document.getElementById('adicaoUser').style.display = 'none';
+    } else if (qual == 'edicaoUser') {
+        document.getElementById('edicaoUser').style.display = 'none';
     }
 }
 
@@ -96,29 +123,73 @@ function closeModal(qual) {
 
 const notificacao = document.getElementById("notificacao");
 const fechar = document.getElementById("fechar-modal");
+let arrow = document.getElementById("fechar-nav");
 
-notificacao.addEventListener('mouseover', () => {
-    notificacao.style.animation = 'animTremendo 0.25s linear';
-})
+if (notificacao != undefined) {
 
-notificacao.addEventListener('mouseout', () => {
-    notificacao.style.animation = 'none';
-})
+    notificacao.addEventListener('mouseover', () => {
+        notificacao.style.animation = 'animTremendo 0.25s linear';
+    })
 
-notificacao.addEventListener('click', () => {
-    let fundo = document.querySelector(".modal-fundo").style.display = 'flex';
-    let modal = document.querySelector(".modal-notificacao").style.display = 'flex';
-})
+    notificacao.addEventListener('mouseout', () => {
+        notificacao.style.animation = 'none';
+    })
 
-fechar.addEventListener('click', () => {
-    let fundo = document.querySelector(".modal-fundo").style.display = 'none';
-    let modal = document.querySelector(".modal-notificacao").style.display = 'none';
-})
+    notificacao.addEventListener('click', () => {
+        let fundo = document.querySelector(".modal-fundo").style.display = 'flex';
+        let modal = document.querySelector(".modal-notificacao").style.display = 'flex';
+    })
+
+    fechar.addEventListener('click', () => {
+        let fundo = document.querySelector(".modal-fundo").style.display = 'none';
+        let modal = document.querySelector(".modal-notificacao").style.display = 'none';
+    })
+}
+
+// funcao fechar e abrir navbar
+if (arrow != undefined) {
+    arrow.addEventListener('mouseenter', () => {
+        arrow.style.animation = 'arrow 0.8s 2 linear';
+    });
+
+    arrow.addEventListener('mouseleave', () => {
+        arrow.style.animation = 'none';
+    });
+
+    arrow.addEventListener('click', () => {
+        let sidebar = document.querySelector(".sidebar");
+        let main = document.querySelector(".sec-main")
+        let navLinks = document.querySelector(".div-links");
+        let divImg = document.querySelector(".div-img");
+        let divConfig = document.querySelector(".div-configs");
+
+        sidebar.style.animation = 'navbarAnim 0.25s linear';
+        arrow.style.animation = 'arrowSwapanim 0.25s linear';
+        navLinks.style.display = 'none';
+        divImg.style.display = 'none';
+        divConfig.style.display = 'none';
+
+        setInterval(() => {
+            sidebar.style.width = '0px';
+            main.style = 'padding-left: 10px';
+            arrow.innerHTML = '<i class="bi bi-arrow-right-circle-fill"></i>';
+            arrow.style.animation = 'none';
+        }, 250)
+
+    });
+}
 
 
-function showModal(qual, id){
-    return 
-    // Colocar a exibição de Modal aqui
+function showModal(qual, id) {
+    if (qual == "adicaoUser") {
+        document.getElementById(qual).style.display = "flex";
+    } else if (qual == "edicaoUser") {
+        document.getElementById("id").value = id;
+        document.getElementById(qual).style.display = "flex";
+    } else if (qual == "editarMaquina") {
+        document.getElementById("id_maquina").value = id;
+        document.getElementById(qual).style.display = "flex";
+    }
 }
 
 function excluirUser(id) {
@@ -142,6 +213,38 @@ function excluirUser(id) {
             .catch(error => {
                 console.error('Erro:', error);
                 alert('Erro ao processar a solicitação.');
+            });
+    }
+}
+function excluirMaquina(id) {
+    if (confirm("Tem certeza que deseja excluir essa máquina?")) {
+        fetch('../actions/machines/delete_machines.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id=' + id
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na rede ou arquivo não encontrado');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+
+
+                if (data.success === true) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Erro: ' + (data.message || 'Erro desconhecido'));
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao processar a solicitação. Verifique o console (F12).');
             });
     }
 }

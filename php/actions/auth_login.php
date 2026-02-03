@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $coletando_db = "SELECT * FROM usuarios WHERE email = ?";
     $stmt = mysqli_prepare($conn, $coletando_db);
     $stmt->bind_param("s", $email);
-    $stmt->execute();   
+    $stmt->execute();
     $resultado = $stmt->get_result();
 
     if ($resultado->num_rows > 0) {

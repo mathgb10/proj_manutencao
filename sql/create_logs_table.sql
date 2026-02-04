@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT,
+    ip_address VARCHAR(45) NOT NULL,
+    sql_command TEXT NOT NULL,
+    data_hora DATETIME DEFAULT CURRENT_TIMESTAMP
+);

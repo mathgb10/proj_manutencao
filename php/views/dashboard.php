@@ -22,7 +22,7 @@
 <body>
     <?php
     if (isset($_GET['acesso']) && $_GET['acesso'] == 'negado') {
-        require '../components/modal_acesso.php';
+        require '../components/modals/modal_acesso.php';
     }
     ?>
 

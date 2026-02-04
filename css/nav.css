@@ -7,10 +7,22 @@
     align-items: center;
     justify-content: space-between;
     position: fixed;
-    background: var(--corFundo2);
+    background: var(--corDestaque);
     box-shadow: var(--sombra2);
-    padding: 40px 0px;
+    padding: 20px 0px;
 }
+
+.botao-fechar button {
+    position: absolute;
+    left: 87%;
+    top: 1.5%;
+    font-size: 3rem;
+    background-color: #ffffff00;
+    border: none;
+    color: var(--corBordas);
+    cursor: pointer;
+}
+
 
 .div-links {
     width: 90%;
@@ -23,6 +35,7 @@
     background: var(--corFundo);
     border: 1px solid var(--corBordas);
     box-shadow: var(--sombra2);
+    padding: 20px 0px;
 }
 
 .links {
@@ -50,55 +63,167 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 25px;
 }
 
-.div-configs div{
+.div-configs #tema,
+.div-configs #notificacao {
+    position: relative;
+    left: 28%;
+}
+
+.div-configs div {
     display: flex;
     width: 100%;
-}
-
-#notificacao {
-    font-size: var(--text-4xl);
-    padding: 10px;
-    border-radius: 50%;
-    border: none;
-    color: var(--corTxt3);
-    background: none;
-    cursor: pointer;
-    display: flex;
-    position: relative;
-
-    &:hover {
-        color: var(--corBase);
-    }
 }
 
 .div-noti {
     border-radius: 50%;
     position: absolute;
-    left: 40px;
-    top: 45px;
+    left: 24px;
+    top: 24px;
     background: var(--corBase);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--corTxt);
+    color: var(--txtClaro);
     font-size: var(--text-base);
-    max-width: 23px;
+    max-width: 26px;
+    height: 24px;
 }
 
-#tema {
-    font-size: var(--text-4xl);
+
+#notificacao {
+    font-size: var(--text-2xl);
     padding: 10px;
     border-radius: 50%;
     border: none;
-    color: var(--corTxt3);
+    color: var(--txtClaro);
     background: none;
     cursor: pointer;
+    display: flex;
+    position: relative;
+    left: 5%;
 
     &:hover {
-        rotate: 360deg;
-        color: var(--corBase);
+        color: var(--txtEscuro);
+    }
+}
+
+
+
+#tema {
+    font-size: var(--text-2xl);
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    color: var(--txtClaro);
+    background: none;
+    cursor: pointer;
+    transition: 0.25s;
+
+    &:hover {
+        color: var(--txtEscuro);
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes animTremendo {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(25deg);
+    }
+
+    50% {
+        transform: rotate(0deg);
+    }
+
+    75% {
+        transform: rotate(-25deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+
+}
+
+
+@keyframes arrow {
+    0% {
+        left: 87%;
+    }
+
+    25% {
+        left: 85%;
+    }
+
+    50% {
+        left: 87%;
+    }
+
+    75% {
+        left: 89%;
+    }
+
+    100% {
+        left: 87%;
+    }
+}
+
+@keyframes arrowSwapanim {
+    from {
+        transform: rotate(0%);
+    }
+
+    to {
+        transform: rotate(360%);
+    }
+}
+
+
+@keyframes navbarAnim {
+    from {
+        width: 275px;
+    }
+
+    to {
+        width: 0px;
+    }
+}
+
+
+
+@media (max-width: 720px) {
+    .sidebar {
+        width: 37px;
+        overflow: auto;
+    }
+
+    .div-links {
+        background: none;
+        border: none;
+        box-shadow: none;
+    }
+
+    .links {
+        font-size: 0px;
+    }
+
+    .links i {
+        font-size: var(--text-base);
+    }
+
+    .div-configs {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .div-configs div i {
+        font-size: var(--text-sm);
     }
 }

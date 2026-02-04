@@ -15,11 +15,11 @@
 
 </head>
 
-<body>
+<body class="body_login">
 
     <?php
     if (isset($_GET['acesso']) && $_GET['acesso'] == 'negado') {
-        require 'php/components/modal_acesso.php';
+        require 'php/components/modals/modal_acesso.php';
     }
 
     if (isset($_GET['erro'])) {
@@ -34,8 +34,8 @@
     <div class="login-bg">
         <div class="login-box">
             <form class="login-form" action="php/actions/auth_login.php" method="POST">
-                <div class="div-img">
-                    <img src="assets/imgs/senailogo.png" alt="Logo Senai">
+                <div class="div-img" id="">
+                    <img src="assets/imgs/senailogo.png" alt="Logo Senai" id="senai-logo" style="width: 70%;">
                 </div>
                 <?php if (isset($erro_pass_msg)) echo $erro_pass_msg; ?>
                 <?php if (isset($erro_email_msg)) echo $erro_email_msg; ?>
@@ -51,16 +51,18 @@
                         <button type="button" onclick="showPass()" id="btnEye"><i class="bi bi-eye-fill"></i></button>
                     </div>
 
-                    <div class="div-btn">
+                    <div class=" div-btn">
                         <button type="submit" class="btn">Entrar <i class="bi bi-box-arrow-in-right"></i></button>
                     </div>
                 </div>
+
             </form>
         </div>
     </div>
 
     <!-- Carregando Js na página -->
-    <script src="js/scripts.js" defer></script>
+    <script src="js/scripts.js" defer>
+    </script>
 </body>
 
 </html>

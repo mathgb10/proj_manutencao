@@ -1,0 +1,150 @@
+/* Tela Padrão */
+.sec-main {
+    width: 100%;
+    min-height: 100%;
+    height: 100%;
+    background: var(--corFundo);
+    padding-left: 12%;
+    padding-top: 3%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5%;
+    transition: 0.25s;
+    padding-bottom: 3%;
+}
+
+.sec-main h3 {
+    width: 90%;
+    color: var(--corTxt3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.div-header {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    border-radius: 7px;
+    justify-content: space-between;
+    padding: 15px;
+    border: 1px solid var(--corBordas);
+    background: var(--corFundo2);
+    font-size: var(--text-lg);
+    color: var(--corTxt3);
+    cursor: default;
+    box-shadow: var(--sombra);
+}
+
+.div-img-header {
+    color: var(--corBase);
+    width: 25%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.div-img-header h4 {
+    margin: 0;
+    color: var(--corTxt3);
+}
+
+.user-name {
+    color: var(--corDestaque);
+}
+
+.div-txt-header {
+    background: var(--corFundo);
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid var(--corBordas);
+}
+
+.div-txt-header p {
+    margin: 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.div-txt-header i {
+    color: var(--corBase);
+}
+
+.avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 50%;
+    background: var(--corFundo);
+    box-shadow: var(--sombra2);
+    width: 50px;
+    height: 50px;
+    font-size: var(--text-2xl);
+    border: 1px solid var(--corBordas);
+    color: var(--corBase);
+    transition: all 0.3s ease;
+}
+
+.avatar:hover {
+    background: var(--corDestaque);
+    border-radius: 15px;
+    color: var(--txtClaro);
+    transform: scale(1.05);
+}
+
+/* Tablet/Mobile Adjustments */
+@media (max-width: 1024px) {
+    .sec-main {
+        padding-left: 285px;
+        /* Ainda respeitando a sidebar se ela estiver aberta */
+    }
+}
+
+@media (max-width: 768px) {
+    .sec-main {
+        padding: 80px 15px 30px 15px;
+        /* Espaço para menu mobile se houver */
+    }
+
+    .div-header {
+        padding: 15px;
+        justify-content: center;
+    }
+
+    .div-img-header {
+        justify-content: center;
+        width: 100%;
+        flex: none;
+    }
+
+    .div-txt-header {
+        width: fit-content;
+        margin: 0 auto;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        font-size: var(--text-lg);
+    }
+
+    .div-header h4 {
+        font-size: var(--text-base);
+    }
+}
+
+@media (max-width: 480px) {
+    .div-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .div-img-header {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

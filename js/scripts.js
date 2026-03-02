@@ -1,0 +1,1150 @@
+// Carrega o Ultimo tema salvo no LocalStorage e define uma saudação de acordo com a hora do dia.
+window.onload = () => {
+    // Se tiver tema no LocalStorage eu pego ele se não coloca "claro" mesmo
+    let tema = localStorage.getItem('tema') || 'claro';
+
+    // Definindo atributo "data-tema" com valor da minha variavel tema
+    document.documentElement.setAttribute("data-tema", tema);
+
+    // Isso é para mudar o icone dos btns, mas tive que colocar uma condicional para verificar se eles existem ou não
+    // Serve também para mudar a logo do senai
+    let btnTema = document.getElementById("tema");
+    let imgSenai = document.getElementById("senai-logo");
+    let imgSenai2 = document.getElementById("senai-logo2");
+    if (tema == 'escuro') {
+        if (imgSenai != undefined) {
+            imgSenai.src = 'assets/imgs/senaiEscuro.png';
+        }
+        if (imgSenai2 != undefined) {
+            imgSenai2.src = '../../assets/imgs/senailogo2.png';
+        }
+        if (btnTema != undefined) {
+            document.getElementById("tema").innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+        }
+    } else {
+        if (imgSenai != undefined) {
+            imgSenai.src = 'assets/imgs/senailogo.png';
+
+        }
+        if (imgSenai2 != undefined) {
+            imgSenai2.src = '../../assets/imgs/senailogo2.png';
+        }
+        if (btnTema != undefined) {
+            document.getElementById("tema").innerHTML = '<i class="bi bi-brightness-high-fill"></i>';
+        }
+    }
+
+    let local_txt = document.getElementById("msg_especial");
+
+    // Mudar a mensagem de boas vindas com base no horario do dia 
+    if (local_txt != undefined) {
+        let data = new Date();
+        let hora = data.getHours();
+        // console.log(hora);
+
+        if (hora >= 6 && hora < 12) {
+            local_txt.innerHTML = "<strong style='color: var(--corBase)'>Bom Dia</strong>";
+        } else if (hora >= 12 && hora < 18) {
+            local_txt.innerHTML = "<strong style='color: var(--corBase)'>Boa Tarde</strong>";
+        } else if (hora >= 18) {
+            local_txt.innerHTML = "<strong style='color: var(--corBase)'>Boa Noite</strong>";
+        } else {
+            local_txt.innerHTML = "<strong style='color: var(--corBase)'>Olá</strong>";
+        }
+    }
+
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', (e) => {
+        const dropdownUsuario = document.getElementById('dropdown-usuario');
+        const avatar = document.querySelector('.avatar');
+
+        if (dropdownUsuario && !dropdownUsuario.contains(e.target) && !avatar.contains(e.target)) {
+            dropdownUsuario.classList.remove('ativo');
+        }
+    });
+
+    startRealTimeClock();
+}
+
+// Garante que a data apareça mesmo com defer
+document.addEventListener('DOMContentLoaded', startRealTimeClock);
+
+// Função para exibir a data atual
+function startRealTimeClock() {
+    const clockElement = document.getElementById("current-date-time");
+    if (!clockElement) return;
+
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    clockElement.innerHTML = `<i class="bi bi-calendar3"></i> ${day}/${month}/${year}`;
+}
+
+// Muda a visibilidade do campo "senha" 
+function showPass() {
+    // Coleto e armazenos o Btn do Olho e o Input de Senha
+
+    let eye = document.getElementById("btnEyeLogin");
+    let inputPass = document.getElementById("senhaLogin");
+
+
+    if (eye.innerHTML.match('<i class="bi bi-eye-slash"></i>')) {
+        inputPass.type = "text";
+        eye.innerHTML = '<i class="bi bi-eye-fill"></i>';
+    } else {
+        inputPass.type = "password";
+        eye.innerHTML = '<i class="bi bi-eye-slash"></i>';
+    }
+    console.log(inputPass.type);
+    console.log(eye.innerHTML);
+}
+
+// Muda o icone de sol pra lua com base no tema da pagina, além de armazenar no localStorage e mudar o tema em sí
+function changeTheme() {
+    let tema_atual = document.documentElement.getAttribute("data-tema")
+    let imgSenai2 = document.getElementById("senai-logo2");
+
+    if (tema_atual == "escuro") {
+        localStorage.removeItem('tema');
+        document.documentElement.setAttribute("data-tema", "claro");
+        document.getElementById("tema").innerHTML = '<i class="bi bi-brightness-high-fill"></i>';
+        localStorage.setItem('tema', 'claro');
+        imgSenai2.src = '../../assets/imgs/senailogo2';
+        if (imgSenai2 != undefined) {
+            imgSenai2.src = '../../assets/imgs/senailogo2.png';
+        }
+    } else {
+        localStorage.removeItem('tema');
+        document.documentElement.setAttribute("data-tema", "escuro");
+        document.getElementById("tema").innerHTML = '<i class="bi bi-moon-stars-fill"></i>';
+        localStorage.setItem('tema', 'escuro');
+        if (imgSenai2 != undefined) {
+            imgSenai2.src = '../../assets/imgs/senailogo2.png';
+        }
+    }
+}
+
+// Muda o icone da porta
+function changeSairBtn(oc) {
+    let btnSair = document.querySelector(".sair");
+    if (oc == "open") {
+        btnSair.innerHTML = 'Sair <i class="bi bi-door-open-fill"></i>';
+    } else {
+        btnSair.innerHTML = 'Sair <i class="bi bi-door-closed-fill"></i>';
+    }
+}
+
+function closeModal(qual) {
+    if (qual == 'acesso') {
+        document.getElementById('acesso').style.display = 'none';
+        // Seria Legal tirar o ?acesso=negado dps que fechar
+    } else if (qual == 'adicaoUser') {
+        document.getElementById('adicaoUser').style.display = 'none';
+    } else if (qual == 'edicaoUser') {
+        document.getElementById('edicaoUser').style.display = 'none';
+    } else if (qual == 'adicaoMachine') {
+        document.getElementById('adicaoMachine').style.display = 'none';
+    } else if (qual == 'edicaoMachine') {
+        document.getElementById('edicaoMachine').style.display = 'none';
+    } else if (qual == "notificacao-modal") {
+        document.getElementById('notificacao-modal').style.display = 'none';
+        document.querySelector('.modal-notificacao').style.display = 'none';
+    } else if (qual == 'dell') {
+        document.getElementById('dell').style.display = 'none';
+    } else if (qual == 'dellMachine') {
+        document.getElementById('dellMachine').style.display = 'none';
+    } else if (qual == 'modalAcessorios') {
+        document.getElementById('modalAcessorios').style.display = 'none';
+    } else if (qual == 'modalFAQ') {
+        document.getElementById('modalFAQ').style.display = 'none';
+    } else if (qual == 'corretiva') {
+        document.getElementById('corretiva').style.display = 'none';
+    } else if (qual == 'preventiva') {
+        document.getElementById('preventiva').style.display = 'none';
+    } else if (qual == 'resetPass') {
+        document.getElementById('resetPass').style.display = 'none';
+    } else if (qual == 'corretiva') {
+        document.getElementById('corretiva').style.display = 'none';
+    } else if (qual == 'preventiva') {
+        document.getElementById('preventiva').style.display = 'none';
+    } else if (qual == "view") {
+        document.getElementById("view").style.display = "none";
+    } else if (qual == "anexos") {
+        document.getElementById("anexos").style.display = "none";
+    } else if (qual == 'modalHistorico') {
+        document.getElementById('modalHistorico').style.display = 'none';
+    }
+}
+
+function showModal(qual, id) {
+    if (qual == "adicaoUser") {
+        document.getElementById(qual).style.display = "flex";
+    } else if (qual == "edicaoUser") {
+        document.getElementById("id").value = id;
+        document.getElementById(qual).style.display = "flex";
+    } else if (qual == "adicaoMachine") {
+        document.getElementById(qual).style.display = "flex";
+    } else if (qual == "notificacao-modal") {
+        document.getElementById(qual).style.display = "flex";
+        document.querySelector('.modal-notificacao').style.display = 'flex';
+    } else if (qual == 'dell') {
+        document.getElementById('dell').style.display = 'flex';
+        document.getElementById("id_usuario").value = id;
+
+    } else if (qual == 'resetPass') {
+        const modal = document.getElementById('resetPass');
+        // Define o ID no input hidden para o JavaScript saber quem atualizar
+        document.getElementById("id_usuario_reset_confirm").value = id;
+        // Abre a modal de confirmação
+        modal.style.display = 'flex';
+
+    } else if (qual == 'dellMachine') {
+        document.getElementById('dellMachine').style.display = 'flex';
+        document.getElementById("id_maquina_del").value = id;
+    } else if (qual == 'modalAcessorios') {
+        document.getElementById('modalAcessorios').style.display = 'flex';
+        carregarAcessorios(id); // Call function to load data
+    } else if (qual == 'corretiva') {
+        document.getElementById('corretiva').style.display = 'flex';
+    } else if (qual == 'preventiva') {
+        document.getElementById('preventiva').style.display = 'flex';
+    } else if (qual == 'view') {
+        document.getElementById('view').style.display = 'flex';
+    } else if (qual == "modalFAQ") {
+        document.getElementById('modalFAQ').style.display = 'flex';
+
+    } else if (qual == "anexos") {
+        document.getElementById("anexos").style.display = "flex";
+    }
+}
+
+// botoes de tema | notificação e suas respectivas animações ou funcionalidades
+
+const notificacao = document.getElementById("notificacao");
+// const fechar = document.getElementById("fechar-modal");
+
+if (notificacao != undefined) {
+    notificacao.addEventListener('mouseover', () => {
+        notificacao.style.animation = 'animTremendo 0.25s linear';
+    })
+
+    notificacao.addEventListener('mouseout', () => {
+        notificacao.style.animation = 'none';
+    })
+}
+
+let arrow = document.getElementById("fechar-nav");
+
+// função fechar e abrir navbar
+if (arrow != undefined) {
+    let sidebar = document.querySelector(".sidebar");
+    let main = document.querySelector(".sec-main")
+    let navLinks = document.querySelector(".div-links");
+    let divImg = document.querySelector(".div-img");
+    let btnSair = document.querySelector(".sair");
+    let divConfig = document.querySelector(".div-configs");
+    const mediaQuery = window.matchMedia('(min-width: 768px)');
+
+    if (mediaQuery.matches) {
+        sidebar.style.width = '275px';
+    } else {
+        sidebar.style.width = '10px';
+        navLinks.style.display = 'none';
+        divImg.style.display = 'none';
+        sidebar.style.width = '10px';
+        divConfig.style.display = 'none';
+        btnSair.style.fontSize = '0px';
+        btnSair.style.width = '0px';
+        main.style = 'padding-left: 10px';
+        arrow.innerHTML = '<i class="bi bi-arrow-right-circle-fill"></i>';
+        arrow.style.animation = 'none';
+    }
+
+    arrow.addEventListener('click', () => {
+        if (arrow.innerHTML.match('<i class="bi bi-arrow-left-circle-fill"></i>')) {
+
+            if (mediaQuery.matches) {
+                sidebar.style.animation = 'navbarAnim 0.25s linear';
+            } else {
+                sidebar.style.animation = 'navbarMobile 0.25s linear';
+            }
+
+            setTimeout(() => {
+                navLinks.style.display = 'none';
+                divImg.style.display = 'none';
+                sidebar.style.width = '10px';
+                divConfig.style.display = 'none';
+                btnSair.style.fontSize = '0px';
+                btnSair.style.width = '0px';
+                main.style = 'padding-left: 10px';
+                arrow.innerHTML = '<i class="bi bi-arrow-right-circle-fill"></i>';
+                arrow.style.animation = 'none';
+                clearTimeout();
+            }, 25)
+        }
+
+        if (arrow.innerHTML.match('<i class="bi bi-arrow-right-circle-fill"></i>')) {
+
+            if (mediaQuery.matches) {
+                sidebar.style.width = '275px';
+            } else {
+                sidebar.style.width = '144px';
+            }
+            arrow.innerHTML = '<i class="bi bi-arrow-left-circle-fill"></i>';
+
+            if (mediaQuery.matches) {
+                setTimeout(() => {
+                    divImg.style.display = 'flex';
+                    divConfig.style.display = 'flex';
+                    navLinks.style.display = 'flex';
+                    main.style = 'padding-left: 16%';
+                    clearTimeout();
+                }, 65)
+            }
+            else {
+                setTimeout(() => {
+                    divImg.style.display = 'flex';
+                    divConfig.style.display = 'flex';
+                    navLinks.style.display = 'flex';
+                    main.style = 'padding-left: 16%';
+                    clearTimeout();
+                }, 65)
+            }
+
+
+            setTimeout(() => {
+                if (mediaQuery.matches) {
+                    btnSair.style.width = '230px';
+                    btnSair.style.fontSize = '16px';
+                } else {
+                    btnSair.style.width = '45px';
+                }
+
+            }, 95)
+        }
+    });
+}
+//oque?
+function excluir(qual, id) {
+    if (qual == 'usuario') {
+        fetch('../actions/user/delete_users.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id=' + id
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else { //hey vamos separar a logica função para cada excluir, acho melhor e seguro
+                    alert('Erro ao excluir usuário: ' + (data.message || 'Erro desconhecido'));
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao processar a solicitação.');
+            });
+    } else if (qual == 'maquina') {
+        fetch('../actions/machines/delete_machines.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'id=' + id
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na rede ou arquivo não encontrado');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+
+
+                if (data.success === true) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Erro: ' + (data.message || 'Erro desconhecido'));
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Erro ao processar a solicitação. Verifique o console (F12).');
+            });
+    }
+}
+
+function editarMaquina(id) {
+    // Busca os dados da máquina
+    fetch('../actions/machines/get_machine.php?id=' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                // Preenche o formulário
+                document.getElementById('edit_id').value = data.id;
+                document.getElementById('edit_denominacao').value = data.denominacao;
+                document.getElementById('edit_marca').value = data.marca;
+                document.getElementById('edit_modelo').value = data.modelo;
+                document.getElementById('edit_numero_identificacao').value = data.numero_identificacao;
+                document.getElementById('edit_numero_serie').value = data.numero_serie;
+                document.getElementById('edit_ano_fabricacao').value = data.ano_fabricacao;
+                document.getElementById('edit_setor').value = data.setor;
+
+                // Limpa e preenche a tabela de inspeção
+                const tbody = document.querySelector("#table-edit-inspection tbody");
+                tbody.innerHTML = "";
+
+                if (data.checklist && data.checklist.length > 0) {
+                    data.checklist.forEach(item => {
+                        adicionarNovaLinhaEdit(item.item_verificacao, item.frequencia, item.id);
+                    });
+                } else {
+                    adicionarNovaLinhaEdit(); // Adiciona uma linha vazia se não houver itens
+                }
+
+                // Abre o modal
+                document.getElementById('edicaoMachine').style.display = 'flex';
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao buscar dados da máquina.');
+        });
+}
+
+function excluirMaquina(id) {
+    fetch('../actions/machines/delete_machines.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'id=' + id
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro na rede ou arquivo não encontrado');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+
+
+            if (data.success === true) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Erro: ' + (data.message || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao processar a solicitação. Verifique o console (F12).');
+        });
+}
+
+function adicionarNovaLinhaEdit(atividade = "", frequencia = "mensal", id = "") {
+    const tbody = document.querySelector("#table-edit-inspection tbody");
+    const novaLinha = document.createElement("tr");
+    const index = tbody.children.length + 1;
+
+    novaLinha.innerHTML = `
+        <td class="index-numero">${index}</td>
+        <td>
+            <input type="hidden" name="id_item[]" value="${id}">
+            <input type="text" name="atividade[]" placeholder="Novo item de inspeção..." value="${atividade}">
+        </td>
+        <td>
+            <select name="freq[]">
+                <option value="mensal" ${frequencia === 'mensal' ? 'selected' : ''}>MENSAL</option>
+                <option value="semestral" ${frequencia === 'semestral' ? 'selected' : ''}>SEMESTRAL</option>
+                <option value="trimestral" ${frequencia === 'trimestral' ? 'selected' : ''}>TRIMESTRAL</option>
+                <option value="anual" ${frequencia === 'anual' ? 'selected' : ''}>ANUAL</option>
+                <option value="bianual" ${frequencia === 'bianual' ? 'selected' : ''}>BIANUAL</option>
+            </select>
+        </td>
+        <td>
+            <button type="button" class="btn-trash2" onclick="removerLinhaEdit(this)">
+                <i class="bi bi-trash-fill"></i>
+            </button>
+        </td>
+    `;
+
+    tbody.appendChild(novaLinha);
+    atualizarNumeracaoEdit();
+}
+
+function removerLinhaEdit(botao) {
+    const linha = botao.closest("tr");
+    linha.remove();
+    atualizarNumeracaoEdit();
+}
+
+function atualizarNumeracaoEdit() {
+    const linhas = document.querySelectorAll("#table-edit-inspection tbody tr");
+
+    linhas.forEach((linha, index) => {
+        const celulaNumero = linha.querySelector(".index-numero");
+        if (celulaNumero) {
+            celulaNumero.textContent = index + 1;
+        }
+    });
+}
+
+
+const btnAddInspecao = document.getElementById("addInspectionItemBtn");
+
+if (btnAddInspecao) {
+    btnAddInspecao.addEventListener("click", function () {
+        adicionarNovaLinha();
+    });
+}
+
+function adicionarNovaLinha() {
+    const tbody = document.querySelector(".custom-table2 tbody");
+    const novaLinha = document.createElement("tr");
+
+    novaLinha.innerHTML = `
+        <td class="index-numero"></td>
+        <td>
+            <input type="text" name="atividade[]" placeholder="Novo item de inspeção...">
+        </td>
+        <td>
+            <select name="freq[]">
+                <option value="mensal">MENSAL</option>
+                <option value="semestral">SEMESTRAL</option>
+                <option value="trimestral">TRIMESTRAL</option>
+                <option value="anual">ANUAL</option>
+                <option value="bianual">BIANUAL</option>
+            </select>
+        </td>
+        <td>
+            <button type="button" class="btn-trash2" onclick="removerLinha(this)">
+                <i class="bi bi-trash-fill"></i>
+            </button>
+        </td>
+    `;
+
+    tbody.appendChild(novaLinha);
+    atualizarNumeracao();
+}
+
+function removerLinha(botao) {
+    const linha = botao.closest("tr");
+    const totalLinhas = document.querySelectorAll(".custom-table2 tbody tr").length;
+
+    if (totalLinhas > 1) {
+        linha.remove();
+        atualizarNumeracao();
+    } else {
+        linha.querySelector("input").value = "";
+        alert("É necessário ter pelo menos um item de inspeção.");
+    }
+}
+
+function atualizarNumeracao() {
+    const linhas = document.querySelectorAll(".custom-table2 tbody tr");
+
+    linhas.forEach((linha, index) => {
+        const celulaNumero = linha.querySelector(".index-numero");
+        if (celulaNumero) {
+            celulaNumero.textContent = index + 1;
+        }
+    });
+}
+
+function LimparTabela() {
+    const iconeLixeira = document.querySelector('lixeira');
+
+    iconeLixeira.addEventListener('click', function () {
+        let tabela = document.querySelectorAll(".custom-table2 tbody tr");
+
+        if (confirm("Tem certeza realmente que quer realmente excluir tudo? ")) {
+            tabela.innerHTML = "";
+
+            adicionarNovaLinha()
+        }
+    });
+}
+
+const btnLimparTudo = document.getElementById("lixeira");
+
+if (btnLimparTudo) {
+    btnLimparTudo.addEventListener("click", function () {
+        if (confirm("Tem certeza que deseja remover TODOS os itens de inspeção?")) {
+            const tbody = document.querySelector(".custom-table2 tbody");
+            tbody.innerHTML = "";
+            adicionarNovaLinha();
+        }
+    });
+}
+
+/* Script de mudar tabela */
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const registrosPorPagina = 10;
+
+    const btnAnterior = document.getElementById("btn-ant");
+    const btnProximo = document.getElementById("btn-prox");
+
+    if (!btnAnterior || !btnProximo) return; // Nenhum controle de paginação nesta página
+
+    // Lista de possíveis tbodies usados nas páginas
+    const tabelasPossiveis = [
+        "tabela-usuarios",
+        "tabela-maquinas",
+        "tabela-logs",
+        "tabela-os"
+    ];
+
+    // Encontra a primeira tabela presente na página
+    const tabelaAtivaId = tabelasPossiveis.find(id => document.getElementById(id));
+    if (!tabelaAtivaId) return;
+
+    function setupPagination(tbody) {
+        let paginaAtual = 1;
+        let linhas = Array.from(tbody.getElementsByTagName("tr"));
+
+        function totalPaginas() {
+            return Math.max(1, Math.ceil(linhas.length / registrosPorPagina));
+        }
+
+        function mostrarPagina(pagina) {
+            paginaAtual = Math.min(Math.max(1, pagina), totalPaginas());
+            const inicio = (paginaAtual - 1) * registrosPorPagina;
+            const fim = inicio + registrosPorPagina;
+
+            linhas.forEach((linha, index) => {
+                linha.style.display = (index >= inicio && index < fim) ? "" : "none";
+            });
+
+            atualizarBotoes();
+        }
+
+        function atualizarBotoes() {
+            if (paginaAtual === 1) {
+                btnAnterior.style.opacity = "0.3";
+                btnAnterior.disabled = true;
+                btnAnterior.style.pointerEvents = "none";
+            } else {
+                btnAnterior.style.opacity = "1";
+                btnAnterior.disabled = false;
+                btnAnterior.style.pointerEvents = "auto";
+            }
+
+            if (paginaAtual >= totalPaginas()) {
+                btnProximo.style.opacity = "0.3";
+                btnProximo.disabled = true;
+                btnProximo.style.pointerEvents = "none";
+            } else {
+                btnProximo.style.opacity = "1";
+                btnProximo.disabled = false;
+                btnProximo.style.pointerEvents = "auto";
+            }
+        }
+
+        // Permite atualizar linhas (útil caso a tabela seja filtrada dinamicamente)
+        function refresh() {
+            linhas = Array.from(tbody.getElementsByTagName("tr"));
+            if (paginaAtual > totalPaginas()) paginaAtual = totalPaginas();
+            mostrarPagina(paginaAtual);
+        }
+
+        return { mostrarPagina, refresh, next() { mostrarPagina(paginaAtual + 1); }, prev() { mostrarPagina(paginaAtual - 1); } };
+    }
+
+    const tbody = document.getElementById(tabelaAtivaId);
+    const pager = setupPagination(tbody);
+
+    btnAnterior.addEventListener("click", function () {
+        if (typeof pager.prev === 'function') pager.prev();
+    });
+
+    btnProximo.addEventListener("click", function () {
+        if (typeof pager.next === 'function') pager.next();
+    });
+
+    // Mostra primeira página ao carregar
+    if (pager && typeof pager.mostrarPagina === 'function') pager.mostrarPagina(1);
+
+    // Se houver pesquisa que esconde/mostra linhas, escutamos por input no campo `pesquisa` para atualizar paginação
+    const inputPesquisa = document.getElementById('pesquisa');
+    if (inputPesquisa) {
+        inputPesquisa.addEventListener('input', function () {
+            // Pequeno timeout para deixar o filtro aplicar antes de recalcular
+            setTimeout(() => { if (pager && typeof pager.refresh === 'function') pager.refresh(); }, 50);
+        });
+    }
+});
+
+function excluirUser(id) {
+    fetch('../actions/user/delete_users.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'id=' + id
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Usuário excluído com sucesso!');
+                location.reload();
+            } else {
+                alert('Erro ao excluir usuário: ' + (data.message || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao processar a solicitação.');
+        });
+}
+
+function resetarSenha(id) {
+    window.location.href = '../actions/user/reset_password.php?id=' + id;
+}
+
+// Função para abrir a segunda modal de reset de senha
+function abrirModalSenha(id) {
+    // Fecha a primeira modal
+    closeModal('resetPass');
+
+    // Define o ID no campo hidden da segunda modal
+    document.getElementById('id_usuario_modal').value = id;
+
+    // Limpa os campos de senha
+    document.getElementById('nova_senha').value = "";
+    document.getElementById('confirmar_senha').value = "";
+
+    // Abre a segunda modal
+    document.getElementById('modalResetPass2').style.display = 'flex';
+}
+
+// Funções para Modal de Acessórios
+
+function carregarAcessorios(idMaquina) {
+    document.getElementById('acessorio_maquina_id').value = idMaquina;
+    document.getElementById('acessorio_maquina_nome').innerText = 'Carregando...';
+
+    const tbody = document.querySelector('#table-acessorios tbody');
+    tbody.innerHTML = ''; // Limpar tabela
+
+    fetch(`../actions/machines/get_accessories.php?id=${idMaquina}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('acessorio_maquina_nome').innerText = `${data.maquina.denominacao} - ${data.maquina.modelo}`;
+
+                if (data.acessorios.length > 0) {
+                    data.acessorios.forEach(acc => {
+                        adicionarAcessorio(acc);
+                    });
+                } else {
+                    adicionarAcessorio(); // Adicionar uma linha vazia se não houver registros
+                }
+            } else {
+                alert('Erro ao carregar acessórios: ' + data.message);
+                closeModal('modalAcessorios');
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao buscar dados.');
+        });
+}
+
+function adicionarAcessorio(dados = null) {
+    const tbody = document.querySelector('#table-acessorios tbody');
+    const tr = document.createElement('tr');
+
+    tr.innerHTML = `
+        <td><input type="text" class="acc-denominacao" placeholder="Ex: Placa 4 castanhas" value="${dados ? dados.denominacao : ''}"></td>
+        <td><input type="text" class="acc-aplicacao" placeholder="Ex: Peças irregulares" value="${dados ? dados.aplicacao : ''}"></td>
+        <td><input type="text" class="acc-caracteristicas" placeholder="Opcional" value="${dados ? dados.caracteristicas : ''}"></td>
+        <td><input type="text" class="acc-ni" placeholder="Opcional" value="${dados ? dados.numero_identificacao : ''}"></td>
+        <td class="text-center">
+            <button type="button" class="btn-trash2" onclick="removerLinhaAcessorio(this)"><i class="bi bi-trash-fill"></i></button>
+        </td>
+    `;
+    tbody.appendChild(tr);
+}
+
+function removerLinhaAcessorio(btn) {
+    const row = btn.closest('tr');
+    row.remove();
+}
+
+function salvarAcessorios() {
+    const idMaquina = document.getElementById('acessorio_maquina_id').value;
+    const rows = document.querySelectorAll('#table-acessorios tbody tr');
+    let listaAcessorios = [];
+
+    rows.forEach(row => {
+        const denominacao = row.querySelector('.acc-denominacao').value;
+        const aplicacao = row.querySelector('.acc-aplicacao').value;
+        const caracteristicas = row.querySelector('.acc-caracteristicas').value;
+        const ni = row.querySelector('.acc-ni').value;
+
+        if (denominacao.trim() !== "") {
+            listaAcessorios.push({
+                denominacao: denominacao,
+                aplicacao: aplicacao,
+                caracteristicas: caracteristicas,
+                ni: ni
+            });
+        }
+    });
+
+    fetch('../actions/machines/save_accessories.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id_maquina: idMaquina,
+            acessorios: listaAcessorios
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Acessórios salvos com sucesso!');
+                closeModal('modalAcessorios');
+            } else {
+                alert('Erro ao salvar: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao processar a solicitação.');
+        });
+}
+
+function openHistory(maquinaNome, maquinaId) {
+    document.getElementById('modalHistorico').style.display = 'flex';
+    document.getElementById('hist_maquina_nome').innerText = 'Carregando...';
+
+    const tbody = document.querySelector('#tabelaHistorico tbody');
+    tbody.innerHTML = '<tr><td colspan="3">Carregando dados...</td></tr>';
+
+    fetch(`../actions/maintenance/get_history.php?id=${maquinaId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('hist_maquina_nome').innerText = `${data.machine.denominacao} - ${data.machine.modelo}`;
+                tbody.innerHTML = '';
+
+                if (data.history.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3">Nenhum histórico encontrado para esta máquina.</td></tr>';
+                } else {
+                    data.history.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td style="text-align: left;">${item.item_verificacao}</td>
+                            <td>${item.usuario_nome || 'Sistema/Desconhecido'}</td>
+                            <td>${item.data_formatada}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+            } else {
+                tbody.innerHTML = `<tr><td colspan="3" class="text-danger">${data.message}</td></tr>`;
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            tbody.innerHTML = '<tr><td colspan="3" class="text-danger">Erro ao carregar histórico via rede.</td></tr>';
+        });
+}
+
+
+function pesquisarMaquinas() {
+    const inputPesquisa = document.getElementById('pesquisa');
+    if (!inputPesquisa) return;
+
+    const termoPesquisa = inputPesquisa.value.toLowerCase().trim();
+    const tabela = document.querySelector('.tabela-main tbody');
+    if (!tabela) return;
+
+    const linhas = tabela.querySelectorAll('tr');
+    let resultadosEncontrados = 0;
+
+    const msgAnterior = document.getElementById('msg-sem-resultado');
+    if (msgAnterior) {
+        msgAnterior.remove();
+    }
+
+    linhas.forEach(linha => {
+        if (linha.querySelector('td[colspan]')) {
+            linha.style.display = termoPesquisa === '' ? '' : 'none';
+            return;
+        }
+
+        const colunas = linha.querySelectorAll('td');
+        let correspondeu = false;
+
+        colunas.forEach((coluna, index) => {
+            if (index < colunas.length - 1) {
+                if (coluna.textContent.toLowerCase().includes(termoPesquisa)) {
+                    correspondeu = true;
+                }
+            }
+        });
+
+        if (correspondeu || termoPesquisa === '') {
+            linha.style.display = '';
+            if (termoPesquisa !== '') resultadosEncontrados++;
+        } else {
+            linha.style.display = 'none';
+        }
+    });
+
+    if (termoPesquisa !== '' && resultadosEncontrados === 0) {
+        const trMensagem = document.createElement('tr');
+        trMensagem.id = 'msg-sem-resultado';
+        trMensagem.innerHTML = '<td colspan="9" style="text-align: center; padding: 20px; color: var(--corBase); font-weight: bold;">Nenhum resultado foi encontrado.</td>';
+        tabela.appendChild(trMensagem);
+    }
+}
+
+function pesquisarMaquinas() {
+    const inputPesquisa = document.getElementById('pesquisa');
+    if (!inputPesquisa) return;
+
+    const termoPesquisa = inputPesquisa.value.toLowerCase().trim();
+    const tabela = document.querySelector('.tabela-main tbody');
+    if (!tabela) return;
+
+    const tabelaBg = document.querySelector('.tabela-bg2');
+    const linhas = tabela.querySelectorAll('tr');
+    let resultadosEncontrados = 0;
+
+    const msgAnterior = document.getElementById('msg-sem-resultado');
+    if (msgAnterior) {
+        msgAnterior.remove();
+    }
+
+    linhas.forEach(linha => {
+        if (linha.querySelector('td[colspan]')) {
+            linha.style.display = termoPesquisa === '' ? '' : 'none';
+            return;
+        }
+
+        const colunas = linha.querySelectorAll('td');
+        let correspondeu = false;
+
+        colunas.forEach((coluna, index) => {
+            if (index < colunas.length - 1) {
+                if (coluna.textContent.toLowerCase().includes(termoPesquisa)) {
+                    correspondeu = true;
+                }
+            }
+        });
+
+        if (correspondeu || termoPesquisa === '') {
+            linha.style.display = '';
+            if (termoPesquisa !== '') resultadosEncontrados++;
+        } else {
+            linha.style.display = 'none';
+        }
+    });
+
+    // Controla o overflow baseado na pesquisa
+    if (tabelaBg) {
+        if (termoPesquisa !== '') {
+            tabelaBg.style.overflowY = 'hidden';
+        } else {
+            tabelaBg.style.overflowY = 'auto';
+        }
+    }
+
+    if (termoPesquisa !== '' && resultadosEncontrados === 0) {
+        const trMensagem = document.createElement('tr');
+        trMensagem.id = 'msg-sem-resultado';
+        trMensagem.innerHTML = '<td colspan="9" style="text-align: center; padding: 20px; color: var(--corBase); font-weight: bold;">Nenhum resultado foi encontrado.</td>';
+        tabela.appendChild(trMensagem);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const inputPesquisa = document.getElementById('pesquisa');
+    if (inputPesquisa) {
+        const paginaAtual = window.location.pathname;
+        if (paginaAtual.includes('usuarios.php')) {
+            inputPesquisa.addEventListener('input', pesquisarUsuarios);
+        } else if (paginaAtual.includes('maquinas.php')) {
+            inputPesquisa.addEventListener('input', pesquisarMaquinas);
+        } else {
+            inputPesquisa.addEventListener('input', pesquisarMaquinas);
+        }
+    }
+});
+
+const hoje = new Date();
+
+function openChecklist(nome, id) {
+    document.getElementById('nome_maquina_checklist').innerText = nome;
+    document.getElementById('id_maquina_checklist').value = id;
+    document.getElementById('modalPreventiva').style.display = 'flex';
+
+    // Carregar itens via AJAX
+    fetch(`../actions/maintenance/get_checklist.php?id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('#tabelaChecklist tbody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6">Nenhum item de checklist cadastrado para esta máquina.</td></tr>';
+                return;
+            }
+
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.setAttribute('data-freq', item.frequencia);
+                tr.setAttribute('data-item-id', item.id);
+                tr.setAttribute('data-next-date', item.proxima_data_iso); // Adicionando data para cálculo
+                // Status da linha
+                let status = 'OK';
+                // Lógica de status (repetida do PHP/JS)
+                // Usar item.proxima_data_iso para comparar
+
+                tr.innerHTML = `
+                    <td class="text-center font-weight-bold">${index + 1}</td>
+                    <td>${item.item_verificacao}</td>
+                    <td class="text-center"><span class="badge-freq badge-${item.frequencia}">${item.frequencia}</span></td>
+                    <td class="text-center">${item.ultima_data}</td>
+                    <td class="text-center"><span class="highlight-target">${item.proxima_data}</span></td>
+                    <td>
+                        <div class="btn-check" onclick="toggleCheck(this)"><i class="bi bi-check-lg"></i></div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            processarDestaquesDeData();
+        })
+        .catch(err => console.error('Erro ao carregar checklist:', err));
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+}
+
+function toggleCheck(el) {
+    el.classList.toggle('active');
+}
+
+function processarDestaquesDeData() {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const seteDias = new Date(hoje);
+    seteDias.setDate(hoje.getDate() + 7);
+
+    document.querySelectorAll('#tabelaChecklist tbody tr').forEach(row => {
+        // data-next-date deve ser adicionado na criação da linha
+        const nextDateIso = row.getAttribute('data-next-date');
+        const targetSpan = row.querySelector('.highlight-target');
+
+        if (!nextDateIso) return;
+
+        const dataPrev = new Date(nextDateIso + 'T00:00:00');
+        targetSpan.classList.remove('highlight-red', 'highlight-yellow');
+
+        if (dataPrev < hoje) {
+            targetSpan.classList.add('highlight-red');
+            row.setAttribute('data-status', 'VENCIDOS');
+        } else if (dataPrev <= seteDias) {
+            targetSpan.classList.add('highlight-yellow');
+            row.setAttribute('data-status', 'PROXIMOS');
+        } else {
+            row.setAttribute('data-status', 'OK');
+        }
+    });
+}
+
+function aplicarFiltrosChecklist() {
+    const ciclo = document.getElementById('selectCiclo').value;
+    const rows = document.querySelectorAll('#tabelaChecklist tbody tr');
+
+    rows.forEach(row => {
+        const rowFreq = row.getAttribute('data-freq');
+        // Filtro simplificado apenas por ciclo por enquanto
+        if (ciclo === 'TODOS' || rowFreq === ciclo) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function limparFiltros() {
+    document.getElementById('selectCiclo').value = 'TODOS';
+    document.getElementById('selectStatus').value = 'TODOS';
+    aplicarFiltrosChecklist();
+}
+
+function filtrarListaPrincipal(status) {
+    const rows = document.querySelectorAll('#mainTable tbody tr');
+    rows.forEach(row => {
+        if (status === 'todos' || row.getAttribute('data-status') === status) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function finalizarPreventiva() {
+    const maquinaId = document.getElementById('id_maquina_checklist').value;
+    const obs = document.getElementById('obs_preventiva').value;
+
+    const itensChecked = [];
+    document.querySelectorAll('#tabelaChecklist tbody tr').forEach(row => {
+        const check = row.querySelector('.btn-check');
+        if (check.classList.contains('active')) {
+            itensChecked.push(row.getAttribute('data-item-id'));
+        }
+    });
+
+    if (itensChecked.length === 0) {
+        alert('Selecione pelo menos um item verificado.');
+        return;
+    }
+
+    fetch('../actions/maintenance/save_preventiva.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            maquina_id: maquinaId,
+            itens: itensChecked,
+            observacoes: obs
+        })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Manutenção registrada com sucesso!');
+                closeModal('modalPreventiva');
+                location.reload(); // Recarregar para atualizar status
+            } else {
+                alert('Erro ao salvar: ' + data.message);
+            }
+        })
+        .catch(err => console.error('Erro:', err));
+}
+
+window.onclick = function (event) {
+    if (event.target.classList.contains('modal-fundo') && event.target.id !== 'changePassword') {
+        closeModal(event.target.id);
+    }
+}

@@ -1,0 +1,22 @@
+Dia 1:
+    Matheus
+        Acabei de organizar as pastas (eu acho), acho que fiz boa parte da logica de login, comecei a SideBar, e fiz a tela de Login.
+Dia 2:
+    Matheus
+        Primeiro "bug" não tá aparencendo o resto do txt que era para aparecer no "header", era por causa de uma tag não fechada 💀.
+        Tá ficando bonitinho a tela da dashboard (espero n ter q usar o css daquele NR12).
+        terminei a sidebar, tem um detalhe bobo que ngm vai notar mas coloquei uma funcao para fechar e abrir a porta, conforme o cursor entra e sai.
+        terminei os cards (eu acho, vamo ve se a rapaziada tmb acha).
+        tive q pesquisa pra colocar o numero impar de tr com outra estilizacao no tailwind eu so colocaria even:bg-red-300 😢.
+        comecei a estilizacao das tabelas
+        Mais um "bug" o botão não está trocando para o olho fechado de jeito nenhum
+        resolvi tinha duas tags com ids iguais
+        perdi papo de 5 minutos kkkkkkkkkkkkkkk por hj deu
+        fiz o icone de notificacao e ajustei o css agr ss por hj chega
+Dia 3:
+    Matheus:
+        como mandei por get os erros vou começar a tratar
+        acabei de fazer a modal de acesso negado, nem vai aparecer provavelmente, mas casooo alguem sem permissão tente entrar nas paginas vai aparecer.
+        vo colocar o parametro acesso nos botoes dela pra tratar na funcao closeModal
+        exibi o erro de email e o de senha no login
+        acho que por hj vou fzr so isso msm, vo fica dboa, adiantei bastante coisa já i think.

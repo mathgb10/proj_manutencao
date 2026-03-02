@@ -281,7 +281,7 @@
     font-size: 14px;
 }
 
-.modal-header2,
+.modal-header2
 .modal-header {
     width: 100%;
     display: flex;
@@ -541,7 +541,7 @@ padding: 5px;
 } */
 /* --- ESTRUTURA DA MODAL --- */
 .modal-box2 {
-    background-color: #ffffff;
+    background-color: var(--corFundo2);
     width: 90%;
     max-width: 850px;
     /* Largura ideal para caber a foto ao lado */
@@ -568,6 +568,9 @@ padding: 5px;
 
 /* Botão de Fechar (X) */
 .btn-close2 {
+    position: absolute;
+    right: -90%;
+    top: 5%;
     background: transparent;
     border: none;
     font-size: 24px;

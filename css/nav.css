@@ -215,7 +215,8 @@
     transition: 0.25s;
 }
 
-#tema:hover, .configs:hover {
+#tema:hover,
+.configs:hover {
     color: var(--hoverTr);
     transform: rotate(360deg);
 }
@@ -235,6 +236,7 @@
     background: var(--corFundo);
     font-size: var(--text-base);
     transition: 0.3s all ease-in-out;
+
     &:hover {
         background: var(--hoverTr);
         color: var(--txtClaro);
@@ -242,7 +244,7 @@
 }
 
 
-/* Div da logo do senai no nav.ph */
+/* Logo do SENAI na sidebar */
 .div-img {
     width: 85%;
     display: flex;

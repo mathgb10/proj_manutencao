@@ -272,15 +272,6 @@
 
 /*MODAL CADASTRO MAQUINA*/
 
-.modal-box2 {
-    background-color: var(--corFundo2);
-    width: 800px;
-    max-width: 95%;
-    padding: 30px;
-    border-radius: 20px;
-    font-size: 14px;
-}
-
 .modal-header2,
 .modal-header {
     width: 100%;
@@ -290,26 +281,6 @@
     font-size: var(--text-xl);
     margin-bottom: 20px;
     color: var(--corBase);
-}
-
-.modal-header2 h3 {
-    color: var(--corBase);
-    font-weight: 800;
-    font-size: 26px;
-    margin: 0;
-}
-
-.btn-close2 {
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    color: var(--corTxt3);
-
-    cursor: pointer;
-
-    &:hover {
-        color: var(--corBase);
-    }
 }
 
 .modal-form2 {

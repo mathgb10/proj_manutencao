@@ -17,19 +17,19 @@ $permissao_usuario = $_SESSION['user_permissao'];
 
     <div class="div-links">
 
-        <a href="home.php" class="<?php if ($atualmente_em == 'home.php') echo 'ativo'; ?> links">
+        <a href="home.php" class="<?php if ($atualmente_em == 'home.php')
+            echo 'ativo'; ?> links">
             <i class="bi bi-house-door-fill"></i> Home
         </a>
 
-        <a href="dashboard.php" class="<?php if ($atualmente_em == 'dashboard.php') echo 'ativo'; ?> links">
+        <a href="dashboard.php" class="<?php if ($atualmente_em == 'dashboard.php')
+            echo 'ativo'; ?> links">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
 
         <div class="menu-manutencao">
 
-            <a href="javascript:void(0)"
-                class="links manutencao-btn"
-                id="btn-manutencao">
+            <a href="javascript:void(0)" class="links manutencao-btn" id="btn-manutencao">
                 <div>
                     <i class="bi bi-tools"></i>
                     <span>Manutenção</span>
@@ -40,36 +40,38 @@ $permissao_usuario = $_SESSION['user_permissao'];
             <div class="submenu" id="submenu-manutencao">
 
                 <a href="preventiva.php"
-                    class="<?php if ($atualmente_em == 'preventiva.php') echo 'ativo'; ?> links-sub">
+                    class="<?php if ($atualmente_em == 'preventiva.php')
+                        echo 'ativo'; ?> links-sub">
                     <i class="bi bi-clock-fill"></i> Preventiva
                 </a>
 
-                <a href="corretiva.php"
-                    class="<?php if ($atualmente_em == 'corretiva.php') echo 'ativo'; ?> links-sub">
+                <a href="corretiva.php" class="<?php if ($atualmente_em == 'corretiva.php')
+                    echo 'ativo'; ?> links-sub">
                     <i class="bi bi-wrench"></i> Corretiva
                 </a>
 
             </div>
         </div>
 
-        <a href="maquinas.php" class="<?php if ($atualmente_em == 'maquinas.php') echo 'ativo'; ?> links">
+        <a href="maquinas.php" class="<?php if ($atualmente_em == 'maquinas.php')
+            echo 'ativo'; ?> links">
             <i class="bi bi-gear"></i> Painel de Máquinas
         </a>
 
         <?php if ($permissao_usuario == "ADMIN") { ?>
 
-            <a href="../views/usuarios.php"
-                class="<?php if ($atualmente_em == 'usuarios.php') echo 'ativo'; ?> links">
+            <a href="../views/usuarios.php" class="<?php if ($atualmente_em == 'usuarios.php')
+                echo 'ativo'; ?> links">
                 <i class="bi bi-file-earmark-person-fill"></i> Painel de Usuários
             </a>
 
-            <a href="log.php"
-                class="<?php if ($atualmente_em == 'log.php') echo 'ativo'; ?> links">
+            <a href="log.php" class="<?php if ($atualmente_em == 'log.php')
+                echo 'ativo'; ?> links">
                 <i class="bi bi-person-vcard"></i> Painel de Logs
             </a>
 
-           <a href="gerencias_os.php"
-                class="<?php if ($atualmente_em == 'gerencias_os.php') echo 'ativo'; ?> links">
+            <a href="gerencias_os.php" class="<?php if ($atualmente_em == 'gerencias_os.php')
+                echo 'ativo'; ?> links">
                 <i class="bi bi-person-vcard"></i> Gerenciar O.S
             </a>
 
@@ -87,30 +89,14 @@ $permissao_usuario = $_SESSION['user_permissao'];
             </button>
         </div>
 
-        <button
-            onclick="window.location.href='../actions/logout.php'"
-            class="btn sair"
-            onmouseover="changeSairBtn('open')"
-            onmouseleave="changeSairBtn('closed')">
+        <button onclick="window.location.href='../actions/logout.php'" class="btn sair"
+            onmouseover="changeSairBtn('open')" onmouseleave="changeSairBtn('closed')">
             Sair <i class="bi bi-door-closed-fill"></i>
         </button>
     </div>
 </nav>
 
-<style>
-    .submenu {
-        display: none;
-        margin-left: 28px;
-    }
 
-    .submenu.aberto {
-        display: block;
-    }
-
-    .links-sub {
-        margin-top: 4px;
-    }
-</style>
 
 <script>
     document.addEventListener("DOMContentLoaded", () => {

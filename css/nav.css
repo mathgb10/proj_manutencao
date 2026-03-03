@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
     position: fixed;
     z-index: 999;
     background: var(--corBarra);
@@ -39,7 +39,7 @@
 
 .div-links {
     width: 100%;
-    height: 65%;
+    height: 75%;
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -80,17 +80,19 @@
 /* MENU MANUTENÇÃO (CLIQUE) */
 /* ========================= */
 
-.menu-manutencao {
-    width: 90%;
+.menu-manutencao,
+.menu-maquinas {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     text-align: start;
 }
 
 /* Botão Manutenção */
-.manutencao-btn {
+.manutencao-btn,
+.maquinas-btn {
     width: 90%;
     display: flex;
     justify-content: space-between;
@@ -99,7 +101,8 @@
 }
 
 /* Setinha */
-.manutencao-btn .seta {
+.manutencao-btn .seta,
+.maquinas-btn .seta {
     font-size: 0.8rem;
     transition: transform 0.3s ease;
 }
@@ -121,7 +124,8 @@
 }
 
 /* Girar seta quando aberto */
-.menu-manutencao.aberto .seta {
+.menu-manutencao.aberto .seta,
+.menu-maquinas.aberto .seta {
     transform: rotate(180deg);
 }
 
@@ -215,9 +219,14 @@
     transition: 0.25s;
 }
 
-#tema:hover, .configs:hover {
+#tema:hover,
+.configs:hover {
     color: var(--hoverTr);
     transform: rotate(360deg);
+}
+
+.dont-rotate:hover {
+    transform: none;
 }
 
 .sair {
@@ -235,6 +244,7 @@
     background: var(--corFundo);
     font-size: var(--text-base);
     transition: 0.3s all ease-in-out;
+
     &:hover {
         background: var(--hoverTr);
         color: var(--txtClaro);
@@ -338,42 +348,6 @@ img {
     }
 }
 
-/* ===================== */
-/* RESPONSIVO */
-/* ===================== */
-
-@media (max-width: 720px) {
-    .botao-fechar button {
-        font-size: 1.2rem;
-        width: 27px;
-    }
-
-    .card-box-filho {
-        width: 120px;
-    }
-
-    .sidebar {
-        width: 35%;
-    }
-
-    .links {
-        font-size: var(--text-sm);
-    }
-
-    .div-links {
-        padding-left: 5px;
-        align-items: flex-start;
-        width: 111%;
-        justify-content: space-between;
-    }
-}
-
-@media screen and (min-resolution: 1.75dppx) {
-    .links {
-        font-size: var(--text-sm);
-    }
-}
-
 /* scrolamento */
 
 .div-links::-webkit-scrollbar {
@@ -391,4 +365,113 @@ img {
 
 .div-links::-webkit-scrollbar-thumb:hover {
     background-color: var(--corFundo);
+}
+
+/* ===================== */
+/* RESPONSIVO */
+/* ===================== */
+
+@media screen and (min-resolution: 1.75dppx) {
+    .links {
+        font-size: var(--text-sm);
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+        margin: 0;
+        height: 100%;
+        border-radius: 0;
+        padding: 10px 0;
+        gap: 20px;
+    }
+
+    /* Esconde a logo no mobile para ganhar espaço */
+    .div-img {
+        display: none;
+    }
+
+    .div-links {
+        height: auto;
+        flex-grow: 1;
+        justify-content: center;
+        overflow-x: hidden;
+    }
+
+    /* Ajuste dos links: Centraliza o ícone e esconde o texto */
+    .links {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 0;
+        font-size: 0;
+    }
+
+    .links i {
+        margin-right: 0;
+        font-size: var(--text-xl);
+    }
+
+    /* Submenu no mobile */
+    .submenu {
+        display: flex;
+        width: 100%;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
+    }
+
+    .links-sub {
+        justify-content: center;
+        font-size: 0;
+    }
+
+    .links-sub i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+
+    /* Botão Sair - Vira um ícone centralizado */
+    .sair {
+        width: 50px;
+        height: 50px;
+        justify-content: center;
+        padding: 0;
+        border-radius: 50%;
+    }
+
+    .sair span {
+        display: none;
+    }
+
+    .sair i {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    /* Ajuste das configurações */
+    .div-configs {
+        gap: 15px;
+        width: 100%;
+    }
+
+    .div-configs a,
+    .div-configs #tema {
+        font-size: var(--text-sm);
+    }
+
+    .div-configs div {
+        flex-direction: row;
+    }
+
+    /* Botão de fechar - Reposicionado */
+    .botao-fechar button {
+        left: 80%;
+        font-size: var(--text-2xl);
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }

@@ -52,8 +52,44 @@ $permissao_usuario = $_SESSION['user_permissao'];
             </div>
         </div>
 
-        <a href="maquinas.php" class="<?php if ($atualmente_em == 'maquinas.php') echo 'ativo'; ?> links">
-            <i class="bi bi-gear"></i> Painel de Máquinas
+        <div class="menu-maquinas">
+
+            <a href="javascript:void(0)"
+                class="links maquinas-btn"
+                id="btn-maquinas">
+                <div>
+                    <i class="bi bi-cpu"></i>
+                    <span>Máquinas</span>
+                </div>
+                <i class="bi bi-caret-down-fill seta"></i>
+            </a>
+
+            <div class="submenu" id="submenu-maquinas">
+
+                <a href="tipo_maquinas.php"
+                    class="<?php if ($atualmente_em == 'tipo_maquinas.php') echo 'ativo'; ?> links-sub">
+                    <i class="bi bi-tags-fill"></i> Tipo Máquinas
+                </a>
+
+                <a href="maquinas.php"
+                    class="<?php if ($atualmente_em == 'maquinas.php') echo 'ativo'; ?> links-sub">
+                    <i class="bi bi-gear-fill"></i> Máquinas
+                </a>
+
+                <a href="motores.php"
+                    class="<?php if ($atualmente_em == 'motores.php') echo 'ativo'; ?> links-sub">
+                    <i class="bi bi-lightning-fill"></i> Motores
+                </a>
+
+            </div>
+        </div>
+
+        <a href="setor.php" class="<?php if ($atualmente_em == 'setor.php') echo 'ativo'; ?> links">
+            <i class="bi bi-diagram-3-fill"></i> Setor
+        </a>
+
+        <a href="unidade.php" class="<?php if ($atualmente_em == 'unidade.php') echo 'ativo'; ?> links">
+            <i class="bi bi-building"></i> Unidade
         </a>
 
         <?php if ($permissao_usuario == "ADMIN") { ?>
@@ -83,7 +119,7 @@ $permissao_usuario = $_SESSION['user_permissao'];
 
             <button id="notificacao" onclick="showModal('notificacao-modal')">
                 <i class="bi bi-bell-fill"></i>
-                <div class="div-noti">0</div>
+                <div class="div-noti" style="color: var(--corFundo2);">0</div>
             </button>
         </div>
 
@@ -115,31 +151,49 @@ $permissao_usuario = $_SESSION['user_permissao'];
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
-        const btnManutencao = document.getElementById("btn-manutencao");
-        const submenu = document.getElementById("submenu-manutencao");
-        const menuManutencao = btnManutencao.parentElement;
-
-        function abrirMenu() {
-            submenu.classList.add("aberto");
-            menuManutencao.classList.add("aberto");
-            btnManutencao.classList.add("ativo");
-        }
-
-        function fecharMenu() {
-            submenu.classList.remove("aberto");
-            menuManutencao.classList.remove("aberto");
-            btnManutencao.classList.remove("ativo");
-        }
-
-        btnManutencao.addEventListener("click", (e) => {
-            e.preventDefault();
-            submenu.classList.contains("aberto") ? fecharMenu() : abrirMenu();
-        });
+        const dropdowns = [
+            {
+                btnId: "btn-manutencao",
+                submenuId: "submenu-manutencao",
+                paginas: ["preventiva.php", "corretiva.php"]
+            },
+            {
+                btnId: "btn-maquinas",
+                submenuId: "submenu-maquinas",
+                paginas: ["tipo_maquinas.php", "maquinas.php", "motores.php"]
+            }
+        ];
 
         const paginaAtual = window.location.pathname;
-        if (paginaAtual.includes("preventiva.php") || paginaAtual.includes("corretiva.php")) {
-            abrirMenu();
-        }
+
+        dropdowns.forEach(({ btnId, submenuId, paginas }) => {
+            const btn = document.getElementById(btnId);
+            const submenu = document.getElementById(submenuId);
+            if (!btn || !submenu) return;
+
+            const menu = btn.parentElement;
+
+            function abrir() {
+                submenu.classList.add("aberto");
+                menu.classList.add("aberto");
+                btn.classList.add("ativo");
+            }
+
+            function fechar() {
+                submenu.classList.remove("aberto");
+                menu.classList.remove("aberto");
+                btn.classList.remove("ativo");
+            }
+
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                submenu.classList.contains("aberto") ? fechar() : abrir();
+            });
+
+            if (paginas.some(p => paginaAtual.includes(p))) {
+                abrir();
+            }
+        });
 
     });
 </script>

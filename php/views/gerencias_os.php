@@ -25,7 +25,7 @@
     <section class="sec-main">
 
         <!-- Header -->
-            <?php require '../components/header.php'; ?>
+        <?php require '../components/header.php'; ?>
 
         <div class="div-btns-pages">
             <form action="" method="GET" class="form-pesquisa">
@@ -35,10 +35,12 @@
                     ?>
                     <div class="box-pesquisa">
                         <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" id="pesquisa" value="<?php echo htmlspecialchars($busca_atual); ?>"
-                            placeholder="Pesquisar..." class="input-pesquisa">
+                        <input type="text" name="search" id="pesquisa"
+                            value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar..."
+                            class="input-pesquisa">
                         <?php if ($busca_atual): ?>
-                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i class="bi bi-x-lg"></i></a>
+                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i
+                                    class="bi bi-x-lg"></i></a>
                         <?php endif; ?>
                     </div>
                     <!-- Hidden submit button to allow Enter to search -->
@@ -49,55 +51,61 @@
 
         </div>
 
-        <div class="card-table">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th style="width: 10%;">Nº O.S.</th>
-                        <th style="width: 25%;">EQUIPAMENTO</th>
-                        <th style="width: 15%;">SOLICITANTE</th>
-                        <th style="width: 20%;">TÉCNICO / GESTOR</th>
-                        <th style="width: 15%;">STATUS</th>
-                        <th style="width: 15%; text-align: center;">AÇÕES</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="font-weight: bold;">#2026-001</td>
-                        <td class="col-info">
-                            <strong>TORNO ROMI T240</strong>
-                            <span>NI: 1052694</span>
-                        </td>
-                        <td>João Func.</td>
-                        <td><span class="aguardando-text">Aguardando...</span></td>
-                        <td><span class="status-badge status-solicitada">SOLICITADA</span></td>
-                        <td style="text-align: center;">
-                            <button class="btn-aprovar">Aprovar</button>
-                        </td>
-                    </tr>
+        <div class="tabela-bg2" style="height: 75vh;">
+            <div class="tabela-titulo">
+                <i class="bi bi-file-earmark-text"></i>
+                <h2>Ordens de Serviço</h2>
+            </div>
+            <div class="tabela-wrapper">
+                <table class="custom-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">Nº O.S.</th>
+                            <th style="width: 25%;">EQUIPAMENTO</th>
+                            <th style="width: 15%;">SOLICITANTE</th>
+                            <th style="width: 20%;">TÉCNICO / GESTOR</th>
+                            <th style="width: 15%;">STATUS</th>
+                            <th style="width: 15%; text-align: center;">AÇÕES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-weight: bold;">#2026-001</td>
+                            <td class="col-info">
+                                <strong>TORNO ROMI T240</strong>
+                                <span>NI: 1052694</span>
+                            </td>
+                            <td>João Func.</td>
+                            <td><span class="aguardando-text">Aguardando...</span></td>
+                            <td><span class="status-badge status-solicitada">SOLICITADA</span></td>
+                            <td style="text-align: center;">
+                                <button class="btn-aprovar">Aprovar</button>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td style="font-weight: bold;">#2026-002</td>
-                        <td class="col-info">
-                            <strong>FRESA UNIVERSAL</strong>
-                            <span>NI: 2018552</span>
-                        </td>
-                        <td>Admin</td>
-                        <td class="col-info">
-                            <strong>Carlos Alberto</strong>
-                            <span class="gestor-highlight">Gestor: Roberto M.</span>
-                        </td>
-                        <td><span class="status-badge status-execucao">EM EXECUÇÃO</span></td>
-                        <td style="text-align: center;">
-                            <div style="display: flex; justify-content: center;">
-                                <button class="btn-acao-dark">
-                                    <i class="bi bi-key-fill"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                        <tr>
+                            <td style="font-weight: bold;">#2026-002</td>
+                            <td class="col-info">
+                                <strong>FRESA UNIVERSAL</strong>
+                                <span>NI: 2018552</span>
+                            </td>
+                            <td>Admin</td>
+                            <td class="col-info">
+                                <strong>Carlos Alberto</strong>
+                                <span class="gestor-highlight">Gestor: Roberto M.</span>
+                            </td>
+                            <td><span class="status-badge status-execucao">EM EXECUÇÃO</span></td>
+                            <td style="text-align: center;">
+                                <div style="display: flex; justify-content: center;">
+                                    <button class="btn-acao-dark">
+                                        <i class="bi bi-key-fill"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 

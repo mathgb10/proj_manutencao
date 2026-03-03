@@ -16,11 +16,13 @@
     </div>
 <?php } ?>
 
-<div class="modal-fundo" id='notificacao-modal' style="display: none">
-    <div class="modal-notificacao">
-        <div class="modal-header">
-            <h3 id="notif-texto">Notificações</h3>
-            <button id="fechar-modal" onclick="closeModal('notificacao-modal')"><i class="bi bi-x-lg"></i></button>
+<div class="modal-fundo modal-notificacao" id='notificacao-modal' style="display: none">
+    <div class="modal-box">
+        <div class="modal-header" id="modal-notif"
+            style="background: var(--corDestaque); color: var(--txtClaro); padding: 10px; border-radius: 10px 10px 0px 0px;">
+            <h3 id="notif-texto" style="color: var(--txtClaro);">Notificações</h3>
+            <button style='color: var(--txtClaro);' onclick="closeModal('notificacao-modal')"><i
+                    class="bi bi-x-lg"></i></button>
         </div>
         <div class="modal-notificacao-corpo">
             <div id="notificacoes-lista">
@@ -182,32 +184,32 @@
 </div>
 
 <div class="modal-fundo" id="adicaoMachine" style="display: none">
-    <div class="modal-box2">
+    <div class="modal-box modal-box-wide">
 
-        <div class="modal-header2">
+        <div class="modal-header">
             <h3>Registrar Máquina</h3>
-            <button class="btn-close2" onclick="closeModal('adicaoMachine')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('adicaoMachine')"><i class="bi bi-x-lg"></i></button>
         </div>
 
-        <form action="../actions/machines/register_machines.php" class="modal-form2" method="POST">
+        <form action="../actions/machines/register_machines.php" class="modal-form" method="POST">
 
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="denominacao">Denominação:</label>
                     <input type="text" name="denominacao" id="denominacao" placeholder="Ex: TORNO MECÂNICO">
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="marca">Marca:</label>
                     <input type="text" name="marca" id="marca" placeholder="ROMI">
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="modelo">Modelo:</label>
                     <input type="text" name="modelo" id="modelo" placeholder="T 240">
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="ano-fabricacao">Ano:
                         <input type="number" name="ano_fabricacao" id="ano-fabricacao" min="1800" max="2099" step="1"
                             placeholder="2020">
@@ -215,25 +217,25 @@
                 </div>
             </div>
 
-            <div class="modal-row2" id="tabela-frequencia">
-                <div class="modal-input-box2">
+            <div class="modal-row" id="tabela-frequencia">
+                <div class="modal-input">
                     <label for="ni">NI:</label>
                     <input type="text" name="numero_identificacao" id="numero_identificacao"
                         placeholder="1052694 SENAI">
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="nserie">N° Série:</label>
                     <input type="text" name="numero_serie" id="numero_serie" placeholder="016-016057-452">
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="setor">Setor:</label>
                     <input type="text" name="setor" id="setor" placeholder="CÉLULA 1">
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <div class="table-container2">
-                    <table class="custom-table2">
+            <div class="modal-row">
+                <div class="table-container">
+                    <table class="custom-table" id="table-add-inspection">
                         <thead>
                             <tr>
                                 <th style="width: 50px;">N°</th>
@@ -259,7 +261,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <button type='button' class="btn-trash2"><i class="bi bi-trash-fill"></i></button>
+                                    <button type='button' class="btn-trash"><i class="bi bi-trash-fill"></i></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -267,14 +269,14 @@
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <button type="button" class="btn-dashed2" id="addInspectionItemBtn">
+            <div class="modal-row">
+                <button type="button" class="btn-dashed" id="addInspectionItemBtn">
                     <i class="bi bi-plus-circle-fill"></i> ADICIONAR NOVO ITEM DE INSPEÇÃO
                 </button>
             </div>
 
-            <div class="modal-footer2">
-                <button type="submit" class="btn-save2 confirmar">
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">
                     Salvar Registro <i class="bi bi-check-lg"></i>
                 </button>
             </div>
@@ -284,55 +286,55 @@
 </div>
 
 <div class="modal-fundo" id="edicaoMachine" style="display: none">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Editar Máquina</h3>
-            <button class="btn-close2" onclick="closeModal('edicaoMachine')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('edicaoMachine')"><i class="bi bi-x-lg"></i></button>
         </div>
 
-        <form action="../actions/machines/update_machine.php" class="modal-form2" method="POST">
+        <form action="../actions/machines/update_machine.php" class="modal-form" method="POST">
             <input type="hidden" name="id" id="edit_id">
 
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="edit_denominacao">Denominação:</label>
                     <input type="text" name="denominacao" id="edit_denominacao" required>
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="edit_marca">Marca:</label>
                     <input type="text" name="marca" id="edit_marca">
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="edit_modelo">Modelo:</label>
                     <input type="text" name="modelo" id="edit_modelo">
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="edit_numero_identificacao">NI:</label>
                     <input type="text" name="numero_identificacao" id="edit_numero_identificacao" required>
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="edit_numero_serie">N° Série:</label>
                     <input type="text" name="numero_serie" id="edit_numero_serie">
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="edit_ano_fabricacao">Ano:</label>
                     <input type="number" name="ano_fabricacao" id="edit_ano_fabricacao">
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="edit_setor">Setor:</label>
                     <input type="text" name="setor" id="edit_setor">
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <div class="table-container2">
-                    <table class="custom-table2" id="table-edit-inspection">
+            <div class="modal-row">
+                <div class="table-container">
+                    <table class="custom-table" id="table-edit-inspection">
                         <thead>
                             <tr>
                                 <th style="width: 50px;">N°</th>
@@ -348,14 +350,14 @@
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <button type="button" class="btn-dashed2" onclick="adicionarNovaLinhaEdit()">
+            <div class="modal-row">
+                <button type="button" class="btn-dashed" onclick="adicionarNovaLinhaEdit()">
                     <i class="bi bi-plus-circle-fill"></i> ADICIONAR NOVO ITEM DE INSPEÇÃO
                 </button>
             </div>
 
-            <div class="modal-footer2">
-                <button type="submit" class="btn-save2 confirmar">
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">
                     Salvar Alterações <i class="bi bi-check-lg"></i>
                 </button>
             </div>
@@ -365,29 +367,29 @@
 
 <!-- Modal usuario senha 2 - Formulário para trocar senha -->
 <div class="modal-fundo" id="changePassword" style="display: none;">
-    <div class="modal-box2" style="width: 500px; max-width: 90%;">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide" style="width: 500px; max-width: 90%;">
+        <div class="modal-header">
             <h3>Trocar Senha</h3>
         </div>
         <div style="margin-bottom: 20px; color: var(--corTxt3); text-align: center;">
             <p>Por motivos de segurança, você deve alterar sua senha padrão.</p>
         </div>
-        <form action="../actions/user/change_password.php" method="POST" class="modal-form2">
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+        <form action="../actions/user/change_password.php" method="POST" class="modal-form">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="nova_senha">Nova Senha:</label>
                     <input type="password" name="nova_senha" id="nova_senha" required placeholder="Nova Senha">
                 </div>
             </div>
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="confirmar_senha">Confirmar Senha:</label>
                     <input type="password" name="confirmar_senha" id="confirmar_senha" required
                         placeholder="Confirme a Senha">
                 </div>
             </div>
-            <div class="modal-footer2">
-                <button type="submit" class="btn-save2 confirmar">
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">
                     Alterar Senha <i class="bi bi-check-lg"></i>
                 </button>
             </div>
@@ -398,13 +400,13 @@
 <!-- modalResetPass2 removida: redefinição passa a executar diretamente a ação de reset -->
 
 <div class="modal-fundo" id="modalAcessorios" style="display: none;">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>ACESSÓRIOS</h3> <!-- Título Vermelho via CSS -->
-            <button class="btn-close2" onclick="closeModal('modalAcessorios')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('modalAcessorios')"><i class="bi bi-x-lg"></i></button>
         </div>
 
-        <div class="modal-form2">
+        <div class="modal-form">
             <div class="p-3 mb-3 bg-white border" style="border-radius: 15px;">
                 <small class="text-muted text-uppercase font-weight-bold" style="font-size: 10px;">Equipamento
                     Selecionado:</small><br>
@@ -412,9 +414,9 @@
                 <input type="hidden" id="acessorio_maquina_id">
             </div>
 
-            <div class="modal-row2">
-                <div class="table-container2">
-                    <table class="custom-table2" id="table-acessorios">
+            <div class="modal-row">
+                <div class="table-container">
+                    <table class="custom-table" id="table-acessorios">
                         <thead>
                             <tr>
                                 <th>Denominação</th>
@@ -431,14 +433,14 @@
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <button type="button" class="btn-dashed2" onclick="adicionarAcessorio()">
+            <div class="modal-row">
+                <button type="button" class="btn-dashed" onclick="adicionarAcessorio()">
                     <i class="bi bi-plus-circle-fill"></i> ADICIONAR NOVO ACESSÓRIO
                 </button>
             </div>
 
-            <div class="modal-footer2">
-                <button type="button" class="btn-save2 confirmar" onclick="salvarAcessorios()">
+            <div class="modal-footer">
+                <button type="button" class="btn-confirmar-full confirmar" onclick="salvarAcessorios()">
                     Salvar Acessórios <i class="bi bi-check-lg"></i>
                 </button>
             </div>
@@ -447,13 +449,13 @@
 </div>
 
 <div class="modal-fundo" id="modalFAQ" style="display: none;">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Dúvidas Frequentes</h3>
-            <button class="btn-close2" onclick="closeModal('modalFAQ')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('modalFAQ')"><i class="bi bi-x-lg"></i></button>
         </div>
 
-        <div class="modal-form2" style="max-height: 400px; overflow-y: auto;">
+        <div class="modal-form" style="max-height: 400px; overflow-y: auto;">
             <div class="faq-item mb-3">
                 <h5 class="font-weight-bold text-dark"><i class="bi bi-question-circle-fill text-primary"></i> Como
                     cadastrar uma nova máquina?</h5>
@@ -483,8 +485,8 @@
             </div>
         </div>
 
-        <div class="modal-footer2">
-            <button type="button" class="btn-save2 confirmar" onclick="closeModal('modalFAQ')">
+        <div class="modal-footer">
+            <button type="button" class="btn-confirmar-full confirmar" onclick="closeModal('modalFAQ')">
                 Entendi <i class="bi bi-check-lg"></i>
             </button>
         </div>
@@ -493,40 +495,40 @@
 
 <!-- Modal Ações Corretiva -->
 <div class="modal-fundo" id="corretiva" style="display: none">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Corretiva Máquina</h3>
-            <button class="btn-close2" onclick="closeModal('corretiva')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('corretiva')"><i class="bi bi-x-lg"></i></button>
         </div>
 
-        <form action="../actions/machines/update_machine.php" class="modal-form2" method="POST">
+        <form action="../actions/machines/update_machine.php" class="modal-form" method="POST">
             <input type="hidden" name="id" id="edit_id">
 
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="data_corretiva">Date:</label>
                     <input type="date" name="data_corretiva" id="data_corretiva">
                 </div>
-                <div class="modal-input-box2">
+                <div class="modal-input">
                     <label for="edit_modelo">Responsavel:</label>
                     <input type="text" name="modelo" id="edit_modelo" placeholder="Ex: Josias da Silva">
                 </div>
             </div>
 
-            <div class="modal-row2">
-                <div class="modal-input-box2">
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="edit_marca">Descrição:</label>
                     <textarea type="text" name="marca" id="edit_marca" placeholder="Descrição da corretiva de Máquina">
                     </textarea>
                 </div>
             </div>
 
-            <div class="modal-row2">
+            <div class="modal-row">
 
             </div>
 
-            <div class="modal-footer2">
-                <button type="submit" class="btn-save2 confirmar">
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">
                     Salvar <i class="bi bi-check-lg"></i>
                 </button>
             </div>
@@ -538,18 +540,18 @@
 
 <!-- Modal para Ações Preventivas  -->
 <div class="modal-fundo" id="preventiva" style="display: none">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Preventiva Máquina</h3>
-            <button class="btn-close2" onclick="closeModal('preventiva')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('preventiva')"><i class="bi bi-x-lg"></i></button>
         </div>
 
-        <form action="../actions/machines/update_machine.php" class="modal-form2" method="POST">
+        <form action="../actions/machines/update_machine.php" class="modal-form" method="POST">
             <input type="hidden" name="id" id="edit_id">
 
-            <div class="modal-row2">
-                <div class="table-container2">
-                    <table class="custom-table2" id="table-edit-inspection">
+            <div class="modal-row">
+                <div class="table-container">
+                    <table class="custom-table" id="table-edit-inspection">
                         <thead>
                             <tr>
                                 <th style="width: 50px;">N°</th>
@@ -568,12 +570,12 @@
                 </div>
             </div>
 
-            <div class="modal-row2">
+            <div class="modal-row">
 
             </div>
 
-            <div class="modal-footer2">
-                <button type="submit" class="btn-save2 confirmar">
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">
                     Salvar <i class="bi bi-check-lg"></i>
                 </button>
             </div>
@@ -585,18 +587,18 @@
 
 <!-- Modal para Mostrar as informações da Maquina -->
 <div class="modal-fundo" id="preventiva" style="display: none">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Informação Maquina</h3>
-            <button class="btn-close2" onclick="closeModal('preventiva')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('preventiva')"><i class="bi bi-x-lg"></i></button>
         </div>
 
-        <form action="../actions/machines/update_machine.php" class="modal-form2" method="POST">
+        <form action="../actions/machines/update_machine.php" class="modal-form" method="POST">
             <input type="hidden" name="id" id="edit_id">
 
-            <div class="modal-row2">
-                <div class="table-container2">
-                    <table class="custom-table2" id="table-edit-inspection">
+            <div class="modal-row">
+                <div class="table-container">
+                    <table class="custom-table" id="table-edit-inspection">
                         <thead>
                             <tr>
                                 <th style="width: 50px;">N°</th>
@@ -615,12 +617,12 @@
                 </div>
             </div>
 
-            <div class="modal-row2">
+            <div class="modal-row">
 
             </div>
 
-            <div class="modal-footer2">
-                <button type="submit" class="btn-save2 confirmar">
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">
                     Salvar <i class="bi bi-check-lg"></i>
                 </button>
             </div>
@@ -630,15 +632,15 @@
 
 <!-- Visualizar -->
 <div class="modal-fundo" id="view" style="display: none">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Nome da Máquina</h3>
-            <button type="button" class="btn-close2" onclick="closeModal('view')">
+            <button type="button" class="" onclick="closeModal('view')">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
 
-        <form action="../actions/machines/update_machine.php" class="modal-form2" method="POST">
+        <form action="../actions/machines/update_machine.php" class="modal-form" method="POST">
             <input type="hidden" name="id" id="edit_id">
 
             <div class="modal-body-layout">
@@ -675,7 +677,7 @@
                 </div>
             </div>
 
-            <div class="modal-footer2">
+            <div class="modal-footer">
 
             </div>
         </form>
@@ -684,15 +686,15 @@
 
 <!-- Anexos Img
 <div class="modal-fundo" id="anexos" style="display: none">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Anexos</h3>
-            <button type="button" class="btn-close2" onclick="closeModal('anexos')">
+            <button type="button" class="" onclick="closeModal('anexos')">
                 <i class="bi bi-x-lg"></i>
             </button>
         </div>
 
-        <form action="../actions/machines/update_machine.php" class="modal-form2" method="POST">
+        <form action="../actions/machines/update_machine.php" class="modal-form" method="POST">
             <input type="hidden" name="id" id="edit_id">
 
             <div class="modal-body-layout">
@@ -712,7 +714,7 @@
                 </div>
             </div>
             
-            <div class="modal-footer2">
+            <div class="modal-footer">
                 
                 </div>
         </form>
@@ -721,10 +723,10 @@
 
 <!-- Modal CUSTOMIZADA DE PREVENTIVA (Extraída e Adaptada) -->
 <div class="modal-fundo" id="modalPreventiva" style="display: none;">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Checklist de Manutenção</h3>
-            <button class="btn-close2" onclick="closeModal('modalPreventiva')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('modalPreventiva')"><i class="bi bi-x-lg"></i></button>
         </div>
 
         <div class="checklist-info-box">
@@ -778,7 +780,7 @@
             </table>
         </div>
 
-        <div class="modal-footer2 p-0" style="margin-top: 20px;">
+        <div class="modal-footer p-0" style="margin-top: 20px;">
             <div class="modal-input" style="margin-bottom: 10px;">
                 <label for="obs_preventiva">Observações Gerais:</label>
                 <textarea id="obs_preventiva" class="form-control"
@@ -794,18 +796,18 @@
 
 <!-- Modal Histórico de Manutenção -->
 <div class="modal-fundo" id="modalHistorico" style="display: none;">
-    <div class="modal-box2">
-        <div class="modal-header2">
+    <div class="modal-box modal-box-wide">
+        <div class="modal-header">
             <h3>Histórico de Manutenção</h3>
-            <button class="btn-close2" onclick="closeModal('modalHistorico')"><i class="bi bi-x-lg"></i></button>
+            <button class="" onclick="closeModal('modalHistorico')"><i class="bi bi-x-lg"></i></button>
         </div>
 
         <div class="checklist-info-box">
             <h5 id="hist_maquina_nome" class="text-center font-weight-bold" style="color: #333;">Carregando...</h5>
         </div>
 
-        <div class="table-container2" style="max-height: 50vh; overflow-y: auto;">
-            <table class="custom-table2" id="tabelaHistorico">
+        <div class="table-container" style="max-height: 50vh; overflow-y: auto;">
+            <table class="custom-table" id="tabelaHistorico">
                 <thead>
                     <tr>
                         <th>Item Verificado</th>
@@ -819,8 +821,8 @@
             </table>
         </div>
 
-        <div class="modal-footer2">
-            <button type="button" class="btn-save2" style="background-color: #6c757d;"
+        <div class="modal-footer">
+            <button type="button" class="btn-confirmar-full" style="background-color: #6c757d;"
                 onclick="closeModal('modalHistorico')">
                 Fechar
             </button>
@@ -844,6 +846,22 @@
                 class="btn-confirmar-full confirmar">Sim</button>
             <button onclick="closeModal('resetPass')" type="button" class="btn-confirmar-full confirmar"
                 style="background-color: var(--corBase);">Não</button>
+        </div>
+    </div>
+</div>
+
+<div class="" id="sucesso" style="display: none;">
+    <div class="modal-box" id="sucesso-box">
+        <div class="modal-header">
+            <h5 id="sucesso-txt">Sucesso</h5>
+            <button style='color: var(--txtClaro); font-size: var(--text-base)' onclick="closeModal('sucesso')"><i
+                    class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-row">
+            <p id="sucesso-msg" style="font-size: var(--text-sm);">A operação de
+                <?php echo $_GET['sucesso'] ?? 'sucesso' ?> foi
+                concluida com sucesso.
+            </p>
         </div>
     </div>
 </div>

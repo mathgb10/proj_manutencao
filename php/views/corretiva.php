@@ -36,10 +36,12 @@
                     ?>
                     <div class="box-pesquisa">
                         <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" id="pesquisa" value="<?php echo htmlspecialchars($busca_atual); ?>"
-                            placeholder="Pesquisar..." class="input-pesquisa">
+                        <input type="text" name="search" id="pesquisa"
+                            value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar..."
+                            class="input-pesquisa">
                         <?php if ($busca_atual): ?>
-                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i class="bi bi-x-lg"></i></a>
+                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i
+                                    class="bi bi-x-lg"></i></a>
                         <?php endif; ?>
                     </div>
                     <!-- Hidden submit button to allow Enter to search -->
@@ -49,59 +51,65 @@
         </div>
 
         <div class="tabela-bg2" id="tabe">
-            <table class="tabela-main">
-                <thead>
-                    <th>Denominação</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Nº Identificação</th>
-                    <th>Ações</th>
-                </thead>
-                <tbody id="tabela-usuarios">
-                    <?php
+            <div class="tabela-titulo">
+                <i class="bi bi-wrench"></i>
+                <h2>Corretiva</h2>
+            </div>
+            <div class="tabela-wrapper">
+                <table class="tabela-main">
+                    <thead>
+                        <th>Denominação</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Nº Identificação</th>
+                        <th>Ações</th>
+                    </thead>
+                    <tbody id="tabela-usuarios">
+                        <?php
 
-                    if (!empty($busca_atual)) {
+                        if (!empty($busca_atual)) {
 
-                        $termo_seguro = $conn->real_escape_string($busca_atual);
+                            $termo_seguro = $conn->real_escape_string($busca_atual);
 
-                        $sql = "SELECT * FROM maquinas WHERE 
+                            $sql = "SELECT * FROM maquinas WHERE 
                                 denominacao LIKE '%$termo_seguro%' OR
                                 marca LIKE '%$termo_seguro%' OR
                                 modelo LIKE '%$termo_seguro%' OR
                                 numero_identificacao LIKE '%$termo_seguro%'";
-                    } else {
+                        } else {
 
-                        $sql = "SELECT * FROM maquinas";
-                    }
-
-
-                    $resultado = $conn->query($sql);
+                            $sql = "SELECT * FROM maquinas";
+                        }
 
 
-                    if ($resultado && $resultado->num_rows > 0) {
-                        while ($linha = $resultado->fetch_assoc()) {
-                            echo "<tr>";
-                            echo "<td>" . $linha["denominacao"] . "</td>";
-                            echo "<td>" . $linha["marca"] . "</td>";
-                            echo "<td>" . $linha["modelo"] . "</td>";
-                            echo "<td>" . $linha["numero_identificacao"] . "</td>";
-                            echo "<td>
+                        $resultado = $conn->query($sql);
+
+
+                        if ($resultado && $resultado->num_rows > 0) {
+                            while ($linha = $resultado->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $linha["denominacao"] . "</td>";
+                                echo "<td>" . $linha["marca"] . "</td>";
+                                echo "<td>" . $linha["modelo"] . "</td>";
+                                echo "<td>" . $linha["numero_identificacao"] . "</td>";
+                                echo "<td>
                                     <div>
                                         <button class='btnAcao deletar' type='button' onclick=\"showModal('corretiva'," . $linha['id'] . ")\"><i class='bi bi-wrench-adjustable'></i></button>
                                     </div>
                                   </td>";
-                            echo "</tr>";
+                                echo "</tr>";
+                            }
                         }
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="div-btns-change">
-            <button id="btn-ant" type="button"><i class="bi bi-arrow-left"></i></button>
+            <div class="div-btns-change">
+                <button id="btn-ant" type="button"><i class="bi bi-arrow-left"></i></button>
 
-            <button id="btn-prox" type="button"><i class="bi bi-arrow-right"></i></button>
+                <button id="btn-prox" type="button"><i class="bi bi-arrow-right"></i></button>
+            </div>
         </div>
 
     </section>

@@ -37,9 +37,9 @@ if (!isset($conn)) {
     <section class="sec-main">
 
         <!-- Header -->
-            <?php require '../components/header.php'; ?>
+        <?php require '../components/header.php'; ?>
 
-                <div class="div-btns-pages">
+        <div class="div-btns-pages">
             <form action="" method="GET" class="form-pesquisa">
                 <div class="search-container">
                     <?php
@@ -47,85 +47,92 @@ if (!isset($conn)) {
                     ?>
                     <div class="box-pesquisa">
                         <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" id="pesquisa" value="<?php echo htmlspecialchars($busca_atual); ?>"
-                            placeholder="Pesquisar..." class="input-pesquisa">
+                        <input type="text" name="search" id="pesquisa"
+                            value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar..."
+                            class="input-pesquisa">
                         <?php if ($busca_atual): ?>
-                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i class="bi bi-x-lg"></i></a>
+                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i
+                                    class="bi bi-x-lg"></i></a>
                         <?php endif; ?>
                     </div>
                     <!-- Hidden submit button to allow Enter to search -->
                     <button type="submit" style="display: none;"></button>
                 </div>
             </form>
-            <button class="btn" onclick="showModal('adicaoUser')">Adicionar Usuário <i
-                    class="bi bi-person-add"></i>
+            <button class="btn" onclick="showModal('adicaoUser')">Adicionar Usuário <i class="bi bi-person-add"></i>
             </button>
         </div>
 
         <div class="tabela-bg2">
-            <table class="tabela-main">
-                <thead>
-                    <th>ID</th>
-                    <th>Usuário</th>
-                    <th>Endereço de IP</th>
-                    <th>Comando SQL</th>
-                    <th>Data/Hora</th>
-                </thead>
-                <tbody id="tabela-logs">
-                    <?php
-                    // --- LÓGICA DE PESQUISA AVANÇADA COM NOME ---
-
-                    // SQL Base: Traz os logs e junta com a tabela de usuários para pegar o nome
-                    // Usamos 'usuarios.nome AS nome_real' para não confundir
-                    $sql_base = "SELECT logs.*, usuarios.nome AS nome_real 
+            <div class="tabela-titulo">
+                <i class="bi bi-file-earmark-code"></i>
+                <h2>Logs do Sistema</h2>
+            </div>
+            <div class="tabela-wrapper">
+                <table class="tabela-main">
+                    <thead>
+                        <th>ID</th>
+                        <th>Usuário</th>
+                        <th>Endereço de IP</th>
+                        <th>Comando SQL</th>
+                        <th>Data/Hora</th>
+                    </thead>
+                    <tbody id="tabela-logs">
+                        <?php
+                        // --- LÓGICA DE PESQUISA AVANÇADA COM NOME ---
+                        
+                        // SQL Base: Traz os logs e junta com a tabela de usuários para pegar o nome
+                        // Usamos 'usuarios.nome AS nome_real' para não confundir
+                        $sql_base = "SELECT logs.*, usuarios.nome AS nome_real 
                                  FROM logs 
                                  LEFT JOIN usuarios ON logs.usuario_id = usuarios.id";
 
-                    if (!empty($busca_atual)) {
-                        $termo_seguro = mysqli_real_escape_string($conn, $busca_atual);
+                        if (!empty($busca_atual)) {
+                            $termo_seguro = mysqli_real_escape_string($conn, $busca_atual);
 
-                        // Filtra pelo Nome do usuário (da tabela usuarios) ou dados do log
-                        $sql = $sql_base . " WHERE 
+                            // Filtra pelo Nome do usuário (da tabela usuarios) ou dados do log
+                            $sql = $sql_base . " WHERE 
                                 usuarios.nome LIKE '%$termo_seguro%' OR 
                                 logs.ip_address LIKE '%$termo_seguro%' OR 
                                 logs.sql_command LIKE '%$termo_seguro%'";
-                    } else {
-                        $sql = $sql_base;
-                    }
-
-                    // Ordena do mais recente para o mais antigo
-                    $sql .= " ORDER BY logs.id DESC";
-
-                    // Executa a query
-                    $resultado = $conn->query($sql);
-
-                    if ($resultado && $resultado->num_rows > 0) {
-                        while ($linha = $resultado->fetch_assoc()) {
-
-                            // Verifica se encontrou o nome (se o usuário não foi excluído)
-                            $nome_exibicao = !empty($linha["nome_real"]) ? htmlspecialchars($linha["nome_real"]) : "<span style='color: #ff6b6b; font-size: 0.9em;'>Ex-Usuário (ID: " . $linha['usuario_id'] . ")</span>";
-
-                            echo "<tr>";
-                            echo "<td>" . htmlspecialchars($linha["id"]) . "</td>";
-                            echo "<td>" . $nome_exibicao . "</td>";
-                            echo "<td>" . htmlspecialchars($linha["ip_address"]) . "</td>";
-                            // Limita o tamanho do comando SQL visualmente se for muito grande
-                            echo "<td title='" . htmlspecialchars($linha["sql_command"]) . "'>" . substr(htmlspecialchars($linha["sql_command"]), 0, 50) . (strlen($linha["sql_command"]) > 50 ? '...' : '') . "</td>";
-                            echo "<td>" . date("d/m/Y H:i", strtotime($linha["data_hora"])) . "</td>"; // Formata a data BR
-                            echo "</tr>";
+                        } else {
+                            $sql = $sql_base;
                         }
-                    } else {
-                        echo "<tr><td colspan='5' style='text-align:center; padding:20px; color: #888;'>Nenhum registro encontrado.</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
 
-         <div class="div-btns-change">
-            <button id="btn-ant" type="button"><i class="bi bi-chevron-left"></i></button>
+                        // Ordena do mais recente para o mais antigo
+                        $sql .= " ORDER BY logs.id DESC";
 
-            <button id="btn-prox" type="button"><i class="bi bi-chevron-right"></i></button>
+                        // Executa a query
+                        $resultado = $conn->query($sql);
+
+                        if ($resultado && $resultado->num_rows > 0) {
+                            while ($linha = $resultado->fetch_assoc()) {
+
+                                // Verifica se encontrou o nome (se o usuário não foi excluído)
+                                $nome_exibicao = !empty($linha["nome_real"]) ? htmlspecialchars($linha["nome_real"]) : "<span style='color: #ff6b6b; font-size: 0.9em;'>Ex-Usuário (ID: " . $linha['usuario_id'] . ")</span>";
+
+                                echo "<tr>";
+                                echo "<td>" . htmlspecialchars($linha["id"]) . "</td>";
+                                echo "<td>" . $nome_exibicao . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["ip_address"]) . "</td>";
+                                // Limita o tamanho do comando SQL visualmente se for muito grande
+                                echo "<td title='" . htmlspecialchars($linha["sql_command"]) . "'>" . substr(htmlspecialchars($linha["sql_command"]), 0, 50) . (strlen($linha["sql_command"]) > 50 ? '...' : '') . "</td>";
+                                echo "<td>" . date("d/m/Y H:i", strtotime($linha["data_hora"])) . "</td>"; // Formata a data BR
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='5' style='text-align:center; padding:20px; color: #888;'>Nenhum registro encontrado.</td></tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="div-btns-change">
+                <button id="btn-ant" type="button"><i class="bi bi-chevron-left"></i></button>
+
+                <button id="btn-prox" type="button"><i class="bi bi-chevron-right"></i></button>
+            </div>
         </div>
 
     </section>

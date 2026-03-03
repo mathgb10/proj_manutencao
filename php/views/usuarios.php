@@ -52,15 +52,20 @@
         </div>
 
         <div class="tabela-bg2">
-            <table class="tabela-main">
-                <thead>
-                    <th>Nome</th>
-                    <th>E-mail</th>
-                    <th>Senha</th>
-                    <th>Permissão</th>
-                    <th>Ações</th>
-                </thead>
-                <tbody id="tabela-usuarios">
+            <div class="tabela-titulo">
+                <i class="bi bi-people"></i>
+                <h2>Usuários</h2>
+            </div>
+            <div class="tabela-wrapper">
+                <table class="tabela-main">
+                    <thead>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Senha</th>
+                        <th>Permissão</th>
+                        <th>Ações</th>
+                    </thead>
+                    <tbody id="tabela-usuarios">
                     <?php
                     // --- LÓGICA DE PESQUISA ---
 
@@ -104,12 +109,13 @@
                     ?>
                 </tbody>
             </table>
-        </div>
+            </div>
 
-        <div class="div-btns-change">
-            <button id="btn-ant" type="button"><i class="bi bi-chevron-left"></i></button>
+            <div class="div-btns-change">
+                <button id="btn-ant" type="button"><i class="bi bi-chevron-left"></i></button>
 
-            <button id="btn-prox" type="button"><i class="bi bi-chevron-right"></i></button>
+                <button id="btn-prox" type="button"><i class="bi bi-chevron-right"></i></button>
+            </div>
         </div>
 
     </section>

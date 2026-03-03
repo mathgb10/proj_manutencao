@@ -105,7 +105,7 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card-dash card-pereira""
+                <div class="card-dash card-pereira"
                     onclick="filtrarListaPrincipal('todos')">
                     <small>Total de Ativos</small>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -117,7 +117,7 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
         </div>
 
         <!-- Botões e Pesquisa (Igual estrutura maquinas.php) -->
-       <div class="div-btns-pages">
+        <div class="div-btns-pages">
 
             <form action="" method="GET" class="form-pesquisa">
                 <div class="search-container">
@@ -126,10 +126,12 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
                     ?>
                     <div class="box-pesquisa">
                         <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" id="pesquisa" value="<?php echo htmlspecialchars($busca_atual); ?>"
-                            placeholder="Pesquisar..." class="input-pesquisa">
+                        <input type="text" name="search" id="pesquisa"
+                            value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar..."
+                            class="input-pesquisa">
                         <?php if ($busca_atual): ?>
-                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i class="bi bi-x-lg"></i></a>
+                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i
+                                    class="bi bi-x-lg"></i></a>
                         <?php endif; ?>
                     </div>
                     <!-- Hidden submit button to allow Enter to search -->
@@ -140,76 +142,84 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
 
         <!-- Tabela Padronizada -->
         <div class="tabela-bg2" id="tabe">
-            <table class="tabela-main" id="mainTable">
-                <thead>
-                    <tr>
-                        <th>NI</th>
-                        <th>Denominação</th>
-                        <th>Status</th>
-                        <th>Próxima Preventiva</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($resMaquinas && $resMaquinas->num_rows > 0) {
-                        while ($maquina = $resMaquinas->fetch_assoc()) {
-                            $dataStatus = calcularStatus($conn, $maquina['id']);
+            <div class="tabela-titulo">
+                <i class="bi bi-shield-check"></i>
+                <h2>Preventivas</h2>
+            </div>
+            <div class="tabela-wrapper">
+                <table class="tabela-main" id="mainTable">
+                    <thead>
+                        <tr>
+                            <th>NI</th>
+                            <th>Denominação</th>
+                            <th>Status</th>
+                            <th>Próxima Preventiva</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($resMaquinas && $resMaquinas->num_rows > 0) {
+                            while ($maquina = $resMaquinas->fetch_assoc()) {
+                                $dataStatus = calcularStatus($conn, $maquina['id']);
 
-                            // Incrementa contadores
-                            if ($dataStatus['status'] == 'OK')
-                                $contadores['ok']++;
-                            if ($dataStatus['status'] == 'PROXIMO' || $dataStatus['status'] == 'PENDENTE')
-                                $contadores['proximos']++;
-                            if ($dataStatus['status'] == 'VENCIDO')
-                                $contadores['vencidos']++;
-                            $contadores['total']++;
+                                // Incrementa contadores
+                                if ($dataStatus['status'] == 'OK')
+                                    $contadores['ok']++;
+                                if ($dataStatus['status'] == 'PROXIMO' || $dataStatus['status'] == 'PENDENTE')
+                                    $contadores['proximos']++;
+                                if ($dataStatus['status'] == 'VENCIDO')
+                                    $contadores['vencidos']++;
+                                $contadores['total']++;
 
-                            // Mapear status para classe CSS e filtro
-                            $filterStatus = strtolower($dataStatus['status']);
-                            if ($filterStatus == 'pendente')
-                                $filterStatus = 'proximos';
-                            if ($filterStatus == 'proximo')
-                                $filterStatus = 'proximos';
-                            if ($filterStatus == 'vencido')
-                                $filterStatus = 'vencidos';
+                                // Mapear status para classe CSS e filtro
+                                $filterStatus = strtolower($dataStatus['status']);
+                                if ($filterStatus == 'pendente')
+                                    $filterStatus = 'proximos';
+                                if ($filterStatus == 'proximo')
+                                    $filterStatus = 'proximos';
+                                if ($filterStatus == 'vencido')
+                                    $filterStatus = 'vencidos';
 
-                    ?>
-                            <tr data-status="<?php echo $filterStatus; ?>">
-                                <td><?php echo $maquina['numero_identificacao']; ?></td>
-                                <td><?php echo $maquina['denominacao']; ?> <small
-                                        style="color: #888;">(<?php echo $maquina['modelo']; ?>)</small></td>
-                                <td><span
-                                        class="badge-status bg-<?php echo $dataStatus['class']; ?>"><?php echo $dataStatus['label']; ?></span>
-                                </td>
-                                <td><b class="text-<?php echo $dataStatus['class']; ?>"><?php echo $dataStatus['data']; ?></b>
-                                </td>
-                                <td>
-                                    <div style="display: flex; gap: 5px; justify-content: center;">
-                                        <button class="btnAcao checklist" title="Abrir Checklist"
-                                            onclick="openChecklist('<?php echo addslashes($maquina['denominacao']); ?>', <?php echo $maquina['id']; ?>)">
-                                            <i class="bi bi-list-check"></i>
-                                        </button>
-                                        <button class="btnAcao history" title="Ver Histórico" style="background-color: #6c757d;"
-                                            onclick="openHistory('<?php echo addslashes($maquina['denominacao']); ?>', <?php echo $maquina['id']; ?>)">
-                                            <i class="bi bi-clock-history"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                    <?php
+                                ?>
+                                <tr data-status="<?php echo $filterStatus; ?>">
+                                    <td><?php echo $maquina['numero_identificacao']; ?></td>
+                                    <td><?php echo $maquina['denominacao']; ?> <small
+                                            style="color: #888;">(<?php echo $maquina['modelo']; ?>)</small></td>
+                                    <td><span
+                                            class="badge-status bg-<?php echo $dataStatus['class']; ?>"><?php echo $dataStatus['label']; ?></span>
+                                    </td>
+                                    <td><b
+                                            class="text-<?php echo $dataStatus['class']; ?>"><?php echo $dataStatus['data']; ?></b>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; gap: 5px; justify-content: center;">
+                                            <button class="btnAcao checklist" title="Abrir Checklist"
+                                                onclick="openChecklist('<?php echo addslashes($maquina['denominacao']); ?>', <?php echo $maquina['id']; ?>)">
+                                                <i class="bi bi-list-check"></i>
+                                            </button>
+                                            <button class="btnAcao history" title="Ver Histórico"
+                                                style="background-color: #6c757d;"
+                                                onclick="openHistory('<?php echo addslashes($maquina['denominacao']); ?>', <?php echo $maquina['id']; ?>)">
+                                                <i class="bi bi-clock-history"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        } else {
+                            echo "<tr><td colspan='5' style='text-align:center;'>Nenhuma máquina encontrada.</td></tr>";
                         }
-                    } else {
-                        echo "<tr><td colspan='5' style='text-align:center;'>Nenhuma máquina encontrada.</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
+                        ?>
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="div-btns-change">
-            <button id="btn-ant" type="button"><i class="bi bi-chevron-left"></i></button>
-            <button id="btn-prox" type="button"><i class="bi bi-chevron-right"></i></button>
+            <div class="div-btns-change">
+                <button id="btn-ant" type="button"><i class="bi bi-chevron-left"></i></button>
+                <button id="btn-prox" type="button"><i class="bi bi-chevron-right"></i></button>
+            </div>
         </div>
 
     </section>

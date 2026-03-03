@@ -87,18 +87,15 @@ function showPass() {
     // Coleto e armazenos o Btn do Olho e o Input de Senha
 
     let eye = document.getElementById("btnEyeLogin");
-    let inputPass = document.getElementById("senhaLogin");
+    let inputPass = document.getElementById("senha");
 
-
-    if (eye.innerHTML.match('<i class="bi bi-eye-slash"></i>')) {
-        inputPass.type = "text";
+    if (inputPass.type == "text") {
+        inputPass.type = "password";
         eye.innerHTML = '<i class="bi bi-eye-fill"></i>';
     } else {
-        inputPass.type = "password";
+        inputPass.type = "text";
         eye.innerHTML = '<i class="bi bi-eye-slash"></i>';
     }
-    console.log(inputPass.type);
-    console.log(eye.innerHTML);
 }
 
 // Muda o icone de sol pra lua com base no tema da pagina, além de armazenar no localStorage e mudar o tema em sí
@@ -509,7 +506,7 @@ if (btnAddInspecao) {
 }
 
 function adicionarNovaLinha() {
-    const tbody = document.querySelector(".custom-table2 tbody");
+    const tbody = document.querySelector("#table-add-inspection tbody");
     const novaLinha = document.createElement("tr");
 
     novaLinha.innerHTML = `
@@ -539,7 +536,7 @@ function adicionarNovaLinha() {
 
 function removerLinha(botao) {
     const linha = botao.closest("tr");
-    const totalLinhas = document.querySelectorAll(".custom-table2 tbody tr").length;
+    const totalLinhas = document.querySelectorAll("#table-add-inspection tbody tr").length;
 
     if (totalLinhas > 1) {
         linha.remove();
@@ -551,7 +548,7 @@ function removerLinha(botao) {
 }
 
 function atualizarNumeracao() {
-    const linhas = document.querySelectorAll(".custom-table2 tbody tr");
+    const linhas = document.querySelectorAll("#table-add-inspection tbody tr");
 
     linhas.forEach((linha, index) => {
         const celulaNumero = linha.querySelector(".index-numero");
@@ -565,7 +562,7 @@ function LimparTabela() {
     const iconeLixeira = document.querySelector('lixeira');
 
     iconeLixeira.addEventListener('click', function () {
-        let tabela = document.querySelectorAll(".custom-table2 tbody tr");
+        let tabela = document.querySelectorAll("#table-add-inspection tbody tr");
 
         if (confirm("Tem certeza realmente que quer realmente excluir tudo? ")) {
             tabela.innerHTML = "";
@@ -580,7 +577,7 @@ const btnLimparTudo = document.getElementById("lixeira");
 if (btnLimparTudo) {
     btnLimparTudo.addEventListener("click", function () {
         if (confirm("Tem certeza que deseja remover TODOS os itens de inspeção?")) {
-            const tbody = document.querySelector(".custom-table2 tbody");
+            const tbody = document.querySelector("#table-add-inspection tbody");
             tbody.innerHTML = "";
             adicionarNovaLinha();
         }

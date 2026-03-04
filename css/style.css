@@ -362,7 +362,7 @@ img {
 .tabela-bg2 table,
 .custom-table,
 .checklist-table {
-    background: radial-gradient(var(--corFundo) 0%, var(--corFundo2) 100%);
+    background: transparent;
     border-collapse: collapse;
     text-align: center;
     width: 100%;
@@ -452,6 +452,7 @@ img {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: var(--sombra);
+    border: 1px solid var(--corBordas);
 }
 
 /* Título no topo do container */

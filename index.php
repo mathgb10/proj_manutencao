@@ -29,13 +29,9 @@
     if (isset($_GET['erro'])) {
         if ($_GET['erro'] == 'email') {
             $erro = "<div class='div-msg-erro'><p>E-mail não encontrado! Tente novamente</p></div>";
-        } else if ($_GET['erro'] == 'senha') {
+        } else if (isset($_GET['erro']) == 'pass'){
             $erro = "<div class='div-msg-erro'><p>Senha incorreta! Tente novamente</p></div>";
-        } else if ($_GET['erro'] == "maquinaNM") {
-            $erro = "<div class='div-msg-erro'><p>Máquina não encontrada ou em manutenção.</p></div>";
-        } else if ($_GET['erro'] == "maquinaN") {
-            $erro = "<div class='div-msg-erro'><p>Matrícula não encontrada.</p></div>";
-        }
+        } 
     }
     ?>
 

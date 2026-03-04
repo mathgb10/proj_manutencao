@@ -170,8 +170,20 @@ function closeModal(qual) {
         document.getElementById("view").style.display = "none";
     } else if (qual == "anexos") {
         document.getElementById("anexos").style.display = "none";
+    } else if (qual == "sucesso") {
+        document.getElementById("sucesso").style.display = "none";
     } else if (qual == 'modalHistorico') {
         document.getElementById('modalHistorico').style.display = 'none';
+    }
+}
+
+function exibirSucesso(mensagem) {
+    const msgElement = document.getElementById("sucesso-msg");
+    if (msgElement) {
+        msgElement.innerText = mensagem;
+        showModal('sucesso');
+    } else {
+        alert(mensagem); // Fallback caso o modal não exista na página
     }
 }
 

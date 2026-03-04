@@ -24,11 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 
             header("Location: ../views/dashboard.php");
+            exit;
         } else {
             header("Location: ../../index.php?erro=pass");
+            exit;
         }
     } else {
         header("Location: ../../index.php?erro=email");
+        exit;
     }
     // qnd o banco tiver ok nois testa, por enquanto eu vo pedir pro se pq se vai dar conta ai dos seus jeitos
     // deixa a navbar responsiva

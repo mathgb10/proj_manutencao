@@ -1,9 +1,9 @@
-# 🛠️ Sistema de Manutenção Math (NR12)
+# 🛠️ Sistema de Manutenção - proj_manutencao
 
-![Dashboard Mockup](file:///C:/Users/TDS26/.gemini/antigravity/brain/00bd2375-ddfc-4320-a2ba-9c208f48f0b9/dashboard_mockup_1772822992109.png)
+![Dashboard Mockup](assets/dashboard_mockup.png)
 
 > [!IMPORTANT]
-> **Manutenção Math** é um ecossistema de gerenciamento industrial focado em conformidade com a norma **NR12**, desenvolvido para otimizar o fluxo de manutenções no ambiente SENAI. O sistema prioriza performance, segurança (ACL) e uma interface moderna baseada em variáveis OKLCH e design responsivo.
+> **proj_manutencao** é um ecossistema de gerenciamento industrial desenvolvido para otimizar o fluxo de manutenções no ambiente SENAI. O sistema prioriza performance, segurança (ACL) e uma interface moderna baseada em variáveis OKLCH e design responsivo.
 
 ---
 
@@ -25,7 +25,7 @@
 
 - 🔐 **Sistema de Controle de Acesso (ACL)**: Bloqueio de rotas baseado em perfis (Admin/Comum).
 - 📊 **Dashboard Dinâmico**: Cards informativos com status em tempo real e gráficos de manutenção.
-- 📋 **Gestão de Máquinas**: CRUD completo para equipamentos sob a norma NR12.
+- 📋 **Gestão de Máquinas**: CRUD completo para equipamentos.
 - 🔔 **Notificações Inteligentes**: Alertas visuais e sistema de logs de eventos.
 - 📂 **Upload de Documentos**: Interface DropZone para anexos técnicos de manutenção.
 - 👁️ **Visualização Segura**: Toggle de visibilidade de senhas e validações rigorosas de login.
@@ -47,21 +47,6 @@ O projeto segue um padrão de organização modular para facilitar a escalabilid
 ├── js/               # Scripts globais e utilitários assíncronos
 └── css/              # Design System (Variáveis OKLCH e Temas)
 ```
-
----
-
-## 🛠️ Como Instalar
-
-1. Clone o repositório no seu diretório `htdocs` (XAMPP).
-2. Importe o arquivo [base.sql](file:///c:/xampp/htdocs/nr12/manutencaoMath/sql/base.sql) no seu servidor MySQL.
-3. Configure a conexão em `php/configs/` (se necessário).
-4. Acesse via `localhost/nr12/manutencaoMath`.
-
----
-
-## ✒️ Desenvolvedor
-
-- **Matheus** (Desenvolvimento Core & UI/UX)
 
 ---
 

@@ -174,6 +174,18 @@ function closeModal(qual) {
         document.getElementById("sucesso").style.display = "none";
     } else if (qual == 'modalHistorico') {
         document.getElementById('modalHistorico').style.display = 'none';
+    } else if (qual == 'novaOS') {
+        document.getElementById('novaOS').style.display = 'none';
+    } else if (qual == 'detalheOS') {
+        document.getElementById('detalheOS').style.display = 'none';
+    } else if (qual == 'historicoOS') {
+        document.getElementById('historicoOS').style.display = 'none';
+    } else if (qual == 'encaminharOS') {
+        document.getElementById('encaminharOS').style.display = 'none';
+    } else if (qual == 'aceitarOSModal') {
+        document.getElementById('aceitarOSModal').style.display = 'none';
+    } else if (qual == 'arquivarOSModal') {
+        document.getElementById('arquivarOSModal').style.display = 'none';
     }
 }
 
@@ -226,6 +238,18 @@ function showModal(qual, id) {
 
     } else if (qual == "anexos") {
         document.getElementById("anexos").style.display = "flex";
+    } else if (qual == 'novaOS') {
+        document.getElementById('novaOS').style.display = 'flex';
+    } else if (qual == 'detalheOS') {
+        document.getElementById('detalheOS').style.display = 'flex';
+    } else if (qual == 'historicoOS') {
+        document.getElementById('historicoOS').style.display = 'flex';
+    } else if (qual == 'encaminharOS') {
+        document.getElementById('encaminharOS').style.display = 'flex';
+    } else if (qual == 'aceitarOSModal') {
+        document.getElementById('aceitarOSModal').style.display = 'flex';
+    } else if (qual == 'arquivarOSModal') {
+        document.getElementById('arquivarOSModal').style.display = 'flex';
     }
 }
 

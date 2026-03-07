@@ -1327,3 +1327,302 @@ select {
     /* Um tom avermelhado/laranja */
     font-weight: 800;
 }
+
+/* =============================================
+   SISTEMA DE ORDEM DE SERVIÇO (O.S.)
+   ============================================= */
+
+/* --- Cards de Resumo --- */
+.os-resumo-container {
+    width: 90%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.os-resumo-card {
+    background: var(--corFundo2);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--sombra);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.os-resumo-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.os-resumo-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.os-resumo-card.os-tab-ativo {
+    border-color: var(--corBase);
+    box-shadow: 0 4px 15px rgba(252, 35, 35, 0.15);
+}
+
+.os-resumo-aberto::before { background: var(--confirmar); }
+.os-resumo-arquivada::before { background: var(--corBase); }
+.os-resumo-aguardando::before { background: oklch(75% 0.183 55.934); }
+.os-resumo-todas::before { background: var(--editar); }
+
+.os-resumo-label {
+    font-size: var(--text-sm);
+    color: var(--corTxt3);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.os-resumo-numero {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-top: 5px;
+}
+
+.os-resumo-aberto .os-resumo-numero { color: oklch(76.5% 0.177 163.223); }
+.os-resumo-arquivada .os-resumo-numero { color: var(--corBase); }
+.os-resumo-aguardando .os-resumo-numero { color: oklch(75% 0.183 55.934); }
+.os-resumo-todas .os-resumo-numero { color: var(--editar); }
+
+/* --- Status Badges O.S. --- */
+.os-status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.os-status-aberto {
+    background: oklch(76.5% 0.177 163.223 / 0.15);
+    color: oklch(50% 0.177 163.223);
+}
+
+.os-status-aguardando {
+    background: oklch(75% 0.183 55.934 / 0.15);
+    color: oklch(55% 0.183 55.934);
+}
+
+.os-status-aceita {
+    background: oklch(74.6% 0.16 232.661 / 0.15);
+    color: oklch(50% 0.16 232.661);
+}
+
+.os-status-arquivada {
+    background: rgba(252, 35, 35, 0.1);
+    color: var(--corBase);
+}
+
+/* --- Tipo Badges --- */
+.os-tipo-badge {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.os-tipo-manutencao {
+    background: oklch(74.6% 0.16 232.661 / 0.12);
+    color: oklch(50% 0.16 232.661);
+}
+
+.os-tipo-patrimonio {
+    background: oklch(75% 0.183 55.934 / 0.12);
+    color: oklch(55% 0.183 55.934);
+}
+
+.os-tipo-outros {
+    background: rgba(100, 100, 100, 0.12);
+    color: var(--corEscura);
+}
+
+/* --- Detalhe da O.S. (Modal) --- */
+.os-detalhe-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--corBordas);
+}
+
+.os-info-item {
+    color: var(--corTxt3);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+}
+
+.os-info-item strong {
+    color: var(--corTxt3);
+    opacity: 0.7;
+    font-size: 12px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.os-detalhe-anexos {
+    padding: 12px 0;
+    color: var(--corTxt3);
+    border-bottom: 1px solid var(--corBordas);
+}
+
+.os-anexo-link {
+    display: inline-block;
+    margin-right: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--corFundo);
+    color: var(--editar);
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.2s ease;
+}
+
+.os-anexo-link:hover {
+    background: oklch(74.6% 0.16 232.661 / 0.15);
+}
+
+/* --- Fluxo Visual Origem → Destino --- */
+.os-fluxo-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px 0;
+}
+
+.os-fluxo-item {
+    text-align: center;
+}
+
+.os-fluxo-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--corTxt3);
+    opacity: 0.6;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.os-fluxo-avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.os-fluxo-avatar i {
+    font-size: 3rem;
+    color: var(--corBase);
+}
+
+.os-fluxo-avatar span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--corTxt3);
+}
+
+.os-fluxo-seta {
+    font-size: 2rem;
+    color: var(--editar);
+}
+
+/* --- Timeline de Histórico --- */
+.os-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 0;
+}
+
+.os-timeline-item {
+    background: var(--corFundo);
+    border-radius: 10px;
+    padding: 15px 20px;
+    border-left: 4px solid var(--corBordas);
+    transition: all 0.2s ease;
+}
+
+.os-timeline-item:hover {
+    transform: translateX(3px);
+    box-shadow: var(--sombra);
+}
+
+.os-timeline-item.os-hist-criada { border-left-color: var(--editar); }
+.os-timeline-item.os-hist-aceita { border-left-color: var(--confirmar); }
+.os-timeline-item.os-hist-encaminhada { border-left-color: oklch(75% 0.183 55.934); }
+.os-timeline-item.os-hist-arquivada { border-left-color: var(--corBase); }
+
+.os-timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.os-timeline-data {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--corBase);
+}
+
+.os-timeline-status {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--corTxt3);
+    opacity: 0.7;
+}
+
+.os-timeline-body {
+    color: var(--corTxt3);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.os-timeline-body p {
+    margin-bottom: 4px;
+}
+
+.os-timeline-desc {
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* --- Responsivo O.S. --- */
+@media (max-width: 768px) {
+    .os-resumo-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .os-detalhe-info {
+        grid-template-columns: 1fr;
+    }
+
+    .os-fluxo-visual {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .os-resumo-container {
+        grid-template-columns: 1fr;
+    }
+}

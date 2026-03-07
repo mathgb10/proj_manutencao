@@ -17,19 +17,19 @@ $permissao_usuario = $_SESSION['user_permissao'];
 
     <div class="div-links">
 
-        <a href="home.php" class="<?php if ($atualmente_em == 'home.php') echo 'ativo'; ?> links">
+        <a href="home.php" class="<?php if ($atualmente_em == 'home.php')
+            echo 'ativo'; ?> links">
             <i class="bi bi-house-door-fill"></i> Home
         </a>
 
-        <a href="dashboard.php" class="<?php if ($atualmente_em == 'dashboard.php') echo 'ativo'; ?> links">
+        <a href="dashboard.php" class="<?php if ($atualmente_em == 'dashboard.php')
+            echo 'ativo'; ?> links">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
 
         <div class="menu-manutencao">
 
-            <a href="javascript:void(0)"
-                class="links manutencao-btn"
-                id="btn-manutencao">
+            <a href="javascript:void(0)" class="links manutencao-btn" id="btn-manutencao">
                 <div>
                     <i class="bi bi-tools"></i>
                     <span>Manutenção</span>
@@ -40,12 +40,14 @@ $permissao_usuario = $_SESSION['user_permissao'];
             <div class="submenu" id="submenu-manutencao">
 
                 <a href="preventiva.php"
-                    class="<?php if ($atualmente_em == 'preventiva.php') echo 'ativo'; ?> links-sub">
+                    class="<?php if ($atualmente_em == 'preventiva.php')
+                        echo 'ativo'; ?> links-sub">
                     <i class="bi bi-clock-fill"></i> Preventiva
                 </a>
 
-                <a href="corretiva.php"
-                    class="<?php if ($atualmente_em == 'corretiva.php') echo 'ativo'; ?> links-sub">
+                <a href="corretiva.php" style="display: none;"
+                    class="<?php if ($atualmente_em == 'corretiva.php')
+                        echo 'ativo'; ?> links-sub">
                     <i class="bi bi-wrench"></i> Corretiva
                 </a>
 
@@ -54,9 +56,7 @@ $permissao_usuario = $_SESSION['user_permissao'];
 
         <div class="menu-maquinas">
 
-            <a href="javascript:void(0)"
-                class="links maquinas-btn"
-                id="btn-maquinas">
+            <a href="javascript:void(0)" class="links maquinas-btn" id="btn-maquinas">
                 <div>
                     <i class="bi bi-cpu"></i>
                     <span>Máquinas</span>
@@ -67,45 +67,48 @@ $permissao_usuario = $_SESSION['user_permissao'];
             <div class="submenu" id="submenu-maquinas">
 
                 <a href="tipo_maquinas.php"
-                    class="<?php if ($atualmente_em == 'tipo_maquinas.php') echo 'ativo'; ?> links-sub">
+                    class="<?php if ($atualmente_em == 'tipo_maquinas.php')
+                        echo 'ativo'; ?> links-sub">
                     <i class="bi bi-tags-fill"></i> Tipo Máquinas
                 </a>
 
-                <a href="maquinas.php"
-                    class="<?php if ($atualmente_em == 'maquinas.php') echo 'ativo'; ?> links-sub">
+                <a href="maquinas.php" class="<?php if ($atualmente_em == 'maquinas.php')
+                    echo 'ativo'; ?> links-sub">
                     <i class="bi bi-gear-fill"></i> Máquinas
                 </a>
 
-                <a href="motores.php"
-                    class="<?php if ($atualmente_em == 'motores.php') echo 'ativo'; ?> links-sub">
+                <a href="motores.php" class="<?php if ($atualmente_em == 'motores.php')
+                    echo 'ativo'; ?> links-sub">
                     <i class="bi bi-lightning-fill"></i> Motores
                 </a>
 
             </div>
         </div>
 
-        <a href="setor.php" class="<?php if ($atualmente_em == 'setor.php') echo 'ativo'; ?> links">
+        <a href="setor.php" class="<?php if ($atualmente_em == 'setor.php')
+            echo 'ativo'; ?> links">
             <i class="bi bi-diagram-3-fill"></i> Setor
         </a>
 
-        <a href="unidade.php" class="<?php if ($atualmente_em == 'unidade.php') echo 'ativo'; ?> links">
+        <a href="unidade.php" class="<?php if ($atualmente_em == 'unidade.php')
+            echo 'ativo'; ?> links">
             <i class="bi bi-building"></i> Unidade
         </a>
 
         <?php if ($permissao_usuario == "ADMIN") { ?>
 
-            <a href="../views/usuarios.php"
-                class="<?php if ($atualmente_em == 'usuarios.php') echo 'ativo'; ?> links">
+            <a href="../views/usuarios.php" class="<?php if ($atualmente_em == 'usuarios.php')
+                echo 'ativo'; ?> links">
                 <i class="bi bi-file-earmark-person-fill"></i> Painel de Usuários
             </a>
 
-            <a href="log.php"
-                class="<?php if ($atualmente_em == 'log.php') echo 'ativo'; ?> links">
+            <a href="log.php" class="<?php if ($atualmente_em == 'log.php')
+                echo 'ativo'; ?> links">
                 <i class="bi bi-person-vcard"></i> Painel de Logs
             </a>
 
-           <a href="gerencias_os.php"
-                class="<?php if ($atualmente_em == 'gerencias_os.php') echo 'ativo'; ?> links">
+            <a href="gerencias_os.php" class="<?php if ($atualmente_em == 'gerencias_os.php')
+                echo 'ativo'; ?> links">
                 <i class="bi bi-person-vcard"></i> Gerenciar O.S
             </a>
 
@@ -123,11 +126,8 @@ $permissao_usuario = $_SESSION['user_permissao'];
             </button>
         </div>
 
-        <button
-            onclick="window.location.href='../actions/logout.php'"
-            class="btn sair"
-            onmouseover="changeSairBtn('open')"
-            onmouseleave="changeSairBtn('closed')">
+        <button onclick="window.location.href='../actions/logout.php'" class="btn sair"
+            onmouseover="changeSairBtn('open')" onmouseleave="changeSairBtn('closed')">
             Sair <i class="bi bi-door-closed-fill"></i>
         </button>
     </div>

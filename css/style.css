@@ -1619,6 +1619,59 @@ select {
     .os-fluxo-visual {
         gap: 15px;
     }
+
+    /* Novos estilos migrados do nr12rework */
+    .div-btns-pages {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .div-btns-pages select {
+        width: 100%;
+    }
+
+    .btn {
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .div-btns-pages form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .search-container {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .box-pesquisa {
+        width: 100%;
+    }
+
+    .filtrar-status {
+        width: 100% !important;
+        justify-content: space-between;
+    }
+
+    .tabela-bg,
+    .tabela-bg2 {
+        overflow-x: auto;
+    }
+
+    .hero-content h1 {
+        font-size: var(--text-2xl);
+    }
+
+    .doc-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-bottom: 35px;
+    }
 }
 
 @media (max-width: 480px) {

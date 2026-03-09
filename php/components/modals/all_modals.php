@@ -227,7 +227,7 @@
                 </div>
             </div>
 
-            <div class="modal-row" id="tabela-frequencia">
+            <div class="modal-row quebraMobile" id="tabela-frequencia">
                 <div class="modal-input">
                     <label for="ni">NI:</label>
                     <input type="text" name="numero_identificacao" id="numero_identificacao"

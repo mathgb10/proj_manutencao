@@ -63,6 +63,18 @@ window.onload = () => {
         }
     });
 
+    // Lógica migrada do nr12rework
+    var placeholderQuebra = document.querySelectorAll(".quebraMobile");
+    var sizeWidth = window.innerWidth;
+    if (sizeWidth <= 720) {
+        if (placeholderQuebra != undefined) {
+            for (let i = 0; i < placeholderQuebra.length; i++) {
+                placeholderQuebra[i].style.display = "flex";
+                placeholderQuebra[i].style.flexDirection = "column";
+            }
+        }
+    }
+
     startRealTimeClock();
 }
 
@@ -332,7 +344,7 @@ if (arrow != undefined) {
                     divImg.style.display = 'flex';
                     divConfig.style.display = 'flex';
                     navLinks.style.display = 'flex';
-                    main.style = 'padding-left: 16%';
+                    main.style = 'padding-left: 12%';
                     clearTimeout();
                 }, 65)
             }
@@ -341,7 +353,7 @@ if (arrow != undefined) {
                     divImg.style.display = 'flex';
                     divConfig.style.display = 'flex';
                     navLinks.style.display = 'flex';
-                    main.style = 'padding-left: 16%';
+                    main.style = 'padding-left: 35%';
                     clearTimeout();
                 }, 65)
             }

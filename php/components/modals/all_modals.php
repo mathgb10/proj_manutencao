@@ -105,42 +105,42 @@
 <div class="modal-fundo" id="edicaoUser" style="display: none">
     <div class="modal-box">
         <div class="modal-header">
-            <h3>Editar</h3>
+            <h3>Editar Usuário</h3>
             <button class="" id="" onclick="closeModal('edicaoUser')"><i class="bi bi-x-lg"></i></button>
         </div>
         <form action="../actions/user/update_users.php" class="modal-form" method="POST">
             <div style="display: none;">
-                <input type="number" id="id" name="id">
+                <input type="number" id="edit_user_id" name="id">
             </div>
 
             <div class="modal-input">
-                <label for="nome">Nome:</label>
+                <label for="edit_user_nome">Nome:</label>
                 <div class="input-wrapper">
-                    <input type="text" name="nome" id="nome" placeholder="Ex: Matheus dos Ateus">
+                    <input type="text" name="nome" id="edit_user_nome" placeholder="Ex: Matheus dos Ateus">
                 </div>
             </div>
 
             <div class="modal-row">
                 <div class="modal-input">
-                    <label for="email">E-mail:</label>
+                    <label for="edit_user_email">E-mail:</label>
                     <div class="input-wrapper">
-                        <input type="email" name="email" id="email" placeholder="exemplo@email.com">
+                        <input type="email" name="email" id="edit_user_email" placeholder="exemplo@email.com">
                     </div>
                 </div>
 
                 <div class="modal-input">
-                    <label for="senha">Senha:</label>
-                    <div class="input-wrapper input-senha-wrapper"> <input type="password" name="senha" id="senha"
+                    <label for="edit_user_senha">Senha:</label>
+                    <div class="input-wrapper input-senha-wrapper"> <input type="password" name="senha" id="edit_user_senha"
                             placeholder="*******" readonly value="06022026">
-                        <button type="button" onclick="showPass()" id="btnEye" class="eye-btn">
+                        <button type="button" onclick="showPass()" id="btnEyeEdit" class="eye-btn">
                             <i class="bi bi-eye-fill"></i>
                         </button>
                     </div>
                 </div>
             </div>
             <div class="modal-input">
-                <label for="permissao">Nível Permissão</label>
-                <select name="permissao" id="permissao">
+                <label for="edit_user_permissao">Nível Permissão</label>
+                <select name="permissao" id="edit_user_permissao">
                     <option value="semValor">Selecione uma Opção</option>
                     <option value="NORMAL">Normal</option>
                     <option value="GESTOR">Gestor</option>
@@ -148,8 +148,8 @@
                 </select>
             </div>
             <div class="modal-btn">
-                <button type="submit" onclick="" class="btn-confirmar-full confirmar">Cadastrar <i
-                        class="bi bi-plus-lg"></i></button>
+                <button type="submit" onclick="" class="btn-confirmar-full confirmar">Salvar Alterações <i
+                        class="bi bi-check-lg"></i></button>
             </div>
         </form>
     </div>
@@ -798,6 +798,181 @@
                     placeholder="Alguma observação sobre essa manutenção?"></textarea>
             </div>
             <button class="btn-save-preventiva" onclick="finalizarPreventiva()">
+                Salvar Manutenção <i class="bi bi-check-lg"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAIS PARA MOTORES -->
+<div class="modal-fundo" id="adicaoMotor" style="display: none">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Registrar Motor</h3>
+            <button onclick="closeModal('adicaoMotor')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form action="../actions/motors/register_motor.php" class="modal-form" method="POST">
+            <div class="modal-input">
+                <label for="motor_fabricante">Fabricante:</label>
+                <input type="text" name="motor_fabricante" id="motor_fabricante" placeholder="Ex: WEG" required>
+            </div>
+            <div class="modal-input">
+                <label for="motor_modelo">Modelo:</label>
+                <input type="text" name="motor_modelo" id="motor_modelo" placeholder="Ex: W22" required>
+            </div>
+            <div class="modal-row">
+                <div class="modal-input">
+                    <label for="motor_potencia">Potência:</label>
+                    <input type="text" name="motor_potencia" id="motor_potencia" placeholder="Ex: 5 CV">
+                </div>
+                <div class="modal-input">
+                    <label for="motor_tensao">Tensão:</label>
+                    <input type="text" name="motor_tensao" id="motor_tensao" placeholder="Ex: 220/380V">
+                </div>
+            </div>
+            <div class="modal-input">
+                <label for="motor_corrente">Corrente:</label>
+                <input type="text" name="motor_corrente" id="motor_corrente" placeholder="Ex: 13.5 A">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">Cadastrar <i class="bi bi-plus-lg"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-fundo" id="editarMotor" style="display: none">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Editar Motor</h3>
+            <button onclick="closeModal('editarMotor')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form action="../actions/motors/update_motor.php" class="modal-form" method="POST">
+            <input type="hidden" name="idmotor" id="edit_idmotor">
+            <div class="modal-input">
+                <label for="edit_motor_fabricante">Fabricante:</label>
+                <input type="text" name="motor_fabricante" id="edit_motor_fabricante" required>
+            </div>
+            <div class="modal-input">
+                <label for="edit_motor_modelo">Modelo:</label>
+                <input type="text" name="motor_modelo" id="edit_motor_modelo" required>
+            </div>
+            <div class="modal-row">
+                <div class="modal-input">
+                    <label for="edit_motor_potencia">Potência:</label>
+                    <input type="text" name="motor_potencia" id="edit_motor_potencia">
+                </div>
+                <div class="modal-input">
+                    <label for="edit_motor_tensao">Tensão:</label>
+                    <input type="text" name="motor_tensao" id="edit_motor_tensao">
+                </div>
+            </div>
+            <div class="modal-row">
+                <div class="modal-input">
+                    <label for="edit_motor_corrente">Corrente:</label>
+                    <input type="text" name="motor_corrente" id="edit_motor_corrente">
+                </div>
+                <div class="modal-input">
+                    <label for="edit_motor_status">Status:</label>
+                    <select name="motor_status" id="edit_motor_status">
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">Salvar Alterações <i class="bi bi-check-lg"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-fundo" id="dellMotor" style="display: none;">
+    <div class="modal-box" style="width: 400px; padding: 20px;">
+        <div class="modal-header" style="margin-bottom: 20px;">
+            <h3>Deletar Motor</h3>
+            <button onclick="closeModal('dellMotor')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
+            <p>Tem certeza que quer deletar este motor?</p>
+        </div>
+        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
+            <input type="hidden" id="id_motor_del">
+            <button onclick="excluirMotor(document.getElementById('id_motor_del').value)" class="btn-confirmar-full confirmar">Sim</button>
+            <button onclick="closeModal('dellMotor')" type="button" class="btn-confirmar-full confirmar" style="background-color: var(--corBase);">Não</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAIS PARA TIPO DE MÁQUINA -->
+<div class="modal-fundo" id="adicaoTipoMaquina" style="display: none">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Registrar Tipo Maquina</h3>
+            <button onclick="closeModal('adicaoTipoMaquina')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form action="../actions/tipo_maquina/register_tipo_maquina.php" class="modal-form" method="POST">
+            <div class="modal-input">
+                <label for="tipomaquina_nome">Nome:</label>
+                <input type="text" name="tipomaquina_nome" id="tipomaquina_nome" placeholder="Ex: Torno Mecânico" required>
+            </div>
+            <div class="modal-input">
+                <label for="tipomaquina_arquivo">Arquivo (PDF/Doc):</label>
+                <input type="text" name="tipomaquina_arquivo" id="tipomaquina_arquivo" placeholder="Ex: manual_torno.pdf">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">Cadastrar <i class="bi bi-plus-lg"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-fundo" id="edicaoTipoMaquina" style="display: none">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Editar Tipo Maquina</h3>
+            <button onclick="closeModal('edicaoTipoMaquina')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form action="../actions/tipo_maquina/update_tipo_maquina.php" class="modal-form" method="POST">
+            <input type="hidden" name="idtipomaquina" id="edit_idtipomaquina">
+            <div class="modal-input">
+                <label for="edit_tipomaquina_nome">Nome:</label>
+                <input type="text" name="tipomaquina_nome" id="edit_tipomaquina_nome" required>
+            </div>
+            <div class="modal-input">
+                <label for="edit_tipomaquina_arquivo">Arquivo:</label>
+                <input type="text" name="tipomaquina_arquivo" id="edit_tipomaquina_arquivo">
+            </div>
+            <div class="modal-input">
+                <label for="edit_tipomaquina_status">Status:</label>
+                <select name="tipomaquina_status" id="edit_tipomaquina_status">
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inativo">Inativo</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn-confirmar-full confirmar">Salvar Alterações <i class="bi bi-check-lg"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal-fundo" id="dellTipoMaquina" style="display: none;">
+    <div class="modal-box" style="width: 400px; padding: 20px;">
+        <div class="modal-header" style="margin-bottom: 20px;">
+            <h3>Deletar Tipo Máquina</h3>
+            <button onclick="closeModal('dellTipoMaquina')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
+            <p>Tem certeza que quer deletar este tipo de máquina?</p>
+        </div>
+        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
+            <input type="hidden" id="id_tipma_del">
+            <button onclick="excluirTipoMaquina(document.getElementById('id_tipma_del').value)" class="btn-confirmar-full confirmar">Sim</button>
+            <button onclick="closeModal('dellTipoMaquina')" type="button" class="btn-confirmar-full confirmar" style="background-color: var(--corBase);">Não</button>
+        </div>
+    </div>
+</div>
                 Finalizar Inspeção Selecionada <i class="bi bi-check-circle-fill ml-2"></i>
             </button>
         </div>

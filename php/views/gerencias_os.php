@@ -250,7 +250,7 @@
                     document.getElementById('os_tipo').value = '';
                     document.getElementById('os_responsavel').value = '';
                     carregarOS();
-                    alert(data.message);
+                    exibirSucesso(data.message);
                 } else {
                     alert(data.message);
                 }
@@ -317,7 +317,7 @@
                 closeModal('aceitarOSModal');
                 if (data.success) {
                     carregarOS();
-                    alert(data.message);
+                    exibirSucesso(data.message);
                 } else {
                     alert(data.message);
                 }
@@ -352,7 +352,7 @@
 
                 if (data.success) {
                     carregarOS();
-                    alert(data.message);
+                    exibirSucesso(data.message);
                 } else {
                     alert(data.message);
                 }
@@ -380,7 +380,7 @@
                 closeModal('arquivarOSModal');
                 if (data.success) {
                     carregarOS();
-                    alert(data.message);
+                    exibirSucesso(data.message);
                 } else {
                     alert(data.message);
                 }

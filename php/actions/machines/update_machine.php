@@ -99,13 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         mysqli_commit($conn);
-        $_SESSION['success_message'] = "Máquina e checklist atualizados com sucesso.";
+        header("Location: ../../views/maquinas.php?sucesso=Máquina atualizada");
+        exit();
 
     } catch (Exception $e) {
         mysqli_rollback($conn);
-        $_SESSION['error_message'] = "Erro ao atualizar: " . $e->getMessage();
+        header("Location: ../../views/maquinas.php?erro=" . urlencode($e->getMessage()));
+        exit();
     }
-
-    header("Location: ../../views/maquinas.php");
-    exit();
 }

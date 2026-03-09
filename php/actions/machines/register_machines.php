@@ -65,7 +65,7 @@ if ($stmt) {
             }
         }
 
-        echo "<script>alert('Máquina e checklist cadastrados com sucesso!'); window.location.href='../../views/maquinas.php';</script>";
+        echo "<script>window.location.href='../../views/maquinas.php?sucesso=Máquina e checklist cadastrados';</script>";
     } else {
         echo "<script>alert('Erro ao cadastrar a máquina. Por favor, tente novamente.'); window.location.href='../../views/maquinas.php';</script>";
     }

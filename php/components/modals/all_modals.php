@@ -973,11 +973,6 @@
         </div>
     </div>
 </div>
-                Finalizar Inspeção Selecionada <i class="bi bi-check-circle-fill ml-2"></i>
-            </button>
-        </div>
-    </div>
-</div>
 
 <!-- Modal Histórico de Manutenção -->
 <div class="modal-fundo" id="modalHistorico" style="display: none;">

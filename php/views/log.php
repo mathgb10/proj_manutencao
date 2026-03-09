@@ -59,8 +59,6 @@ if (!isset($conn)) {
                     <button type="submit" style="display: none;"></button>
                 </div>
             </form>
-            <button class="btn" onclick="showModal('adicaoUser')">Adicionar Usuário <i class="bi bi-person-add"></i>
-            </button>
         </div>
 
         <div class="tabela-bg2">

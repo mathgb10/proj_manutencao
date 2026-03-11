@@ -250,7 +250,7 @@
                     document.getElementById('os_tipo').value = '';
                     document.getElementById('os_responsavel').value = '';
                     carregarOS();
-                    alert(data.message);
+                    exibirSucesso(data.message);
                 } else {
                     alert(data.message);
                 }
@@ -317,7 +317,7 @@
                 closeModal('aceitarOSModal');
                 if (data.success) {
                     carregarOS();
-                    alert(data.message);
+                    exibirSucesso(data.message);
                 } else {
                     alert(data.message);
                 }
@@ -351,8 +351,13 @@
                 document.getElementById('encaminhar_responsavel').value = '';
 
                 if (data.success) {
+<<<<<<< HEAD
                     filtrarOS('Aguardando Aprovação'); // Redireciona para aba privada para mostrar que a OS está lá
                     alert(data.message);
+=======
+                    carregarOS();
+                    exibirSucesso(data.message);
+>>>>>>> e70253c17b1bf3a75a010f2ba6a0d96a3c9509cb
                 } else {
                     alert(data.message);
                 }
@@ -380,7 +385,7 @@
                 closeModal('arquivarOSModal');
                 if (data.success) {
                     carregarOS();
-                    alert(data.message);
+                    exibirSucesso(data.message);
                 } else {
                     alert(data.message);
                 }

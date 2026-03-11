@@ -380,8 +380,10 @@ img {
 @media (max-width: 768px) {
     .sidebar {
         width: 70px;
+        /* Reduzi para focar nos ícones */
         margin: 0;
         height: 100%;
+        /* Ocupa a altura toda sem margem */
         border-radius: 0;
         padding: 10px 0;
         gap: 20px;
@@ -396,6 +398,7 @@ img {
         height: auto;
         flex-grow: 1;
         justify-content: center;
+        /* Faz a lista de links ocupar o espaço central */
         overflow-x: hidden;
     }
 
@@ -405,14 +408,16 @@ img {
         justify-content: center;
         padding: 12px 0;
         font-size: 0;
+        /* Esconde o texto */
     }
 
     .links i {
         margin-right: 0;
         font-size: var(--text-xl);
+        /* Ícones maiores para facilitar o toque */
     }
 
-    /* Submenu no mobile */
+    /* Submenu no mobile (opcional: pode esconder ou mostrar apenas ícones) */
     .submenu {
         display: flex;
         width: 100%;
@@ -442,6 +447,7 @@ img {
 
     .sair span {
         display: none;
+        /* Esconde o texto "Sair" */
     }
 
     .sair i {
@@ -464,7 +470,7 @@ img {
         flex-direction: row;
     }
 
-    /* Botão de fechar - Reposicionado */
+    /* Botão de fechar - Reposicionado para não sumir */
     .botao-fechar button {
         left: 80%;
         font-size: var(--text-2xl);

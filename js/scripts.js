@@ -63,6 +63,18 @@ window.onload = () => {
         }
     });
 
+    // Lógica migrada do nr12rework
+    var placeholderQuebra = document.querySelectorAll(".quebraMobile");
+    var sizeWidth = window.innerWidth;
+    if (sizeWidth <= 720) {
+        if (placeholderQuebra != undefined) {
+            for (let i = 0; i < placeholderQuebra.length; i++) {
+                placeholderQuebra[i].style.display = "flex";
+                placeholderQuebra[i].style.flexDirection = "column";
+            }
+        }
+    }
+
     startRealTimeClock();
 }
 
@@ -139,12 +151,18 @@ function closeModal(qual) {
         // Seria Legal tirar o ?acesso=negado dps que fechar
     } else if (qual == 'adicaoUser') {
         document.getElementById('adicaoUser').style.display = 'none';
-    } else if (qual == 'edicaoUser') {
-        document.getElementById('edicaoUser').style.display = 'none';
-    } else if (qual == 'adicaoMachine') {
-        document.getElementById('adicaoMachine').style.display = 'none';
-    } else if (qual == 'edicaoMachine') {
-        document.getElementById('edicaoMachine').style.display = 'none';
+    } else if (qual == 'adicaoMotor') {
+        document.getElementById('adicaoMotor').style.display = 'none';
+    } else if (qual == 'editarMotor') {
+        document.getElementById('editarMotor').style.display = 'none';
+    } else if (qual == 'dellMotor') {
+        document.getElementById('dellMotor').style.display = 'none';
+    } else if (qual == 'adicaoTipoMaquina') {
+        document.getElementById('adicaoTipoMaquina').style.display = 'none';
+    } else if (qual == 'edicaoTipoMaquina') {
+        document.getElementById('edicaoTipoMaquina').style.display = 'none';
+    } else if (qual == 'dellTipoMaquina') {
+        document.getElementById('dellTipoMaquina').style.display = 'none';
     } else if (qual == "notificacao-modal") {
         document.getElementById('notificacao-modal').style.display = 'none';
         document.querySelector('.modal-notificacao').style.display = 'none';
@@ -203,10 +221,31 @@ function showModal(qual, id) {
     if (qual == "adicaoUser") {
         document.getElementById(qual).style.display = "flex";
     } else if (qual == "edicaoUser") {
-        document.getElementById("id").value = id;
-        document.getElementById(qual).style.display = "flex";
+        editarUsuario(id);
     } else if (qual == "adicaoMachine") {
         document.getElementById(qual).style.display = "flex";
+    } else if (qual == "adicaoMotor") {
+        document.getElementById(qual).style.display = "flex";
+    } else if (qual == "editarMotor") {
+        editarMotor(id);
+    } else if (qual == "deletarMotor") {
+        document.getElementById("dellMotor").style.display = "flex";
+        document.getElementById("id_motor_del").value = id;
+    } else if (qual == "desativarMotor") {
+        if (confirm("Deseja realmente desativar este motor?")) {
+            excluirMotor(id, 'desativar');
+        }
+    } else if (qual == "adicaoTipoMaquina") {
+        document.getElementById(qual).style.display = "flex";
+    } else if (qual == "edicaoTipoMaquina") {
+        editarTipoMaquina(id);
+    } else if (qual == "deletarTipoMaquina") {
+        document.getElementById("dellTipoMaquina").style.display = "flex";
+        document.getElementById("id_tipma_del").value = id;
+    } else if (qual == "desativarTipMa") {
+        if (confirm("Deseja realmente desativar este tipo de máquina?")) {
+            excluirTipoMaquina(id, 'desativar');
+        }
     } else if (qual == "notificacao-modal") {
         document.getElementById(qual).style.display = "flex";
         document.querySelector('.modal-notificacao').style.display = 'flex';
@@ -250,7 +289,98 @@ function showModal(qual, id) {
         document.getElementById('aceitarOSModal').style.display = 'flex';
     } else if (qual == 'arquivarOSModal') {
         document.getElementById('arquivarOSModal').style.display = 'flex';
+    } else if (qual == "sucesso") {
+        document.getElementById("sucesso").style.display = "flex";
     }
+}
+
+function editarMotor(id) {
+    fetch('../actions/motors/get_motor.php?id=' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.getElementById('edit_idmotor').value = data.idmotor;
+                document.getElementById('edit_motor_fabricante').value = data.motor_fabricante;
+                document.getElementById('edit_motor_modelo').value = data.motor_modelo;
+                document.getElementById('edit_motor_potencia').value = data.motor_potencia;
+                document.getElementById('edit_motor_tensao').value = data.motor_tensão;
+                document.getElementById('edit_motor_corrente').value = data.motor_corrente;
+                document.getElementById('edit_motor_status').value = data.motor_status;
+                document.getElementById('editarMotor').style.display = 'flex';
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao buscar dados do motor.');
+        });
+}
+
+function excluirMotor(id, acao = 'deletar') {
+    fetch('../actions/motors/delete_motor.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'id=' + id + '&acao=' + acao
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                sessionStorage.setItem('pendingSuccessMessage', data.message);
+                location.reload();
+            } else {
+                alert('Erro: ' + (data.message || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao processar a solicitação.');
+        });
+}
+
+function editarTipoMaquina(id) {
+    fetch('../actions/tipo_maquina/get_tipo_maquina.php?id=' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.getElementById('edit_idtipomaquina').value = data.idtipomaquina;
+                document.getElementById('edit_tipomaquina_nome').value = data.tipomaquina_nome;
+                document.getElementById('edit_tipomaquina_arquivo').value = data.tipomaquina_arquivo;
+                document.getElementById('edit_tipomaquina_status').value = data.tipomaquina_status;
+                document.getElementById('edicaoTipoMaquina').style.display = 'flex';
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao buscar dados do tipo de máquina.');
+        });
+}
+
+function excluirTipoMaquina(id, acao = 'deletar') {
+    fetch('../actions/tipo_maquina/delete_tipo_maquina.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'id=' + id + '&acao=' + acao
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                sessionStorage.setItem('pendingSuccessMessage', data.message);
+                location.reload();
+            } else {
+                alert('Erro: ' + (data.message || 'Erro desconhecido'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao processar a solicitação.');
+        });
 }
 
 // botoes de tema | notificação e suas respectivas animações ou funcionalidades
@@ -332,7 +462,7 @@ if (arrow != undefined) {
                     divImg.style.display = 'flex';
                     divConfig.style.display = 'flex';
                     navLinks.style.display = 'flex';
-                    main.style = 'padding-left: 16%';
+                    main.style = 'padding-left: 12%';
                     clearTimeout();
                 }, 65)
             }
@@ -341,7 +471,7 @@ if (arrow != undefined) {
                     divImg.style.display = 'flex';
                     divConfig.style.display = 'flex';
                     navLinks.style.display = 'flex';
-                    main.style = 'padding-left: 16%';
+                    main.style = 'padding-left: 35%';
                     clearTimeout();
                 }, 65)
             }
@@ -372,6 +502,7 @@ function excluir(qual, id) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    sessionStorage.setItem('pendingSuccessMessage', 'Usuário excluído com sucesso!');
                     location.reload();
                 } else { //hey vamos separar a logica função para cada excluir, acho melhor e seguro
                     alert('Erro ao excluir usuário: ' + (data.message || 'Erro desconhecido'));
@@ -400,7 +531,7 @@ function excluir(qual, id) {
 
 
                 if (data.success === true) {
-                    alert(data.message);
+                    sessionStorage.setItem('pendingSuccessMessage', data.message);
                     location.reload();
                 } else {
                     alert('Erro: ' + (data.message || 'Erro desconhecido'));
@@ -411,6 +542,26 @@ function excluir(qual, id) {
                 alert('Erro ao processar a solicitação. Verifique o console (F12).');
             });
     }
+}
+
+function editarUsuario(id) {
+    fetch('../actions/user/get_user.php?id=' + id)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.getElementById('edit_user_id').value = data.id;
+                document.getElementById('edit_user_nome').value = data.nome;
+                document.getElementById('edit_user_email').value = data.email;
+                document.getElementById('edit_user_permissao').value = data.permissao;
+                document.getElementById('edicaoUser').style.display = 'flex';
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            alert('Erro ao buscar dados do usuário.');
+        });
 }
 
 function editarMaquina(id) {
@@ -472,7 +623,7 @@ function excluirMaquina(id) {
 
 
             if (data.success === true) {
-                alert(data.message);
+                sessionStorage.setItem('pendingSuccessMessage', data.message);
                 location.reload();
             } else {
                 alert('Erro: ' + (data.message || 'Erro desconhecido'));
@@ -730,7 +881,7 @@ function excluirUser(id) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Usuário excluído com sucesso!');
+                sessionStorage.setItem('pendingSuccessMessage', 'Usuário excluído com sucesso!');
                 location.reload();
             } else {
                 alert('Erro ao excluir usuário: ' + (data.message || 'Erro desconhecido'));
@@ -850,7 +1001,7 @@ function salvarAcessorios() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Acessórios salvos com sucesso!');
+                exibirSucesso('Acessórios salvos com sucesso!');
                 closeModal('modalAcessorios');
             } else {
                 alert('Erro ao salvar: ' + data.message);
@@ -1166,7 +1317,7 @@ function finalizarPreventiva() {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                alert('Manutenção registrada com sucesso!');
+                sessionStorage.setItem('pendingSuccessMessage', 'Manutenção registrada com sucesso!');
                 closeModal('modalPreventiva');
                 location.reload(); // Recarregar para atualizar status
             } else {
@@ -1181,3 +1332,19 @@ window.onclick = function (event) {
         closeModal(event.target.id);
     }
 }
+// Verificar se há mensagem de sucesso na URL ou sessionStorage
+document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sucessoUrl = urlParams.get('sucesso');
+    const pendingMsg = sessionStorage.getItem('pendingSuccessMessage');
+
+    if (pendingMsg) {
+        exibirSucesso(pendingMsg);
+        sessionStorage.removeItem('pendingSuccessMessage');
+    } else if (sucessoUrl) {
+        exibirSucesso(sucessoUrl);
+        // Opcional: remover o parâmetro da URL sem recarregar
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
+    }
+});

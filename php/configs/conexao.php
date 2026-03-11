@@ -9,6 +9,14 @@ $port = 3308;
 
 $conn = mysqli_connect($sv, $user, $pass, $db, $port);
 
+// Conexão com o banco de dados do projeto NR12
+$db_nr12 = "nr12";
+$conn_nr12 = mysqli_connect($sv, $user, $pass, $db_nr12, $port);
+
+if (!$conn_nr12) {
+    // Silencioso ou logar erro
+}
+
 // Fiz pq no do Senai precisa mas em my house não precisa. OBS: TIRA ESSE COMENTARIO NA HORA DE APRESENTAR
 
 function salvarLog($conn, $sql_command)

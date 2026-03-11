@@ -105,8 +105,7 @@
 
 @media (max-width: 768px) {
     .sec-main {
-        padding: 80px 15px 30px 15px;
-        /* Espaço para menu mobile se houver */
+        padding-left: 90px;
     }
 
     .div-header {

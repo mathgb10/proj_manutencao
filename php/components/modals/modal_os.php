@@ -119,12 +119,12 @@
                 </div>
             </div>
 
-            <div class="modal-footer" style="gap: 10px;">
-                <button type="button" class="btn-confirmar-full editar" onclick="verHistoricoOS()"
+            <div class="modal-footer" style="gap: 15px; display: flex;">
+                <button type="button" class="os-btn-premium os-btn-historico" onclick="verHistoricoOS()"
                     id="btn-historico-os">
                     <i class="bi bi-clock-history"></i> Histórico
                 </button>
-                <button type="button" class="btn-confirmar-full confirmar" onclick="showModal('encaminharOS')"
+                <button type="button" class="os-btn-premium os-btn-encaminhar" onclick="showModal('encaminharOS')"
                     id="btn-encaminhar-os">
                     <i class="bi bi-send"></i> Encaminhar
                 </button>
@@ -148,8 +148,8 @@
         </div>
 
         <div class="modal-footer">
-            <button type="button" class="btn-confirmar-full editar" onclick="closeModal('historicoOS')">
-                <i class="bi bi-arrow-left"></i> Voltar
+            <button type="button" class="os-btn-premium os-btn-voltar" onclick="closeModal('historicoOS')">
+                <i class="bi bi-arrow-left"></i> Voltar para Detalhes
             </button>
         </div>
     </div>
@@ -193,8 +193,8 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn-confirmar-full confirmar" onclick="encaminharOS()">
-                    Encaminhar <i class="bi bi-send"></i>
+                <button type="button" class="os-btn-premium os-btn-encaminhar" onclick="encaminharOS()">
+                    Confirmar Encaminhamento <i class="bi bi-send-check"></i>
                 </button>
             </div>
         </div>

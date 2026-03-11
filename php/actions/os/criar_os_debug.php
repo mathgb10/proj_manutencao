@@ -1,22 +1,10 @@
 <?php
-// Suprimir warnings/notices que quebram JSON
-// Habilitar erros para depuração agressiva
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('log_errors', 1);
-ini_set('error_log', dirname(__FILE__) . '/php_error_log.txt');
-
 session_start();
 require '../../configs/conexao.php';
 
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['success' => false, 'message' => 'Sessão expirada. Faça login novamente.']);
-    exit;
-}
-
-$input = json_decode(file_get_contents('php://input'), true);
+$input = json_decode(file_get_contents('mock_input.json'), true);
 
 if (!$input) {
     echo json_encode(['success' => false, 'message' => 'Dados inválidos']);
@@ -44,11 +32,6 @@ if (!in_array($tipo, $tipos_validos)) {
 // 1. Inserir a Ordem de Serviço
 $sql = "INSERT INTO ordens_servico (descricao, tipo, status, solicitante_id, responsavel_id) VALUES (?, ?, 'Em Aberto', ?, ?)";
 $stmt = $conn->prepare($sql);
-
-if (!$stmt) {
-    echo json_encode(['success' => false, 'message' => 'Erro ao preparar SQL da O.S.: ' . $conn->error]);
-    exit;
-}
 $stmt->bind_param("ssii", $descricao, $tipo, $solicitante_id, $responsavel_id);
 
 if ($stmt->execute()) {
@@ -63,32 +46,18 @@ if ($stmt->execute()) {
     $responsavel_nome = ($resResp->num_rows > 0) ? $resResp->fetch_assoc()['nome'] : 'Desconhecido';
 
     // 3. Criar primeiro registro no histórico
-    $desc_hist = "Ordem de Serviço criada por $solicitante_nome em " . date('d/m/Y H:i') . " e encaminhada para $responsavel_nome.";
+    $desc_hist = "Ordem de Serviço criada por $solicitante_nome em " . date('d/m/Y H:i') . " e encaminhada para $responsavel_nome. Com a seguinte Descrição: $descricao";
     $status_hist = "OS Criada";
 
     $sqlHist = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
     $stmtHist = $conn->prepare($sqlHist);
-    if ($stmtHist) {
-        $stmtHist->bind_param("isiis", $os_id, $status_hist, $solicitante_id, $responsavel_id, $desc_hist);
-        if (!$stmtHist->execute()) {
-            // Se falhar o histórico, vamos avisar mas a OS foi criada
-            echo json_encode(['success' => true, 'message' => 'O.S. Criada, mas erro no Histórico: ' . $stmtHist->error, 'os_id' => $os_id]);
-            exit;
-        }
-    } else {
-         echo json_encode(['success' => true, 'message' => 'O.S. Criada, mas erro ao preparar Histórico: ' . $conn->error, 'os_id' => $os_id]);
-         exit;
-    }
+    $stmtHist->bind_param("isiis", $os_id, $status_hist, $solicitante_id, $responsavel_id, $desc_hist);
+    $stmtHist->execute();
 
-    // Tentar salvar log sem quebrar se falhar
-    try {
-        if (function_exists('salvarLog')) {
-            salvarLog($conn, "INSERT ordens_servico ID=$os_id por usuario ID=$solicitante_id");
-        }
-    } catch (Throwable $t) {}
+    salvarLog($conn, "INSERT ordens_servico ID=$os_id por usuario ID=$solicitante_id");
 
     echo json_encode(['success' => true, 'message' => 'Ordem de Serviço criada com sucesso!', 'os_id' => $os_id]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao criar O.S. no banco: ' . $conn->error]);
+    echo json_encode(['success' => false, 'message' => 'Erro ao criar O.S.: ' . $conn->error]);
 }
 ?>

@@ -1,5 +1,14 @@
 <?php
+// Suprimir warnings/notices que quebram JSON
+error_reporting(0);
+ini_set('display_errors', 0);
+
 session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Sessão expirada. Faça login novamente.']);
+    exit;
+}
 require '../../configs/conexao.php';
 
 header('Content-Type: application/json');
@@ -41,15 +50,23 @@ $stmtUpdate->bind_param("i", $os_id);
 
 if ($stmtUpdate->execute()) {
     // Registrar no histórico
-    $desc_hist = "Ordem de Serviço arquivada por $usuario_nome dia " . date('d/m/Y H:i');
-    $status_hist = "OS Arquivada";
+    try {
+        $desc_hist = "Ordem de Serviço arquivada por $usuario_nome dia " . date('d/m/Y H:i');
+        $status_hist = "OS Arquivada";
 
-    $sqlHist = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
-    $stmtHist = $conn->prepare($sqlHist);
-    $stmtHist->bind_param("isiis", $os_id, $status_hist, $usuario_id, $os['responsavel_id'], $desc_hist);
-    $stmtHist->execute();
+        $sqlHist = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
+        $stmtHist = $conn->prepare($sqlHist);
+        if ($stmtHist) {
+            $stmtHist->bind_param("isiis", $os_id, $status_hist, $usuario_id, $os['responsavel_id'], $desc_hist);
+            $stmtHist->execute();
+        }
+    } catch (Throwable $t) {}
 
-    salvarLog($conn, "UPDATE ordens_servico ID=$os_id STATUS=Arquivada por usuario ID=$usuario_id");
+    try {
+        if (function_exists('salvarLog')) {
+            salvarLog($conn, "UPDATE ordens_servico ID=$os_id STATUS=Arquivada por usuario ID=$usuario_id");
+        }
+    } catch (Throwable $t) {}
 
     echo json_encode(['success' => true, 'message' => 'O.S. arquivada com sucesso!']);
 } else {

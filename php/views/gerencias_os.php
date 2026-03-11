@@ -47,19 +47,19 @@
         <!-- Cards de Resumo -->
         <div class="os-resumo-container">
             <div class="os-resumo-card os-resumo-aberto os-tab-ativo" onclick="filtrarOS('Em Aberto')">
-                <div class="os-resumo-label">O.S. "Em Aberto"</div>
+                <div class="os-resumo-label">Principais (Aberto/Aceitas)</div>
                 <div class="os-resumo-numero" id="contador-aberto">0</div>
             </div>
-            <div class="os-resumo-card os-resumo-arquivada" onclick="filtrarOS('Arquivada')">
-                <div class="os-resumo-label">O.S. "Arquivada"</div>
-                <div class="os-resumo-numero" id="contador-arquivada">0</div>
-            </div>
             <div class="os-resumo-card os-resumo-aguardando" onclick="filtrarOS('Aguardando Aprovação')">
-                <div class="os-resumo-label">O.S. "A Aceitar"</div>
+                <div class="os-resumo-label">Encaminhadas (Privadas)</div>
                 <div class="os-resumo-numero" id="contador-aguardando">0</div>
             </div>
+            <div class="os-resumo-card os-resumo-arquivada" onclick="filtrarOS('Arquivada')">
+                <div class="os-resumo-label">Arquivadas</div>
+                <div class="os-resumo-numero" id="contador-arquivada">0</div>
+            </div>
             <div class="os-resumo-card os-resumo-todas" onclick="filtrarOS('')">
-                <div class="os-resumo-label">Todas</div>
+                <div class="os-resumo-label">Todas Visíveis</div>
                 <div class="os-resumo-numero" id="contador-todas">0</div>
             </div>
         </div>
@@ -180,10 +180,10 @@
         }
 
         function atualizarContadores(contadores, totalAtual) {
-            document.getElementById('contador-aberto').textContent = contadores.em_aberto;
+            document.getElementById('contador-aberto').textContent = parseInt(contadores.em_aberto) + parseInt(contadores.aceita || 0);
             document.getElementById('contador-arquivada').textContent = contadores.arquivada;
             document.getElementById('contador-aguardando').textContent = contadores.aguardando;
-            document.getElementById('contador-todas').textContent = contadores.em_aberto + contadores.arquivada + contadores.aguardando;
+            document.getElementById('contador-todas').textContent = parseInt(contadores.em_aberto) + parseInt(contadores.arquivada) + parseInt(contadores.aguardando) + parseInt(contadores.aceita || 0);
         }
 
         function getStatusClass(status) {
@@ -220,7 +220,7 @@
                 'Aguardando Aprovação': 'Aguardando Aprovação',
                 '': 'Todas'
             };
-            document.getElementById('os-titulo-tabela').textContent = `Ordens de Serviço — ${titulos[status] || 'Todas'}`;
+            document.getElementById('os-titulo-tabela').textContent = `Status: ${status === 'Em Aberto' ? 'Aberto / Aceitas' : (status === 'Aguardando Aprovação' ? 'Encaminhadas (Privadas)' : (titulos[status] || 'Todas'))}`;
 
             carregarOS();
         }
@@ -351,7 +351,7 @@
                 document.getElementById('encaminhar_responsavel').value = '';
 
                 if (data.success) {
-                    carregarOS();
+                    filtrarOS('Aguardando Aprovação'); // Redireciona para aba privada para mostrar que a OS está lá
                     alert(data.message);
                 } else {
                     alert(data.message);

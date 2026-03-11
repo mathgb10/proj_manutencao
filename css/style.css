@@ -1626,3 +1626,79 @@ select {
         grid-template-columns: 1fr;
     }
 }
+
+/* =============================================
+   BOTÕES PREMIUM O.S. (REDESIGN)
+   ============================================= */
+.os-btn-premium {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 15px 25px;
+    border-radius: 14px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+}
+
+.os-btn-premium::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(35deg);
+    transition: 0.6s all ease;
+}
+
+.os-btn-premium:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.os-btn-premium:hover::after {
+    left: 130%;
+}
+
+.os-btn-premium:active {
+    transform: translateY(-2px) scale(0.97);
+}
+
+/* Histórico - Gradiente Ultravioleta */
+.os-btn-historico {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+/* Encaminhar - Gradiente Esmeralda */
+.os-btn-encaminhar {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+/* Voltar - Ardosia */
+.os-btn-voltar {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    box-shadow: 0 4px 15px rgba(100, 116, 139, 0.4);
+}
+
+.os-btn-premium i {
+    font-size: 1.3rem;
+    transition: transform 0.3s ease;
+}
+
+.os-btn-premium:hover i {
+    transform: rotate(-10deg) scale(1.2);
+}

@@ -1,0 +1,10 @@
+[11-Mar-2026 21:05:56 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`manutencao_tds2026`.`os_historico`, CONSTRAINT `os_historico_ibfk_1` FOREIGN KEY (`os_id`) REFERENCES `ordens_servico_bkp_2026` (`id`) ON DELETE CASCADE) in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\criar_os.php:73
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\criar_os.php(73): mysqli_stmt->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\criar_os.php on line 73
+[11-Mar-2026 21:06:18 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Cannot add or update a child row: a foreign key constraint fails (`manutencao_tds2026`.`os_historico`, CONSTRAINT `os_historico_ibfk_1` FOREIGN KEY (`os_id`) REFERENCES `ordens_servico_bkp_2026` (`id`) ON DELETE CASCADE) in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\criar_os.php:73
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\criar_os.php(73): mysqli_stmt->execute()
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\criar_os.php on line 73

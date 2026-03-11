@@ -351,13 +351,8 @@
                 document.getElementById('encaminhar_responsavel').value = '';
 
                 if (data.success) {
-<<<<<<< HEAD
                     filtrarOS('Aguardando Aprovação'); // Redireciona para aba privada para mostrar que a OS está lá
                     alert(data.message);
-=======
-                    carregarOS();
-                    exibirSucesso(data.message);
->>>>>>> e70253c17b1bf3a75a010f2ba6a0d96a3c9509cb
                 } else {
                     alert(data.message);
                 }

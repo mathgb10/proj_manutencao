@@ -1038,10 +1038,10 @@
                     class="bi bi-x-lg"></i></button>
         </div>
         <div class="modal-row">
-            <p id="sucesso-msg" style="font-size: var(--text-sm);">A operação de
-                <?php echo $_GET['sucesso'] ?? 'sucesso' ?> foi
-                concluida com sucesso.
+            <p id="sucesso-msg" style="font-size: var(--text-sm);">
+                <?php echo $_GET['sucesso'] ?? 'A operação foi concluída com sucesso.' ?>
             </p>
         </div>
     </div>
 </div>
+```

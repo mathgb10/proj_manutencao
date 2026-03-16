@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 h3 {
     color: var(--corTxt3);
 }
@@ -1374,10 +1373,21 @@ select {
     box-shadow: 0 4px 15px rgba(252, 35, 35, 0.15);
 }
 
-.os-resumo-aberto::before { background: var(--confirmar); }
-.os-resumo-arquivada::before { background: var(--corBase); }
-.os-resumo-aguardando::before { background: oklch(75% 0.183 55.934); }
-.os-resumo-todas::before { background: var(--editar); }
+.os-resumo-aberto::before {
+    background: var(--confirmar);
+}
+
+.os-resumo-arquivada::before {
+    background: var(--corBase);
+}
+
+.os-resumo-aguardando::before {
+    background: oklch(75% 0.183 55.934);
+}
+
+.os-resumo-todas::before {
+    background: var(--editar);
+}
 
 .os-resumo-label {
     font-size: var(--text-sm);
@@ -1393,10 +1403,21 @@ select {
     margin-top: 5px;
 }
 
-.os-resumo-aberto .os-resumo-numero { color: oklch(76.5% 0.177 163.223); }
-.os-resumo-arquivada .os-resumo-numero { color: var(--corBase); }
-.os-resumo-aguardando .os-resumo-numero { color: oklch(75% 0.183 55.934); }
-.os-resumo-todas .os-resumo-numero { color: var(--editar); }
+.os-resumo-aberto .os-resumo-numero {
+    color: oklch(76.5% 0.177 163.223);
+}
+
+.os-resumo-arquivada .os-resumo-numero {
+    color: var(--corBase);
+}
+
+.os-resumo-aguardando .os-resumo-numero {
+    color: oklch(75% 0.183 55.934);
+}
+
+.os-resumo-todas .os-resumo-numero {
+    color: var(--editar);
+}
 
 /* --- Status Badges O.S. --- */
 .os-status-badge {
@@ -1565,10 +1586,21 @@ select {
     box-shadow: var(--sombra);
 }
 
-.os-timeline-item.os-hist-criada { border-left-color: var(--editar); }
-.os-timeline-item.os-hist-aceita { border-left-color: var(--confirmar); }
-.os-timeline-item.os-hist-encaminhada { border-left-color: oklch(75% 0.183 55.934); }
-.os-timeline-item.os-hist-arquivada { border-left-color: var(--corBase); }
+.os-timeline-item.os-hist-criada {
+    border-left-color: var(--editar);
+}
+
+.os-timeline-item.os-hist-aceita {
+    border-left-color: var(--confirmar);
+}
+
+.os-timeline-item.os-hist-encaminhada {
+    border-left-color: oklch(75% 0.183 55.934);
+}
+
+.os-timeline-item.os-hist-arquivada {
+    border-left-color: var(--corBase);
+}
 
 .os-timeline-header {
     display: flex;
@@ -1703,7 +1735,7 @@ select {
 .os-btn-premium:hover i {
     transform: rotate(-10deg) scale(1.2);
 }
-=======
+
 h3 {
     color: var(--corTxt3);
 }
@@ -3079,10 +3111,21 @@ select {
     box-shadow: 0 4px 15px rgba(252, 35, 35, 0.15);
 }
 
-.os-resumo-aberto::before { background: var(--confirmar); }
-.os-resumo-arquivada::before { background: var(--corBase); }
-.os-resumo-aguardando::before { background: oklch(75% 0.183 55.934); }
-.os-resumo-todas::before { background: var(--editar); }
+.os-resumo-aberto::before {
+    background: var(--confirmar);
+}
+
+.os-resumo-arquivada::before {
+    background: var(--corBase);
+}
+
+.os-resumo-aguardando::before {
+    background: oklch(75% 0.183 55.934);
+}
+
+.os-resumo-todas::before {
+    background: var(--editar);
+}
 
 .os-resumo-label {
     font-size: var(--text-sm);
@@ -3098,10 +3141,21 @@ select {
     margin-top: 5px;
 }
 
-.os-resumo-aberto .os-resumo-numero { color: oklch(76.5% 0.177 163.223); }
-.os-resumo-arquivada .os-resumo-numero { color: var(--corBase); }
-.os-resumo-aguardando .os-resumo-numero { color: oklch(75% 0.183 55.934); }
-.os-resumo-todas .os-resumo-numero { color: var(--editar); }
+.os-resumo-aberto .os-resumo-numero {
+    color: oklch(76.5% 0.177 163.223);
+}
+
+.os-resumo-arquivada .os-resumo-numero {
+    color: var(--corBase);
+}
+
+.os-resumo-aguardando .os-resumo-numero {
+    color: oklch(75% 0.183 55.934);
+}
+
+.os-resumo-todas .os-resumo-numero {
+    color: var(--editar);
+}
 
 /* --- Status Badges O.S. --- */
 .os-status-badge {
@@ -3270,10 +3324,21 @@ select {
     box-shadow: var(--sombra);
 }
 
-.os-timeline-item.os-hist-criada { border-left-color: var(--editar); }
-.os-timeline-item.os-hist-aceita { border-left-color: var(--confirmar); }
-.os-timeline-item.os-hist-encaminhada { border-left-color: oklch(75% 0.183 55.934); }
-.os-timeline-item.os-hist-arquivada { border-left-color: var(--corBase); }
+.os-timeline-item.os-hist-criada {
+    border-left-color: var(--editar);
+}
+
+.os-timeline-item.os-hist-aceita {
+    border-left-color: var(--confirmar);
+}
+
+.os-timeline-item.os-hist-encaminhada {
+    border-left-color: oklch(75% 0.183 55.934);
+}
+
+.os-timeline-item.os-hist-arquivada {
+    border-left-color: var(--corBase);
+}
 
 .os-timeline-header {
     display: flex;
@@ -3385,4 +3450,58 @@ select {
         grid-template-columns: 1fr;
     }
 }
->>>>>>> e70253c17b1bf3a75a010f2ba6a0d96a3c9509cb
+
+
+/* ESTILOS DE SUCESSO (TOAST) - SINCRONIZADO COM NR12REWORK */
+
+#sucesso {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.0);
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding: 20px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: toastIn 0.45s cubic-bezier(.22, .61, .36, 1),
+               toastOut 0.4s ease-in-out 3.2s forwards;
+}
+
+@keyframes toastIn {
+    from {
+        transform: translateY(-15px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes toastOut {
+    to {
+        transform: translateY(-10px) scale(0.96);
+        opacity: 0;
+        display: none;
+    }
+}
+
+#sucesso-box {
+    width: 320px;
+    background: oklch(76.864% 0.16957 161.631 / 0.75);
+    border: 1px solid oklch(76.5% 0.177 163.223);
+    border-radius: 8px;
+    padding: 12px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    pointer-events: auto;
+}
+
+#sucesso-txt {
+    color: oklch(96.782% 0.03253 170.226);
+}

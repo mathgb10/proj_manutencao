@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         salvarLog($conn, "UPDATE usuarios SET nome = '$nome', email = '$email', permissao = '$permissao' WHERE id = '$id'");
-        header("Location: ../../views/usuarios.php?update=success");
+        header("Location: ../../views/usuarios.php?sucesso=Usuário atualizado com sucesso!");
     } else {
         header("Location: ../../views/usuarios.php?update=error");
     }

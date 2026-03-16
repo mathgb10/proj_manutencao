@@ -1332,7 +1332,7 @@ window.onclick = function (event) {
         closeModal(event.target.id);
     }
 }
-// Verificar se há mensagem de sucesso na URL ou sessionStorage
+
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const sucessoUrl = urlParams.get('sucesso');

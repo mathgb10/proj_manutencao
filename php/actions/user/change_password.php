@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($stmt->execute()) {
             $_SESSION['user_senha_padrao'] = 0; // Atualiza a sessão
-            header("Location: ../../views/dashboard.php?msg=senha_atualizada");
+            header("Location: ../../views/dashboard.php?sucesso=Senha atualizada com sucesso!");
         } else {
             header("Location: ../../views/dashboard.php?erro=erro_banco");
         }

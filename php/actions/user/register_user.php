@@ -28,5 +28,5 @@ if ($row > 0) {
 
     salvarLog($conn, "INSERT INTO usuarios(nome, email, senha, permissao, senha_padrao) VALUES( '$nome','$email','senaisp','$permissao', '1')");
 
-    header("Location: ../../views/usuarios.php?deu_certo=true");
+    header("Location: ../../views/usuarios.php?sucesso=Usuário cadastrado com sucesso!");
 }

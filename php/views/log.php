@@ -55,7 +55,6 @@ if (!isset($conn)) {
                                     class="bi bi-x-lg"></i></a>
                         <?php endif; ?>
                     </div>
-                    <!-- Hidden submit button to allow Enter to search -->
                     <button type="submit" style="display: none;"></button>
                 </div>
             </form>

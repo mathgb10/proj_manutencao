@@ -19,7 +19,7 @@ if (isset($_GET['id'])) {
     $stmt->bind_param("sii", $senha_cript, $senha_padrao_flag, $id_usuario);
 
     if ($stmt->execute()) {
-        header("Location: ../../views/usuarios.php?msg=senha_resetada");
+        header("Location: ../../views/usuarios.php?sucesso=Senha resetada com sucesso para 'senaisp'!");
     } else {
         header("Location: ../../views/usuarios.php?erro=erro_banco");
     }

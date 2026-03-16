@@ -791,7 +791,9 @@ document.addEventListener("DOMContentLoaded", function () {
         "tabela-usuarios",
         "tabela-maquinas",
         "tabela-logs",
-        "tabela-os"
+        "tabela-os",
+        "tabela-motores",
+        "tabela-tipo_maquinas"
     ];
 
     // Encontra a primeira tabela presente na página

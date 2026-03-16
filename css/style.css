@@ -2291,13 +2291,7 @@ img {
     }
 }
 
-.confirmar {
-    background: var(--confirmar);
 
-    &:hover {
-        background: var(--confirmarHover);
-    }
-}
 
 .deletar {
     background: var(--corBase);

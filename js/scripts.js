@@ -232,9 +232,11 @@ function showModal(qual, id) {
         document.getElementById("dellMotor").style.display = "flex";
         document.getElementById("id_motor_del").value = id;
     } else if (qual == "desativarMotor") {
-        if (confirm("Deseja realmente desativar este motor?")) {
-            excluirMotor(id, 'desativar');
-        }
+        document.getElementById("desativarMotorModal").style.display = "flex";
+        document.getElementById("id_motor_confirm").value = id;
+    } else if (qual == "ativarMotor") {
+        document.getElementById("ativarMotorModal").style.display = "flex";
+        document.getElementById("id_motor_ativar_confirm").value = id;
     } else if (qual == "adicaoTipoMaquina") {
         document.getElementById(qual).style.display = "flex";
     } else if (qual == "edicaoTipoMaquina") {
@@ -243,9 +245,11 @@ function showModal(qual, id) {
         document.getElementById("dellTipoMaquina").style.display = "flex";
         document.getElementById("id_tipma_del").value = id;
     } else if (qual == "desativarTipMa") {
-        if (confirm("Deseja realmente desativar este tipo de máquina?")) {
-            excluirTipoMaquina(id, 'desativar');
-        }
+        document.getElementById("desativarTipMaModal").style.display = "flex";
+        document.getElementById("id_tipma_confirm").value = id;
+    } else if (qual == "ativarTipMa") {
+        document.getElementById("ativarTipMaModal").style.display = "flex";
+        document.getElementById("id_tipma_ativar_confirm").value = id;
     } else if (qual == "notificacao-modal") {
         document.getElementById(qual).style.display = "flex";
         document.querySelector('.modal-notificacao').style.display = 'flex';

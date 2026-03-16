@@ -9,6 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($acao == 'desativar') {
         $sql = "UPDATE tipomaquina SET tipomaquina_status = 'Inativo' WHERE idtipomaquina = ?";
+    } else if ($acao == 'ativar') {
+        $sql = "UPDATE tipomaquina SET tipomaquina_status = 'Ativo' WHERE idtipomaquina = ?";
     } else {
         $sql = "DELETE FROM tipomaquina WHERE idtipomaquina = ?";
     }

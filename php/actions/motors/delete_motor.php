@@ -9,6 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($acao == 'desativar') {
         $sql = "UPDATE motor SET motor_status = 'Inativo' WHERE idmotor = ?";
+    } else if ($acao == 'ativar') {
+        $sql = "UPDATE motor SET motor_status = 'Ativo' WHERE idmotor = ?";
     } else {
         $sql = "DELETE FROM motor WHERE idmotor = ?";
     }

@@ -1030,6 +1030,82 @@
     </div>
 </div>
 
+<!-- Modais de Confirmação Customizadas (Estilo nr12rework) -->
+
+<!-- Motores -->
+<div class="modal-fundo" id="desativarMotorModal" style="display: none;">
+    <div class="modal-box" style="width: 400px; padding: 20px;">
+        <div class="modal-header" style="margin-bottom: 20px;">
+            <h3>Desativar Motor</h3>
+            <button onclick="closeModal('desativarMotorModal')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
+            <p>Tem certeza que deseja realmente desativar este motor?</p>
+        </div>
+        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
+            <input type="hidden" id="id_motor_confirm">
+            <button onclick="excluirMotor(document.getElementById('id_motor_confirm').value, 'desativar')" class="btn-confirmar-full confirmar">Sim</button>
+            <button onclick="closeModal('desativarMotorModal')" type="button" class="btn-confirmar-full confirmar"
+                style="background-color: var(--corBase);">Não</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-fundo" id="ativarMotorModal" style="display: none;">
+    <div class="modal-box" style="width: 400px; padding: 20px;">
+        <div class="modal-header" style="margin-bottom: 20px;">
+            <h3>Ativar Motor</h3>
+            <button onclick="closeModal('ativarMotorModal')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
+            <p>Tem certeza que deseja realmente ativar este motor?</p>
+        </div>
+        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
+            <input type="hidden" id="id_motor_ativar_confirm">
+            <button onclick="excluirMotor(document.getElementById('id_motor_ativar_confirm').value, 'ativar')" class="btn-confirmar-full confirmar">Sim</button>
+            <button onclick="closeModal('ativarMotorModal')" type="button" class="btn-confirmar-full confirmar"
+                style="background-color: var(--corBase);">Não</button>
+        </div>
+    </div>
+</div>
+
+<!-- Tipos de Máquina -->
+<div class="modal-fundo" id="desativarTipMaModal" style="display: none;">
+    <div class="modal-box" style="width: 400px; padding: 20px;">
+        <div class="modal-header" style="margin-bottom: 20px;">
+            <h3>Desativar Tipo Máquina</h3>
+            <button onclick="closeModal('desativarTipMaModal')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
+            <p>Tem certeza que deseja realmente desativar este tipo de máquina?</p>
+        </div>
+        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
+            <input type="hidden" id="id_tipma_confirm">
+            <button onclick="excluirTipoMaquina(document.getElementById('id_tipma_confirm').value, 'desativar')" class="btn-confirmar-full confirmar">Sim</button>
+            <button onclick="closeModal('desativarTipMaModal')" type="button" class="btn-confirmar-full confirmar"
+                style="background-color: var(--corBase);">Não</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-fundo" id="ativarTipMaModal" style="display: none;">
+    <div class="modal-box" style="width: 400px; padding: 20px;">
+        <div class="modal-header" style="margin-bottom: 20px;">
+            <h3>Ativar Tipo Máquina</h3>
+            <button onclick="closeModal('ativarTipMaModal')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
+            <p>Tem certeza que deseja realmente ativar este tipo de máquina?</p>
+        </div>
+        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
+            <input type="hidden" id="id_tipma_ativar_confirm">
+            <button onclick="excluirTipoMaquina(document.getElementById('id_tipma_ativar_confirm').value, 'ativar')" class="btn-confirmar-full confirmar">Sim</button>
+            <button onclick="closeModal('ativarTipMaModal')" type="button" class="btn-confirmar-full confirmar"
+                style="background-color: var(--corBase);">Não</button>
+        </div>
+    </div>
+</div>
+
 <div class="" id="sucesso" style="display: none;">
     <div class="modal-box" id="sucesso-box">
         <div class="modal-header">

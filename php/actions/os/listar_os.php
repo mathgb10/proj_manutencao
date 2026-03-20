@@ -1,5 +1,4 @@
 <?php
-// Suprimir warnings/notices que quebram JSON
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -8,65 +7,92 @@ require '../../configs/conexao.php';
 
 header('Content-Type: application/json');
 
-// Validar conexão
 if (!$conn) {
-    echo json_encode(['success' => false, 'message' => 'Erro de conexão com o banco', 'dados' => [], 'contadores' => ['em_aberto' => 0, 'arquivada' => 0, 'aguardando' => 0]]);
+    echo json_encode(['success' => false, 'message' => 'Erro de conexão com o banco', 'dados' => [], 'contadores' => []]);
     exit;
 }
 
-// Validar sessão para privacidade
-$usuario_logado_id = $_SESSION['user_id'] ?? 0;
+$usuario_logado_id = intval($_SESSION['user_id'] ?? 0);
+$permissao         = $_SESSION['user_permissao'] ?? 'NORMAL';
 
-$status_filtro = isset($_GET['status']) ? trim($_GET['status']) : '';
+$aba   = isset($_GET['aba'])    ? trim($_GET['aba'])    : 'abertas';
 $busca = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-$where = "WHERE 1=1";
+$where  = "WHERE 1=1";
 $params = [];
-$types = "";
+$types  = "";
 
-// REGRA DE PRIVACIDADE: 
-// Se a OS estiver em "Aguardando Aprovação", ela só deve aparecer para o solicitante ou para o responsável.
-// Outros status (Em Aberto, Aceita, Arquivada) continuam visíveis para todos.
-$where .= " AND (os.status != 'Aguardando Aprovação' OR os.solicitante_id = ? OR os.responsavel_id = ?)";
-$params[] = $usuario_logado_id;
-$params[] = $usuario_logado_id;
-$types .= "ii";
+/*
+ * =============================================
+ *  REGRAS DE VISIBILIDADE POR ABA
+ * =============================================
+ *
+ * ABERTAS   → status = 'Em Aberto'
+ *             Todo mundo pode ver (é uma solicitação nova).
+ *
+ * ANDAMENTO → status IN ('Aguardando Aprovação','Aceita')
+ *             Apenas o responsável atual OU quem criou (solicitante) pode ver.
+ *             ADMIN vê tudo.
+ *
+ * ARQUIVADAS → status = 'Arquivada'
+ *              Apenas o criador original (solicitante_id) OU quem finalizou (responsavel_id).
+ *              ADMIN vê tudo.
+ */
 
-// Filtro por status
-if (!empty($status_filtro)) {
-    if ($status_filtro === 'Em Aberto') {
-        // Na aba "Em Aberto", mostramos tanto as abertas quanto as já aceitas
-        $where .= " AND (os.status = 'Em Aberto' OR os.status = 'Aceita')";
-    } else {
-        $where .= " AND os.status = ?";
-        $params[] = $status_filtro;
-        $types .= "s";
+if ($aba === 'abertas') {
+    $where .= " AND os.status = 'Em Aberto'";
+
+} elseif ($aba === 'andamento') {
+    $where .= " AND os.status IN ('Aguardando Aprovação','Aceita')";
+    if ($permissao !== 'ADMIN') {
+        $where .= " AND (os.responsavel_id = ? OR os.solicitante_id = ?)";
+        $params[] = $usuario_logado_id;
+        $params[] = $usuario_logado_id;
+        $types .= "ii";
     }
+
+} elseif ($aba === 'arquivadas') {
+    $where .= " AND os.status = 'Arquivada'";
+    if ($permissao !== 'ADMIN') {
+        $where .= " AND (os.solicitante_id = ? OR os.responsavel_id = ?)";
+        $params[] = $usuario_logado_id;
+        $params[] = $usuario_logado_id;
+        $types .= "ii";
+    }
+
+} else {
+    // Fallback: abertas
+    $where .= " AND os.status = 'Em Aberto'";
 }
 
-// Filtro de busca
+// Filtro de busca por texto
 if (!empty($busca)) {
-    $where .= " AND (os.descricao LIKE ? OR sol.nome LIKE ? OR resp.nome LIKE ?)";
-    $termo = "%$busca%";
+    $where .= " AND (os.descricao LIKE ? OR sol.nome LIKE ? OR resp.nome LIKE ? OR os.patrimonio LIKE ?)";
+    $termo    = "%$busca%";
     $params[] = $termo;
     $params[] = $termo;
     $params[] = $termo;
-    $types .= "sss";
+    $params[] = $termo;
+    $types   .= "ssss";
 }
 
-$sql = "SELECT 
+$sql = "SELECT
             os.id,
             os.descricao,
             os.tipo,
             os.status,
+            os.patrimonio,
+            os.gasto,
+            os.obs_finalizacao,
             os.criado_em,
             os.atualizado_em,
             os.solicitante_id,
             os.responsavel_id,
+            os.anterior_responsavel_id,
             sol.nome AS solicitante_nome,
             resp.nome AS responsavel_nome
         FROM ordens_servico os
-        INNER JOIN usuarios sol ON os.solicitante_id = sol.id
+        INNER JOIN usuarios sol  ON os.solicitante_id = sol.id
         INNER JOIN usuarios resp ON os.responsavel_id = resp.id
         $where
         ORDER BY os.criado_em DESC";
@@ -74,7 +100,7 @@ $sql = "SELECT
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
-    echo json_encode(['success' => false, 'message' => 'Erro SQL: ' . $conn->error, 'dados' => [], 'contadores' => ['em_aberto' => 0, 'arquivada' => 0, 'aguardando' => 0, 'aceita' => 0]]);
+    echo json_encode(['success' => false, 'message' => 'Erro SQL: ' . $conn->error, 'dados' => [], 'contadores' => []]);
     exit;
 }
 
@@ -90,28 +116,39 @@ while ($linha = $resultado->fetch_assoc()) {
     $ordens[] = $linha;
 }
 
-// Contadores por status (considerando a privacidade também nos números)
-$sqlContadores = "SELECT 
-    SUM(CASE WHEN (status = 'Em Aberto') AND (status != 'Aguardando Aprovação' OR solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS em_aberto,
-    SUM(CASE WHEN (status = 'Arquivada') AND (status != 'Aguardando Aprovação' OR solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS arquivada,
-    SUM(CASE WHEN (status = 'Aguardando Aprovação') AND (solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS aguardando,
-    SUM(CASE WHEN (status = 'Aceita') AND (status != 'Aguardando Aprovação' OR solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS aceita
-FROM ordens_servico";
+// ---- Contadores para as 3 abas (respeitando visibilidade) ----
+if ($permissao === 'ADMIN') {
+    $sqlCount = "SELECT
+        SUM(CASE WHEN status = 'Em Aberto' THEN 1 ELSE 0 END) AS abertas,
+        SUM(CASE WHEN status IN ('Aguardando Aprovação','Aceita') THEN 1 ELSE 0 END) AS andamento,
+        SUM(CASE WHEN status = 'Arquivada' THEN 1 ELSE 0 END) AS arquivadas
+    FROM ordens_servico";
+    $resCount = $conn->query($sqlCount);
+} else {
+    $sqlCount = "SELECT
+        SUM(CASE WHEN status = 'Em Aberto' THEN 1 ELSE 0 END) AS abertas,
+        SUM(CASE WHEN status IN ('Aguardando Aprovação','Aceita')
+                 AND (responsavel_id = $usuario_logado_id OR solicitante_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS andamento,
+        SUM(CASE WHEN status = 'Arquivada'
+                 AND (solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS arquivadas
+    FROM ordens_servico";
+    $resCount = $conn->query($sqlCount);
+}
 
-$resContadores = $conn->query($sqlContadores);
-$contadores = ['em_aberto' => 0, 'arquivada' => 0, 'aguardando' => 0, 'aceita' => 0];
-if ($resContadores && $row = $resContadores->fetch_assoc()) {
+$contadores = ['abertas' => 0, 'andamento' => 0, 'arquivadas' => 0];
+if ($resCount && $row = $resCount->fetch_assoc()) {
     $contadores = [
-        'em_aberto' => intval($row['em_aberto'] ?? 0),
-        'arquivada' => intval($row['arquivada'] ?? 0),
-        'aguardando' => intval($row['aguardando'] ?? 0),
-        'aceita' => intval($row['aceita'] ?? 0)
+        'abertas'    => intval($row['abertas'] ?? 0),
+        'andamento'  => intval($row['andamento'] ?? 0),
+        'arquivadas' => intval($row['arquivadas'] ?? 0),
     ];
 }
 
 echo json_encode([
-    'success' => true,
-    'dados' => $ordens,
-    'contadores' => $contadores
+    'success'    => true,
+    'dados'      => $ordens,
+    'contadores' => $contadores,
+    'usuario_id' => $usuario_logado_id,
+    'permissao'  => $permissao
 ]);
 ?>

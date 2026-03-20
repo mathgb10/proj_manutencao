@@ -1,5 +1,4 @@
 <?php
-// Suprimir warnings/notices que quebram JSON
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -20,19 +19,41 @@ if (!$input) {
     exit;
 }
 
-$os_id = intval($input['os_id'] ?? 0);
+$os_id               = intval($input['os_id'] ?? 0);
 $novo_responsavel_id = intval($input['responsavel_id'] ?? 0);
-$motivo = trim($input['motivo'] ?? '');
-$usuario_id = $_SESSION['user_id'] ?? 0;
-$usuario_nome = $_SESSION['user_nome'] ?? 'Desconhecido';
+$motivo              = trim($input['motivo'] ?? '');
+$usuario_id          = $_SESSION['user_id'] ?? 0;
+$usuario_nome        = $_SESSION['user_nome'] ?? 'Desconhecido';
 
 if ($os_id <= 0 || $novo_responsavel_id <= 0) {
-    echo json_encode(['success' => false, 'message' => 'Dados inválidos. Informe o ID da O.S. e o novo responsável']);
+    echo json_encode(['success' => false, 'message' => 'Dados inválidos. Informe ID da O.S. e novo responsável']);
     exit;
 }
 
 if (empty($motivo)) {
     echo json_encode(['success' => false, 'message' => 'Informe o motivo do encaminhamento']);
+    exit;
+}
+
+// Buscar OS atual
+$sqlOS = "SELECT os.*, resp.nome AS responsavel_nome FROM ordens_servico os
+          INNER JOIN usuarios resp ON os.responsavel_id = resp.id
+          WHERE os.id = ?";
+$stmtOS = $conn->prepare($sqlOS);
+$stmtOS->bind_param("i", $os_id);
+$stmtOS->execute();
+$resOS = $stmtOS->get_result();
+
+if ($resOS->num_rows === 0) {
+    echo json_encode(['success' => false, 'message' => 'O.S. não encontrada']);
+    exit;
+}
+
+$os = $resOS->fetch_assoc();
+
+// Apenas o responsável atual pode encaminhar
+if ($os['responsavel_id'] != $usuario_id) {
+    echo json_encode(['success' => false, 'message' => 'Apenas o responsável atual pode encaminhar esta O.S.']);
     exit;
 }
 
@@ -50,32 +71,23 @@ if ($resResp->num_rows === 0) {
 
 $novo_resp_nome = $resResp->fetch_assoc()['nome'];
 
-// Atualizar O.S.
-$sqlUpdate = "UPDATE ordens_servico SET status = 'Aguardando Aprovação', responsavel_id = ? WHERE id = ?";
+// Atualizar OS: salvar quem encaminhou como anterior_responsavel_id
+$sqlUpdate = "UPDATE ordens_servico SET status = 'Aguardando Aprovação', responsavel_id = ?, anterior_responsavel_id = ? WHERE id = ?";
 $stmtUpdate = $conn->prepare($sqlUpdate);
-$stmtUpdate->bind_param("ii", $novo_responsavel_id, $os_id);
+$stmtUpdate->bind_param("iii", $novo_responsavel_id, $usuario_id, $os_id);
 
 if ($stmtUpdate->execute()) {
-    // Registrar no histórico
-    try {
-        $desc_hist = "Ordem de Serviço Encaminhada por $usuario_nome para $novo_resp_nome dia " . date('d/m/Y H:i') . ". Motivo: $motivo";
-        $status_hist = "OS Encaminhada";
+    $desc_hist  = "O.S. encaminhada por $usuario_nome para $novo_resp_nome em " . date('d/m/Y H:i') . ". Motivo: $motivo";
+    $status_hist = "OS Encaminhada";
 
-        $sqlHist = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
-        $stmtHist = $conn->prepare($sqlHist);
-        if ($stmtHist) {
-            $stmtHist->bind_param("isiis", $os_id, $status_hist, $usuario_id, $novo_responsavel_id, $desc_hist);
-            $stmtHist->execute();
-        }
-    } catch (Throwable $t) {}
+    $sqlHist  = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
+    $stmtHist = $conn->prepare($sqlHist);
+    if ($stmtHist) {
+        $stmtHist->bind_param("isiss", $os_id, $status_hist, $usuario_id, $novo_responsavel_id, $desc_hist);
+        $stmtHist->execute();
+    }
 
-    try {
-        if (function_exists('salvarLog')) {
-            salvarLog($conn, "UPDATE ordens_servico ID=$os_id ENCAMINHADA para usuario ID=$novo_responsavel_id por usuario ID=$usuario_id");
-        }
-    } catch (Throwable $t) {}
-
-    echo json_encode(['success' => true, 'message' => 'O.S. encaminhada com sucesso!']);
+    echo json_encode(['success' => true, 'message' => "O.S. encaminhada para $novo_resp_nome com sucesso!"]);
 } else {
     echo json_encode(['success' => false, 'message' => 'Erro ao encaminhar O.S.: ' . $conn->error]);
 }

@@ -4,66 +4,66 @@
 
 <!-- Modal: Nova Ordem de Serviço -->
 <div class="modal-fundo" id="novaOS" style="display: none">
-    <div class="modal-box modal-box-wide" style="max-width: 600px;">
+    <div class="modal-box modal-box-wide" style="max-width: 620px;">
         <div class="modal-header">
-            <h3>Nova Ordem de Serviço</h3>
+            <h3><i class="bi bi-file-earmark-plus"></i> Nova Ordem de Serviço</h3>
             <button class="" onclick="closeModal('novaOS')"><i class="bi bi-x-lg"></i></button>
         </div>
 
         <div class="modal-form">
+            <!-- Descrição -->
             <div class="modal-input">
-                <label for="os_descricao">Descrição:</label>
+                <label for="os_descricao">Descrição do Problema:</label>
                 <div class="input-wrapper">
-                    <textarea id="os_descricao" placeholder="Descreva a solicitação..." rows="3"
+                    <textarea id="os_descricao" placeholder="Descreva o problema detalhadamente..." rows="3"
                         style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);resize:vertical;font-family:inherit;"></textarea>
                 </div>
             </div>
 
-            <div class="modal-row">
-                <div class="modal-input">
-                    <label for="os_tipo">Tipo:</label>
-                    <div class="input-wrapper">
-                        <select id="os_tipo"
-                            style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
-                            <option value="" disabled selected>Selecione o tipo</option>
-                            <option value="Manutenção">Manutenção</option>
-                            <option value="Patrimônio">Patrimônio</option>
-                            <option value="Outros">Outros</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="modal-input">
-                    <label for="os_patrimonio">Patrimônio / NI:</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="os_patrimonio" placeholder="Ex: 12345"
-                            style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);font-family:inherit;">
-                    </div>
-                </div>
-            </div>
-
+            <!-- Tipo (apenas Corretivo) -->
             <div class="modal-input">
-                <label for="os_responsavel">Encaminhar para:</label>
+                <label for="os_tipo">Tipo:</label>
                 <div class="input-wrapper">
-                    <select id="os_responsavel"
+                    <select id="os_tipo"
                         style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
-                        <option value="" disabled selected>Selecione o responsável</option>
-                        <?php
-                        $sqlUsers = "SELECT id, nome FROM usuarios ORDER BY nome ASC";
-                        $resUsers = $conn->query($sqlUsers);
-                        if ($resUsers && $resUsers->num_rows > 0) {
-                            while ($user = $resUsers->fetch_assoc()) {
-                                echo "<option value='" . $user['id'] . "'>" . htmlspecialchars($user['nome']) . "</option>";
-                            }
-                        }
-                        ?>
+                        <option value="" disabled selected>Selecione o tipo</option>
+                        <option value="Corretivo">Corretivo</option>
+                        <option value="Manutenção">Manutenção</option>
                     </select>
                 </div>
             </div>
 
-            <div class="modal-footer">
+            <!-- Patrimônio com busca na modal -->
+            <div class="modal-input">
+                <label>Patrimônio / N° de Série:</label>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <input type="text" id="os_patrimonio_busca" placeholder="Digite para buscar..."
+                        oninput="buscarPatrimonio(this.value)"
+                        style="flex:1;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);font-family:inherit;">
+                    <input type="hidden" id="os_patrimonio">
+                </div>
+                <!-- Lista de resultados da busca -->
+                <div id="patrimonio-resultados" style="
+                    display:none;
+                    position:absolute;
+                    z-index:9999;
+                    background:var(--corFundo2);
+                    border:1px solid var(--corBordas);
+                    border-radius:8px;
+                    max-height:160px;
+                    overflow-y:auto;
+                    margin-top:4px;
+                    width:calc(100% - 40px);
+                    box-shadow:0 4px 15px rgba(0,0,0,.2);
+                "></div>
+                <div id="patrimonio-selecionado" style="margin-top:6px;font-size:.85rem;color:var(--corBase);display:none;">
+                    <i class="bi bi-check-circle-fill"></i> <span id="patrimonio-selecionado-texto"></span>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="margin-top:12px;">
                 <button type="button" class="btn-confirmar-full confirmar" onclick="criarOS()">
-                    Criar O.S. <i class="bi bi-plus-lg"></i>
+                    Abrir O.S. <i class="bi bi-send"></i>
                 </button>
             </div>
         </div>
@@ -100,19 +100,32 @@
                     <strong>Patrimônio:</strong>
                     <span id="detalhe-os-patrimonio"></span>
                 </div>
+                <div class="os-info-item">
+                    <strong>Responsável Atual:</strong>
+                    <span id="detalhe-os-destino"></span>
+                </div>
                 <div class="os-info-item" style="grid-column: 1 / -1;">
                     <strong>Descrição:</strong>
                     <p id="detalhe-os-descricao" style="margin-top:5px;"></p>
                 </div>
+                <!-- Gasto e Obs exibido quando Arquivada -->
+                <div class="os-info-item os-info-arquivada" id="detalhe-os-bloco-gasto" style="display:none;">
+                    <strong>Gasto (R$):</strong>
+                    <span id="detalhe-os-gasto"></span>
+                </div>
+                <div class="os-info-item os-info-arquivada" style="grid-column: 1 / -1; display:none;" id="detalhe-os-bloco-obs">
+                    <strong>Obs. Finalização:</strong>
+                    <p id="detalhe-os-obs" style="margin-top:5px;"></p>
+                </div>
             </div>
 
-            <!-- Seção Anexos -->
+            <!-- Anexos -->
             <div class="os-detalhe-anexos">
                 <strong><i class="bi bi-paperclip"></i> Anexos:</strong>
                 <div id="detalhe-os-anexos-lista" style="margin-top:8px;"></div>
             </div>
 
-            <!-- Seção Origem → Destino -->
+            <!-- Fluxo Visual -->
             <div class="os-fluxo-visual">
                 <div class="os-fluxo-item">
                     <span class="os-fluxo-label">Origem</span>
@@ -123,22 +136,26 @@
                 </div>
                 <i class="bi bi-arrow-right os-fluxo-seta"></i>
                 <div class="os-fluxo-item">
-                    <span class="os-fluxo-label">Destino</span>
+                    <span class="os-fluxo-label">Destino Atual</span>
                     <div class="os-fluxo-avatar">
                         <i class="bi bi-person-circle"></i>
-                        <span id="detalhe-os-destino"></span>
+                        <span id="detalhe-os-destino-fluxo"></span>
                     </div>
                 </div>
             </div>
 
-            <div class="modal-footer" style="gap: 15px; display: flex;">
+            <div class="modal-footer" style="gap: 10px; display: flex; flex-wrap: wrap;">
                 <button type="button" class="os-btn-premium os-btn-historico" onclick="verHistoricoOS()"
                     id="btn-historico-os">
                     <i class="bi bi-clock-history"></i> Histórico
                 </button>
                 <button type="button" class="os-btn-premium os-btn-encaminhar" onclick="showModal('encaminharOS')"
-                    id="btn-encaminhar-os">
+                    id="btn-encaminhar-os" style="display:none;">
                     <i class="bi bi-send"></i> Encaminhar
+                </button>
+                <button type="button" class="os-btn-premium" style="background:var(--cor-recusar,#e74c3c);color:#fff;display:none;"
+                    onclick="abrirRecusarOS()" id="btn-recusar-os">
+                    <i class="bi bi-x-circle"></i> Recusar
                 </button>
             </div>
         </div>
@@ -171,7 +188,7 @@
 <div class="modal-fundo" id="encaminharOS" style="display: none">
     <div class="modal-box modal-box-wide" style="max-width: 550px;">
         <div class="modal-header">
-            <h3>Encaminhar O.S.</h3>
+            <h3><i class="bi bi-send"></i> Encaminhar O.S.</h3>
             <button class="" onclick="closeModal('encaminharOS')"><i class="bi bi-x-lg"></i></button>
         </div>
 
@@ -185,10 +202,12 @@
                         style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
                         <option value="" disabled selected>Selecione o responsável</option>
                         <?php
+                        $sqlUsers = "SELECT id, nome, permissao FROM usuarios ORDER BY nome ASC";
                         $resUsers2 = $conn->query($sqlUsers);
                         if ($resUsers2 && $resUsers2->num_rows > 0) {
                             while ($user2 = $resUsers2->fetch_assoc()) {
-                                echo "<option value='" . $user2['id'] . "'>" . htmlspecialchars($user2['nome']) . "</option>";
+                                $cargo = $user2['permissao'] !== 'NORMAL' ? ' (' . $user2['permissao'] . ')' : '';
+                                echo "<option value='" . $user2['id'] . "'>" . htmlspecialchars($user2['nome']) . $cargo . "</option>";
                             }
                         }
                         ?>
@@ -213,15 +232,16 @@
     </div>
 </div>
 
-<!-- Modal: Confirmação para Aceitar -->
+<!-- Modal: Aceitar O.S. -->
 <div class="modal-fundo" id="aceitarOSModal" style="display: none;">
     <div class="modal-box" style="width: 400px; padding: 20px;">
         <div class="modal-header" style="margin-bottom: 20px;">
-            <h3>Aceitar O.S.</h3>
+            <h3><i class="bi bi-check-circle"></i> Aceitar O.S.</h3>
             <button onclick="closeModal('aceitarOSModal')"><i class="bi bi-x-lg"></i></button>
         </div>
         <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
-            <p>Tem certeza que deseja aceitar esta Ordem de Serviço?</p>
+            <p>Tem certeza que deseja aceitar esta Ordem de Serviço?<br>
+            <small style="opacity:.7;">Você será o responsável por executá-la.</small></p>
         </div>
         <input type="hidden" id="aceitar_os_id">
         <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
@@ -232,21 +252,73 @@
     </div>
 </div>
 
-<!-- Modal: Confirmação para Arquivar -->
+<!-- Modal: Arquivar (Finalizar) O.S. -->
 <div class="modal-fundo" id="arquivarOSModal" style="display: none;">
-    <div class="modal-box" style="width: 400px; padding: 20px;">
-        <div class="modal-header" style="margin-bottom: 20px;">
-            <h3>Arquivar O.S.</h3>
+    <div class="modal-box modal-box-wide" style="max-width: 500px;">
+        <div class="modal-header" style="margin-bottom: 16px;">
+            <h3><i class="bi bi-archive"></i> Finalizar / Arquivar O.S.</h3>
             <button onclick="closeModal('arquivarOSModal')"><i class="bi bi-x-lg"></i></button>
         </div>
-        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
-            <p>Tem certeza que deseja arquivar esta Ordem de Serviço?</p>
+        <div class="modal-form">
+            <input type="hidden" id="arquivar_os_id">
+
+            <div class="modal-input">
+                <label for="arquivar_gasto">Gasto Total (R$):</label>
+                <div class="input-wrapper">
+                    <input type="number" id="arquivar_gasto" placeholder="Ex: 150.00" min="0" step="0.01"
+                        style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);font-family:inherit;">
+                </div>
+            </div>
+
+            <div class="modal-input">
+                <label for="arquivar_obs">Observação de Finalização:</label>
+                <div class="input-wrapper">
+                    <textarea id="arquivar_obs" placeholder="Descreva o que foi feito, peças utilizadas, etc..." rows="4"
+                        style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);resize:vertical;font-family:inherit;"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="gap: 10px; display:flex;">
+                <button onclick="arquivarOS()" class="btn-confirmar-full confirmar">
+                    <i class="bi bi-archive-fill"></i> Finalizar O.S.
+                </button>
+                <button onclick="closeModal('arquivarOSModal')" type="button" class="btn-confirmar-full confirmar"
+                    style="background-color:var(--corBase);">Cancelar</button>
+            </div>
         </div>
-        <input type="hidden" id="arquivar_os_id">
-        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
-            <button onclick="arquivarOS()" class="btn-confirmar-full confirmar">Sim, Arquivar</button>
-            <button onclick="closeModal('arquivarOSModal')" type="button" class="btn-confirmar-full confirmar"
-                style="background-color: var(--corBase);">Cancelar</button>
+    </div>
+</div>
+
+<!-- Modal: Recusar O.S. -->
+<div class="modal-fundo" id="recusarOSModal" style="display: none;">
+    <div class="modal-box modal-box-wide" style="max-width: 500px;">
+        <div class="modal-header" style="margin-bottom: 16px;">
+            <h3><i class="bi bi-x-circle"></i> Recusar O.S.</h3>
+            <button onclick="closeModal('recusarOSModal')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-form">
+            <input type="hidden" id="recusar_os_id">
+
+            <div style="background: rgba(231,76,60,.1); border:1px solid rgba(231,76,60,.3); border-radius:8px; padding:12px; margin-bottom:14px; color:var(--corTxt3);">
+                <i class="bi bi-exclamation-triangle" style="color:#e74c3c;"></i>
+                A O.S. será devolvida para o responsável anterior.
+            </div>
+
+            <div class="modal-input">
+                <label for="recusar_motivo">Motivo da Recusa:</label>
+                <div class="input-wrapper">
+                    <textarea id="recusar_motivo" placeholder="Explique o motivo da recusa..." rows="3"
+                        style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);resize:vertical;font-family:inherit;"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="gap: 10px; display:flex;">
+                <button onclick="recusarOS()" class="btn-confirmar-full confirmar" style="background:#e74c3c;">
+                    <i class="bi bi-x-circle-fill"></i> Confirmar Recusa
+                </button>
+                <button onclick="closeModal('recusarOSModal')" type="button" class="btn-confirmar-full confirmar"
+                    style="background-color:var(--corBase);">Cancelar</button>
+            </div>
         </div>
     </div>
 </div>

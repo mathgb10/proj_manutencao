@@ -1,10 +1,6 @@
 <?php
-// Suprimir warnings/notices que quebram JSON
-// Habilitar erros para depuração agressiva
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set('log_errors', 1);
-ini_set('error_log', dirname(__FILE__) . '/php_error_log.txt');
+error_reporting(0);
+ini_set('display_errors', 0);
 
 session_start();
 require '../../configs/conexao.php';
@@ -23,73 +19,65 @@ if (!$input) {
     exit;
 }
 
-$descricao = trim($input['descricao'] ?? '');
-$tipo = trim($input['tipo'] ?? '');
-$patrimonio = trim($input['patrimonio'] ?? '');
-$responsavel_id = intval($input['responsavel_id'] ?? 0);
-$solicitante_id = $_SESSION['user_id'] ?? 0;
+$descricao    = trim($input['descricao'] ?? '');
+$tipo         = trim($input['tipo'] ?? '');
+$patrimonio   = trim($input['patrimonio'] ?? '');
+$solicitante_id   = $_SESSION['user_id'] ?? 0;
 $solicitante_nome = $_SESSION['user_nome'] ?? 'Desconhecido';
 
-// Validações
-if (empty($descricao) || empty($tipo) || $responsavel_id <= 0) {
+// Validações básicas
+if (empty($descricao) || empty($tipo)) {
     echo json_encode(['success' => false, 'message' => 'Preencha todos os campos obrigatórios']);
     exit;
 }
 
-$tipos_validos = ['Manutenção', 'Patrimônio', 'Outros'];
+$tipos_validos = ['Manutenção', 'Corretivo'];
 if (!in_array($tipo, $tipos_validos)) {
     echo json_encode(['success' => false, 'message' => 'Tipo inválido']);
     exit;
 }
 
-// 1. Inserir a Ordem de Serviço
-$sql = "INSERT INTO ordens_servico (descricao, tipo, patrimonio, status, solicitante_id, responsavel_id) VALUES (?, ?, ?, 'Em Aberto', ?, ?)";
+// Buscar automaticamente o primeiro GESTOR (ou ADMIN) disponível
+$sqlGestor = "SELECT id, nome FROM usuarios WHERE permissao IN ('GESTOR','ADMIN') ORDER BY id ASC LIMIT 1";
+$resGestor = $conn->query($sqlGestor);
+
+if (!$resGestor || $resGestor->num_rows === 0) {
+    echo json_encode(['success' => false, 'message' => 'Nenhum gestor cadastrado no sistema. Contate o administrador.']);
+    exit;
+}
+
+$gestor = $resGestor->fetch_assoc();
+$responsavel_id   = $gestor['id'];
+$responsavel_nome = $gestor['nome'];
+
+// Inserir a Ordem de Serviço — tipo padrão Corretivo, responsável = gestor
+$sql = "INSERT INTO ordens_servico (descricao, tipo, patrimonio, status, solicitante_id, responsavel_id, anterior_responsavel_id)
+        VALUES (?, ?, ?, 'Em Aberto', ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
-    echo json_encode(['success' => false, 'message' => 'Erro ao preparar SQL da O.S.: ' . $conn->error]);
+    echo json_encode(['success' => false, 'message' => 'Erro ao preparar SQL: ' . $conn->error]);
     exit;
 }
-$stmt->bind_param("sssii", $descricao, $tipo, $patrimonio, $solicitante_id, $responsavel_id);
+// anterior_responsavel_id começa como o próprio solicitante (ponto de retorno)
+$stmt->bind_param("sssiii", $descricao, $tipo, $patrimonio, $solicitante_id, $responsavel_id, $solicitante_id);
 
 if ($stmt->execute()) {
     $os_id = $stmt->insert_id;
 
-    // 2. Buscar nome do responsável destino
-    $sqlResp = "SELECT nome FROM usuarios WHERE id = ?";
-    $stmtResp = $conn->prepare($sqlResp);
-    $stmtResp->bind_param("i", $responsavel_id);
-    $stmtResp->execute();
-    $resResp = $stmtResp->get_result();
-    $responsavel_nome = ($resResp->num_rows > 0) ? $resResp->fetch_assoc()['nome'] : 'Desconhecido';
-
-    // 3. Criar primeiro registro no histórico
-    $desc_hist = "Ordem de Serviço criada por $solicitante_nome em " . date('d/m/Y H:i') . " e encaminhada para $responsavel_nome.";
+    // Histórico de criação
+    $desc_hist  = "O.S. criada por $solicitante_nome e encaminhada automaticamente para o gestor $responsavel_nome em " . date('d/m/Y H:i') . ".";
     $status_hist = "OS Criada";
 
-    $sqlHist = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
+    $sqlHist  = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
     $stmtHist = $conn->prepare($sqlHist);
     if ($stmtHist) {
-        $stmtHist->bind_param("isiis", $os_id, $status_hist, $solicitante_id, $responsavel_id, $desc_hist);
-        if (!$stmtHist->execute()) {
-            // Se falhar o histórico, vamos avisar mas a OS foi criada
-            echo json_encode(['success' => true, 'message' => 'O.S. Criada, mas erro no Histórico: ' . $stmtHist->error, 'os_id' => $os_id]);
-            exit;
-        }
-    } else {
-         echo json_encode(['success' => true, 'message' => 'O.S. Criada, mas erro ao preparar Histórico: ' . $conn->error, 'os_id' => $os_id]);
-         exit;
+        $stmtHist->bind_param("isiss", $os_id, $status_hist, $solicitante_id, $responsavel_id, $desc_hist);
+        $stmtHist->execute();
     }
-
-    // Tentar salvar log sem quebrar se falhar
-    try {
-        if (function_exists('salvarLog')) {
-            salvarLog($conn, "INSERT ordens_servico ID=$os_id por usuario ID=$solicitante_id");
-        }
-    } catch (Throwable $t) {}
 
     echo json_encode(['success' => true, 'message' => 'Ordem de Serviço criada com sucesso!', 'os_id' => $os_id]);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao criar O.S. no banco: ' . $conn->error]);
+    echo json_encode(['success' => false, 'message' => 'Erro ao criar O.S.: ' . $conn->error]);
 }
 ?>

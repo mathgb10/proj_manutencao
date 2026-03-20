@@ -1349,7 +1349,7 @@ select {
 .os-resumo-container {
     width: 90%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     margin-bottom: 5px;
 }
@@ -1463,6 +1463,11 @@ select {
     color: var(--corBase);
 }
 
+.os-status-recusada {
+    background: rgba(180, 30, 30, 0.15);
+    color: #c0392b;
+}
+
 /* --- Tipo Badges --- */
 .os-tipo-badge {
     padding: 3px 10px;
@@ -1474,6 +1479,11 @@ select {
 .os-tipo-manutencao {
     background: oklch(74.6% 0.16 232.661 / 0.12);
     color: oklch(50% 0.16 232.661);
+}
+
+.os-tipo-corretivo {
+    background: rgba(252, 35, 35, 0.1);
+    color: var(--corBase);
 }
 
 .os-tipo-patrimonio {

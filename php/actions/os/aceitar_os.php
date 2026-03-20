@@ -1,5 +1,4 @@
 <?php
-// Suprimir warnings/notices que quebram JSON
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -20,8 +19,8 @@ if (!$input) {
     exit;
 }
 
-$os_id = intval($input['os_id'] ?? 0);
-$usuario_id = $_SESSION['user_id'] ?? 0;
+$os_id       = intval($input['os_id'] ?? 0);
+$usuario_id  = $_SESSION['user_id'] ?? 0;
 $usuario_nome = $_SESSION['user_nome'] ?? 'Desconhecido';
 
 if ($os_id <= 0) {
@@ -30,7 +29,9 @@ if ($os_id <= 0) {
 }
 
 // Buscar dados atuais da OS
-$sqlOS = "SELECT os.*, resp.nome AS responsavel_nome FROM ordens_servico os INNER JOIN usuarios resp ON os.responsavel_id = resp.id WHERE os.id = ?";
+$sqlOS = "SELECT os.*, resp.nome AS responsavel_nome FROM ordens_servico os
+          INNER JOIN usuarios resp ON os.responsavel_id = resp.id
+          WHERE os.id = ?";
 $stmtOS = $conn->prepare($sqlOS);
 $stmtOS->bind_param("i", $os_id);
 $stmtOS->execute();
@@ -43,30 +44,28 @@ if ($resOS->num_rows === 0) {
 
 $os = $resOS->fetch_assoc();
 
-// Atualizar status para Aceita e responsável para quem aceitou
-$sqlUpdate = "UPDATE ordens_servico SET status = 'Aceita', responsavel_id = ? WHERE id = ?";
+// Apenas o responsável atual pode aceitar
+if ($os['responsavel_id'] != $usuario_id) {
+    echo json_encode(['success' => false, 'message' => 'Apenas o responsável atual pode aceitar esta O.S.']);
+    exit;
+}
+
+// Atualizar status para Aceita (responsavel_id permanece o mesmo, que já é o aceitante)
+$sqlUpdate = "UPDATE ordens_servico SET status = 'Aceita', anterior_responsavel_id = responsavel_id WHERE id = ?";
 $stmtUpdate = $conn->prepare($sqlUpdate);
-$stmtUpdate->bind_param("ii", $usuario_id, $os_id);
+$stmtUpdate->bind_param("i", $os_id);
 
 if ($stmtUpdate->execute()) {
     // Registrar no histórico
-    try {
-        $desc_hist = "Ordem de Serviço aceita pelo $usuario_nome dia " . date('d/m/Y H:i');
-        $status_hist = "OS Aceita";
+    $desc_hist  = "O.S. aceita por $usuario_nome em " . date('d/m/Y H:i') . '.';
+    $status_hist = "OS Aceita";
 
-        $sqlHist = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
-        $stmtHist = $conn->prepare($sqlHist);
-        if ($stmtHist) {
-            $stmtHist->bind_param("isiis", $os_id, $status_hist, $os['responsavel_id'], $usuario_id, $desc_hist);
-            $stmtHist->execute();
-        }
-    } catch (Throwable $t) {}
-
-    try {
-        if (function_exists('salvarLog')) {
-            salvarLog($conn, "UPDATE ordens_servico ID=$os_id STATUS=Aceita por usuario ID=$usuario_id");
-        }
-    } catch (Throwable $t) {}
+    $sqlHist  = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
+    $stmtHist = $conn->prepare($sqlHist);
+    if ($stmtHist) {
+        $stmtHist->bind_param("isiss", $os_id, $status_hist, $os['responsavel_id'], $usuario_id, $desc_hist);
+        $stmtHist->execute();
+    }
 
     echo json_encode(['success' => true, 'message' => 'Ordem de Serviço aceita com sucesso!']);
 } else {

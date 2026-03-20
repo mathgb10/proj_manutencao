@@ -1,0 +1,20 @@
+Deixar claro que é corretiva; 
+manter somente manutenção no select;
+pesquisar na própria modal o "patrimonio";
+na hr de encaminhar o professor n tem poder para mandar para alguém, então o ideal serial mandar para um gestor;
+qnd o os chegar para mim posso arquivar ou encaminhar;
+qnd arquivada mostrar todas;
+
+prof -> gestor -> alguem (pode passar para outro alguém) arquivar = finalizar colocar obs ao finalizar
+
+
+só quem esta como responsável pode ver (ele e ultima pessoa) ao final colocar gasto, aceitar e recusar, caso recuse volta para pessoa anterior
+
+deixar 3 botoes de fluxo
+
+Abertas Andamento Arquivadas
+
+andamento seria todas que foram aceitas por voce (ou as que voce passou para alguém) e que não foram arquivadas
+
+os arquivados só vai mostrar para pessoa original (coordenador) e para quem finalizou
+

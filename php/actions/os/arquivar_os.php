@@ -1,5 +1,4 @@
 <?php
-// Suprimir warnings/notices que quebram JSON
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -20,9 +19,11 @@ if (!$input) {
     exit;
 }
 
-$os_id = intval($input['os_id'] ?? 0);
-$usuario_id = $_SESSION['user_id'] ?? 0;
-$usuario_nome = $_SESSION['user_nome'] ?? 'Desconhecido';
+$os_id            = intval($input['os_id'] ?? 0);
+$gasto            = isset($input['gasto']) && $input['gasto'] !== '' ? floatval($input['gasto']) : null;
+$obs_finalizacao  = trim($input['obs_finalizacao'] ?? '');
+$usuario_id       = $_SESSION['user_id'] ?? 0;
+$usuario_nome     = $_SESSION['user_nome'] ?? 'Desconhecido';
 
 if ($os_id <= 0) {
     echo json_encode(['success' => false, 'message' => 'ID da O.S. inválido']);
@@ -43,32 +44,31 @@ if ($resOS->num_rows === 0) {
 
 $os = $resOS->fetch_assoc();
 
-// Atualizar status para Arquivada
-$sqlUpdate = "UPDATE ordens_servico SET status = 'Arquivada' WHERE id = ?";
+// Apenas responsável atual pode arquivar (ou ADMIN)
+$permissao = $_SESSION['user_permissao'] ?? 'NORMAL';
+if ($os['responsavel_id'] != $usuario_id && $permissao !== 'ADMIN') {
+    echo json_encode(['success' => false, 'message' => 'Apenas o responsável atual pode arquivar esta O.S.']);
+    exit;
+}
+
+// Atualizar status e salvar gasto + observação
+$sqlUpdate = "UPDATE ordens_servico SET status = 'Arquivada', gasto = ?, obs_finalizacao = ? WHERE id = ?";
 $stmtUpdate = $conn->prepare($sqlUpdate);
-$stmtUpdate->bind_param("i", $os_id);
+$stmtUpdate->bind_param("dsi", $gasto, $obs_finalizacao, $os_id);
 
 if ($stmtUpdate->execute()) {
-    // Registrar no histórico
-    try {
-        $desc_hist = "Ordem de Serviço arquivada por $usuario_nome dia " . date('d/m/Y H:i');
-        $status_hist = "OS Arquivada";
+    $gastoFormatado = $gasto !== null ? 'R$ ' . number_format($gasto, 2, ',', '.') : 'Não informado';
+    $desc_hist  = "O.S. arquivada (finalizada) por $usuario_nome em " . date('d/m/Y H:i') . ". Gasto: $gastoFormatado." . (!empty($obs_finalizacao) ? " Obs: $obs_finalizacao" : '');
+    $status_hist = "OS Arquivada";
 
-        $sqlHist = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
-        $stmtHist = $conn->prepare($sqlHist);
-        if ($stmtHist) {
-            $stmtHist->bind_param("isiis", $os_id, $status_hist, $usuario_id, $os['responsavel_id'], $desc_hist);
-            $stmtHist->execute();
-        }
-    } catch (Throwable $t) {}
+    $sqlHist  = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
+    $stmtHist = $conn->prepare($sqlHist);
+    if ($stmtHist) {
+        $stmtHist->bind_param("isiss", $os_id, $status_hist, $usuario_id, $os['solicitante_id'], $desc_hist);
+        $stmtHist->execute();
+    }
 
-    try {
-        if (function_exists('salvarLog')) {
-            salvarLog($conn, "UPDATE ordens_servico ID=$os_id STATUS=Arquivada por usuario ID=$usuario_id");
-        }
-    } catch (Throwable $t) {}
-
-    echo json_encode(['success' => true, 'message' => 'O.S. arquivada com sucesso!']);
+    echo json_encode(['success' => true, 'message' => 'O.S. arquivada (finalizada) com sucesso!']);
 } else {
     echo json_encode(['success' => false, 'message' => 'Erro ao arquivar O.S.: ' . $conn->error]);
 }

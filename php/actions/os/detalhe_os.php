@@ -27,10 +27,13 @@ $sql = "SELECT
             os.tipo,
             os.patrimonio,
             os.status,
+            os.gasto,
+            os.obs_finalizacao,
             os.criado_em,
             os.atualizado_em,
             os.solicitante_id,
             os.responsavel_id,
+            os.anterior_responsavel_id,
             sol.nome AS solicitante_nome,
             resp.nome AS responsavel_nome
         FROM ordens_servico os

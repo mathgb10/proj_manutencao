@@ -53,9 +53,10 @@ $types  = "";
 if ($aba === 'abertas') {
     $where .= " AND os.status IN ('Em Aberto', 'Aguardando Aprovação')";
     if ($permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
-        $where .= " AND os.solicitante_id = ?";
+        $where .= " AND (os.solicitante_id = ? OR os.responsavel_id = ?)";
         $params[] = $usuario_logado_id;
-        $types .= "i";
+        $params[] = $usuario_logado_id;
+        $types .= "ii";
     }
 
 } elseif ($aba === 'andamento') {
@@ -142,7 +143,8 @@ if ($permissao === 'ADMIN' || $permissao === 'GESTOR') {
     $resCount = $conn->query($sqlCount);
 } else {
     $sqlCount = "SELECT
-        SUM(CASE WHEN status IN ('Em Aberto', 'Aguardando Aprovação') AND (solicitante_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS abertas,
+        SUM(CASE WHEN status IN ('Em Aberto', 'Aguardando Aprovação') 
+                 AND (solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS abertas,
         SUM(CASE WHEN status = 'Aceita'
                  AND (responsavel_id = $usuario_logado_id OR solicitante_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS andamento,
         SUM(CASE WHEN status = 'Arquivada'

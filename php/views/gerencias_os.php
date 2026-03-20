@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="../../css/global.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
+    <style>
+        .os-hist-observacao { border-left: 4px solid #607d8b !important; }
+        .os-hist-observacao .os-timeline-status { background: #607d8b !important; color: #fff !important; }
+    </style>
 </head>
 
 <body>
@@ -393,9 +397,11 @@
                     const ehAdmin       = USUARIO_PERMISSAO === 'ADMIN';
                     const ehGestor      = USUARIO_PERMISSAO === 'GESTOR';
                     const aceita        = os.status === 'Aceita';
+                    const aguardando    = os.status === 'Aguardando Aprovação';
                     const naoArquivada  = os.status !== 'Arquivada';
 
-                    document.getElementById('btn-encaminhar-os').style.display = ((ehAdmin || ehGestor || (ehResponsavel && aceita)) && naoArquivada) ? '' : 'none';
+                    document.getElementById('btn-observacao-os').style.display = ((ehResponsavel || ehAdmin) && naoArquivada) ? '' : 'none';
+                    document.getElementById('btn-encaminhar-os').style.display = ((ehAdmin || ehGestor || (ehResponsavel && (aceita || aguardando))) && naoArquivada) ? '' : 'none';
 
                     showModal('detalheOS');
                 }
@@ -406,7 +412,7 @@
 
         // ---------- ACEITAR ----------
         async function aceitarOS() {
-            const id = osIdSelecionada;
+            const id = document.getElementById('aceitar_os_id').value || osIdSelecionada;
             if(!id) return;
 
             try {
@@ -417,8 +423,10 @@
                 });
                 const data = await res.json();
 
+                closeModal('aceitarOSModal');
+                closeModal('detalheOS');
+
                 if (data.success) {
-                    closeModal('detalheOS');
                     trocarAba('andamento');
                     exibirSucesso(data.message);
                 } else {
@@ -495,6 +503,7 @@
                 const data = await res.json();
 
                 closeModal('arquivarOSModal');
+                closeModal('detalheOS');
                 if (data.success) {
                     trocarAba('arquivadas');
                     exibirSucesso(data.message);
@@ -553,6 +562,41 @@
             }
         }
 
+        // ---------- OBSERVAÇÃO ----------
+        function abrirModalObservacao() {
+            document.getElementById('obs_os_id').value = osIdSelecionada;
+            document.getElementById('campo_observacao').value = '';
+            showModal('observacaoOSModal');
+        }
+
+        async function salvarObservacao() {
+            const id  = document.getElementById('obs_os_id').value;
+            const obs = document.getElementById('campo_observacao').value.trim();
+
+            if (!obs) {
+                alert('Digite uma observação para salvar!');
+                return;
+            }
+
+            try {
+                const res  = await fetch('../actions/os/adicionar_observacao.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ os_id: parseInt(id), observacao: obs })
+                });
+                const data = await res.json();
+
+                closeModal('observacaoOSModal');
+                if (data.success) {
+                    exibirSucesso(data.message);
+                } else {
+                    alert(data.message);
+                }
+            } catch (err) {
+                console.error('Erro ao salvar observação:', err);
+            }
+        }
+
         // ---------- HISTÓRICO ----------
         async function verHistoricoOS() {
             const id = osIdSelecionada;
@@ -574,7 +618,8 @@
                                                 h.status.includes('Aceita')      ? 'os-hist-aceita' :
                                                 h.status.includes('Encaminhada') ? 'os-hist-encaminhada' :
                                                 h.status.includes('Arquivada')   ? 'os-hist-arquivada' :
-                                                h.status.includes('Recusada')    ? 'os-hist-recusada' : '';
+                                                h.status.includes('Recusada')    ? 'os-hist-recusada' :
+                                                h.status.includes('Observação')  ? 'os-hist-observacao' : '';
 
                             return `
                                 <div class="os-timeline-item ${statusClass}">

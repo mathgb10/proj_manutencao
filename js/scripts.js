@@ -301,6 +301,8 @@ function showModal(qual, id) {
         document.getElementById('recusarOSModal').style.display = 'flex';
     } else if (qual == 'modalPesquisaMaquina') {
         document.getElementById('modalPesquisaMaquina').style.display = 'flex';
+    } else if (qual == 'observacaoOSModal') {
+        document.getElementById('observacaoOSModal').style.display = 'flex';
     } else if (qual == "sucesso") {
         document.getElementById("sucesso").style.display = "flex";
     }

@@ -188,6 +188,9 @@
                 <button type="button" class="os-btn-premium os-btn-historico" onclick="verHistoricoOS()" id="btn-historico-os">
                     <i class="bi bi-clock-history"></i> Histórico
                 </button>
+                <button type="button" class="os-btn-premium os-btn-observacao" onclick="abrirModalObservacao()" id="btn-observacao-os" style="background-color: #607d8b;">
+                    <i class="bi bi-chat-left-text"></i> Observação
+                </button>
                 <button type="button" class="os-btn-premium os-btn-encaminhar" onclick="showModal('encaminharOS')" id="btn-encaminhar-os" style="display:none;">
                     <i class="bi bi-send"></i> Encaminhar
                 </button>
@@ -350,6 +353,35 @@
                     <i class="bi bi-x-circle-fill"></i> Confirmar Recusa
                 </button>
                 <button onclick="closeModal('recusarOSModal')" type="button" class="btn-confirmar-full confirmar"
+                    style="background-color:var(--corBase);">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Adicionar Observação Avulsa -->
+<div class="modal-fundo" id="observacaoOSModal" style="display: none;">
+    <div class="modal-box modal-box-wide" style="max-width: 500px;">
+        <div class="modal-header" style="margin-bottom: 16px;">
+            <h3><i class="bi bi-chat-left-text"></i> Adicionar Observação</h3>
+            <button onclick="closeModal('observacaoOSModal')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="modal-form">
+            <input type="hidden" id="obs_os_id">
+            
+            <div class="modal-input">
+                <label for="campo_observacao">Sua Anotação:</label>
+                <div class="input-wrapper">
+                    <textarea id="campo_observacao" placeholder="Digite aqui sua observação sobre esta O.S...." rows="4"
+                        style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);resize:vertical;font-family:inherit;"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="gap: 10px; display:flex;">
+                <button onclick="salvarObservacao()" class="btn-confirmar-full confirmar" style="background:#607d8b;">
+                    <i class="bi bi-save"></i> Salvar Observação
+                </button>
+                <button onclick="closeModal('observacaoOSModal')" type="button" class="btn-confirmar-full confirmar"
                     style="background-color:var(--corBase);">Cancelar</button>
             </div>
         </div>

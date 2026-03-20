@@ -569,6 +569,19 @@ img {
     }
 }
 
+.checklist {
+    background: var(--confirmar);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+    font-weight: 600;
+
+    &:hover {
+        background: var(--confirmarHover);
+    }
+}
+
 /* ------------------------------------------------------------------------------------------------------------------------- */
 .form-pesquisa {
     display: flex;

@@ -34,22 +34,30 @@
                 </div>
 
                 <div class="modal-input">
-                    <label for="os_responsavel">Encaminhar para:</label>
+                    <label for="os_patrimonio">Patrimônio / NI:</label>
                     <div class="input-wrapper">
-                        <select id="os_responsavel"
-                            style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
-                            <option value="" disabled selected>Selecione o responsável</option>
-                            <?php
-                            $sqlUsers = "SELECT id, nome FROM usuarios ORDER BY nome ASC";
-                            $resUsers = $conn->query($sqlUsers);
-                            if ($resUsers && $resUsers->num_rows > 0) {
-                                while ($user = $resUsers->fetch_assoc()) {
-                                    echo "<option value='" . $user['id'] . "'>" . htmlspecialchars($user['nome']) . "</option>";
-                                }
-                            }
-                            ?>
-                        </select>
+                        <input type="text" id="os_patrimonio" placeholder="Ex: 12345"
+                            style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);font-family:inherit;">
                     </div>
+                </div>
+            </div>
+
+            <div class="modal-input">
+                <label for="os_responsavel">Encaminhar para:</label>
+                <div class="input-wrapper">
+                    <select id="os_responsavel"
+                        style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
+                        <option value="" disabled selected>Selecione o responsável</option>
+                        <?php
+                        $sqlUsers = "SELECT id, nome FROM usuarios ORDER BY nome ASC";
+                        $resUsers = $conn->query($sqlUsers);
+                        if ($resUsers && $resUsers->num_rows > 0) {
+                            while ($user = $resUsers->fetch_assoc()) {
+                                echo "<option value='" . $user['id'] . "'>" . htmlspecialchars($user['nome']) . "</option>";
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
 
@@ -87,6 +95,10 @@
                 <div class="os-info-item">
                     <strong>Status:</strong>
                     <span id="detalhe-os-status"></span>
+                </div>
+                <div class="os-info-item">
+                    <strong>Patrimônio:</strong>
+                    <span id="detalhe-os-patrimonio"></span>
                 </div>
                 <div class="os-info-item" style="grid-column: 1 / -1;">
                     <strong>Descrição:</strong>

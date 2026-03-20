@@ -229,6 +229,7 @@
         async function criarOS() {
             const descricao = document.getElementById('os_descricao').value.trim();
             const tipo = document.getElementById('os_tipo').value;
+            const patrimonio = document.getElementById('os_patrimonio').value.trim();
             const responsavel_id = document.getElementById('os_responsavel').value;
 
             if (!descricao || !tipo || !responsavel_id) {
@@ -240,7 +241,12 @@
                 const res = await fetch('../actions/os/criar_os.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ descricao, tipo, responsavel_id: parseInt(responsavel_id) })
+                    body: JSON.stringify({ 
+                        descricao, 
+                        tipo, 
+                        patrimonio,
+                        responsavel_id: parseInt(responsavel_id) 
+                    })
                 });
                 const data = await res.json();
 
@@ -248,6 +254,7 @@
                     closeModal('novaOS');
                     document.getElementById('os_descricao').value = '';
                     document.getElementById('os_tipo').value = '';
+                    document.getElementById('os_patrimonio').value = '';
                     document.getElementById('os_responsavel').value = '';
                     carregarOS();
                     exibirSucesso(data.message);
@@ -274,6 +281,7 @@
                     document.getElementById('detalhe-os-solicitante').textContent = os.solicitante_nome;
                     document.getElementById('detalhe-os-tipo').textContent = os.tipo;
                     document.getElementById('detalhe-os-status').innerHTML = `<span class="os-status-badge ${getStatusClass(os.status)}">${os.status}</span>`;
+                    document.getElementById('detalhe-os-patrimonio').textContent = os.patrimonio || 'Não informado';
                     document.getElementById('detalhe-os-descricao').textContent = os.descricao;
                     document.getElementById('detalhe-os-origem').textContent = os.solicitante_nome;
                     document.getElementById('detalhe-os-destino').textContent = os.responsavel_nome;

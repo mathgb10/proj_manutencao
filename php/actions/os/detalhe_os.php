@@ -25,6 +25,7 @@ $sql = "SELECT
             os.id,
             os.descricao,
             os.tipo,
+            os.patrimonio,
             os.status,
             os.criado_em,
             os.atualizado_em,

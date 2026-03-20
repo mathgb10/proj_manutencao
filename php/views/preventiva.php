@@ -198,7 +198,7 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
                                         <div style="display: flex; gap: 5px; justify-content: center;">
                                             <button class="btnAcao checklist" title="Abrir Checklist"
                                                 onclick="openChecklist('<?php echo addslashes($maquina['denominacao']); ?>', <?php echo $maquina['id']; ?>)">
-                                                <i class="bi bi-list-check"></i>
+                                                <i class="bi bi-list-check"></i> Abrir Checklist
                                             </button>
                                             <button class="btnAcao history" title="Ver Histórico"
                                                 style="background-color: #6c757d;"

@@ -25,6 +25,7 @@ if (!$input) {
 
 $descricao = trim($input['descricao'] ?? '');
 $tipo = trim($input['tipo'] ?? '');
+$patrimonio = trim($input['patrimonio'] ?? '');
 $responsavel_id = intval($input['responsavel_id'] ?? 0);
 $solicitante_id = $_SESSION['user_id'] ?? 0;
 $solicitante_nome = $_SESSION['user_nome'] ?? 'Desconhecido';
@@ -42,14 +43,14 @@ if (!in_array($tipo, $tipos_validos)) {
 }
 
 // 1. Inserir a Ordem de Serviço
-$sql = "INSERT INTO ordens_servico (descricao, tipo, status, solicitante_id, responsavel_id) VALUES (?, ?, 'Em Aberto', ?, ?)";
+$sql = "INSERT INTO ordens_servico (descricao, tipo, patrimonio, status, solicitante_id, responsavel_id) VALUES (?, ?, ?, 'Em Aberto', ?, ?)";
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
     echo json_encode(['success' => false, 'message' => 'Erro ao preparar SQL da O.S.: ' . $conn->error]);
     exit;
 }
-$stmt->bind_param("ssii", $descricao, $tipo, $solicitante_id, $responsavel_id);
+$stmt->bind_param("sssii", $descricao, $tipo, $patrimonio, $solicitante_id, $responsavel_id);
 
 if ($stmt->execute()) {
     $os_id = $stmt->insert_id;

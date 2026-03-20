@@ -24,6 +24,6 @@ ALTER TABLE ordens_servico ADD COLUMN obs_finalizacao TEXT NULL AFTER gasto;
 -- =============================================
 -- PASSO 3: Ajustar ENUMs
 -- =============================================
-UPDATE ordens_servico SET tipo = 'Manutenção' WHERE tipo NOT IN ('Manutenção', 'Corretivo');
-ALTER TABLE ordens_servico MODIFY COLUMN tipo ENUM('Manutenção','Corretivo') NOT NULL DEFAULT 'Corretivo';
+UPDATE ordens_servico SET tipo = 'Outros' WHERE tipo NOT IN ('Corretivo');
+ALTER TABLE ordens_servico MODIFY COLUMN tipo ENUM('Corretivo','Outros') NOT NULL DEFAULT 'Corretivo';
 ALTER TABLE ordens_servico MODIFY COLUMN status ENUM('Em Aberto','Aguardando Aprovação','Aceita','Arquivada','Recusada') NOT NULL DEFAULT 'Em Aberto';

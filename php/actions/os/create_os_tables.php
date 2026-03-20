@@ -9,7 +9,7 @@ $sqls = [
     "CREATE TABLE IF NOT EXISTS ordens_servico (
         id INT AUTO_INCREMENT PRIMARY KEY,
         descricao TEXT NOT NULL,
-        tipo ENUM('Manutenção','Patrimônio','Outros') NOT NULL,
+        tipo ENUM('Corretivo','Outros') NOT NULL,
         patrimonio VARCHAR(255) NULL,
         status ENUM('Em Aberto','Aguardando Aprovação','Aceita','Arquivada') NOT NULL DEFAULT 'Em Aberto',
         solicitante_id INT NOT NULL,

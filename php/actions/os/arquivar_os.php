@@ -46,7 +46,7 @@ $os = $resOS->fetch_assoc();
 
 // Apenas responsável atual pode arquivar (ou ADMIN)
 $permissao = $_SESSION['user_permissao'] ?? 'NORMAL';
-if ($os['responsavel_id'] != $usuario_id && $permissao !== 'ADMIN') {
+if ($os['responsavel_id'] != $usuario_id && $permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
     echo json_encode(['success' => false, 'message' => 'Apenas o responsável atual pode arquivar esta O.S.']);
     exit;
 }

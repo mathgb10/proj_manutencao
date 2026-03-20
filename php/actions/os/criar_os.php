@@ -41,7 +41,7 @@ if (empty($descricao) || empty($tipo)) {
     exit;
 }
 
-$tipos_validos = ['Manutenção', 'Corretivo'];
+$tipos_validos = ['Corretivo', 'Outros'];
 if (!in_array($tipo, $tipos_validos)) {
     echo json_encode(['success' => false, 'message' => 'Tipo inválido']);
     exit;

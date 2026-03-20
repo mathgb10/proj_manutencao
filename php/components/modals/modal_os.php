@@ -37,7 +37,7 @@
                         style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
                         <option value="" disabled selected>Selecione o tipo</option>
                         <option value="Corretivo">Corretivo</option>
-                        <option value="Manutencao">Manutenção</option>
+                        <option value="Outros">Outros</option>
                     </select>
                 </div>
             </div>
@@ -115,7 +115,7 @@
 <div class="modal-fundo" id="detalheOS" style="display: none">
     <div class="modal-box modal-box-wide" style="max-width: 700px;">
         <div class="modal-header">
-            <h3 id="detalhe-os-titulo">Ordem de Serviço: #</h3>
+            <h3 id="detalhe-os-titulo" style="margin-bottom: 0;">Ordem de Serviço: #</h3>
             <button class="" onclick="closeModal('detalheOS')"><i class="bi bi-x-lg"></i></button>
         </div>
 
@@ -184,18 +184,12 @@
                 </div>
             </div>
 
-            <div class="modal-footer" style="gap: 10px; display: flex; flex-wrap: wrap;">
-                <button type="button" class="os-btn-premium os-btn-historico" onclick="verHistoricoOS()"
-                    id="btn-historico-os">
+            <div class="modal-footer" style="display: flex; justify-content: flex-start; align-items: center; gap: 10px;">
+                <button type="button" class="os-btn-premium os-btn-historico" onclick="verHistoricoOS()" id="btn-historico-os">
                     <i class="bi bi-clock-history"></i> Histórico
                 </button>
-                <button type="button" class="os-btn-premium os-btn-encaminhar" onclick="showModal('encaminharOS')"
-                    id="btn-encaminhar-os" style="display:none;">
+                <button type="button" class="os-btn-premium os-btn-encaminhar" onclick="showModal('encaminharOS')" id="btn-encaminhar-os" style="display:none;">
                     <i class="bi bi-send"></i> Encaminhar
-                </button>
-                <button type="button" class="os-btn-premium" style="background:var(--cor-recusar,#e74c3c);color:#fff;display:none;"
-                    onclick="abrirRecusarOS()" id="btn-recusar-os">
-                    <i class="bi bi-x-circle"></i> Recusar
                 </button>
             </div>
         </div>

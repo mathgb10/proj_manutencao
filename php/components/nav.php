@@ -85,6 +85,11 @@ $permissao_usuario = $_SESSION['user_permissao'];
             </div>
         </div>
 
+        <a href="gerencias_os.php" class="<?php if ($atualmente_em == 'gerencias_os.php')
+    echo 'ativo'; ?> links">
+            <i class="bi bi-clipboard-data-fill"></i> Gerenciar O.S
+        </a>
+
         <?php if ($permissao_usuario == "ADMIN") { ?>
 
             <a href="../views/usuarios.php" class="<?php if ($atualmente_em == 'usuarios.php')
@@ -97,13 +102,8 @@ $permissao_usuario = $_SESSION['user_permissao'];
                 <i class="bi bi-person-vcard"></i> Painel de Logs
             </a>
 
-            <a href="gerencias_os.php" class="<?php if ($atualmente_em == 'gerencias_os.php')
-        echo 'ativo'; ?> links">
-                <i class="bi bi-person-vcard"></i> Gerenciar O.S
-            </a>
-
         <?php
-}?>
+} ?>
 
     </div>
 

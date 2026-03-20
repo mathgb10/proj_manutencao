@@ -51,11 +51,16 @@ $types  = "";
  */
 
 if ($aba === 'abertas') {
-    $where .= " AND os.status = 'Em Aberto'";
+    $where .= " AND os.status IN ('Em Aberto', 'Aguardando Aprovação')";
+    if ($permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
+        $where .= " AND os.solicitante_id = ?";
+        $params[] = $usuario_logado_id;
+        $types .= "i";
+    }
 
 } elseif ($aba === 'andamento') {
-    $where .= " AND os.status IN ('Aguardando Aprovação','Aceita')";
-    if ($permissao !== 'ADMIN') {
+    $where .= " AND os.status = 'Aceita'";
+    if ($permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
         $where .= " AND (os.responsavel_id = ? OR os.solicitante_id = ?)";
         $params[] = $usuario_logado_id;
         $params[] = $usuario_logado_id;
@@ -64,7 +69,7 @@ if ($aba === 'abertas') {
 
 } elseif ($aba === 'arquivadas') {
     $where .= " AND os.status = 'Arquivada'";
-    if ($permissao !== 'ADMIN') {
+    if ($permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
         $where .= " AND (os.solicitante_id = ? OR os.responsavel_id = ?)";
         $params[] = $usuario_logado_id;
         $params[] = $usuario_logado_id;
@@ -128,17 +133,17 @@ while ($linha = $resultado->fetch_assoc()) {
 }
 
 // ---- Contadores para as 3 abas (respeitando visibilidade) ----
-if ($permissao === 'ADMIN') {
+if ($permissao === 'ADMIN' || $permissao === 'GESTOR') {
     $sqlCount = "SELECT
-        SUM(CASE WHEN status = 'Em Aberto' THEN 1 ELSE 0 END) AS abertas,
-        SUM(CASE WHEN status IN ('Aguardando Aprovação','Aceita') THEN 1 ELSE 0 END) AS andamento,
+        SUM(CASE WHEN status IN ('Em Aberto', 'Aguardando Aprovação') THEN 1 ELSE 0 END) AS abertas,
+        SUM(CASE WHEN status = 'Aceita' THEN 1 ELSE 0 END) AS andamento,
         SUM(CASE WHEN status = 'Arquivada' THEN 1 ELSE 0 END) AS arquivadas
     FROM ordens_servico";
     $resCount = $conn->query($sqlCount);
 } else {
     $sqlCount = "SELECT
-        SUM(CASE WHEN status = 'Em Aberto' THEN 1 ELSE 0 END) AS abertas,
-        SUM(CASE WHEN status IN ('Aguardando Aprovação','Aceita')
+        SUM(CASE WHEN status IN ('Em Aberto', 'Aguardando Aprovação') AND (solicitante_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS abertas,
+        SUM(CASE WHEN status = 'Aceita'
                  AND (responsavel_id = $usuario_logado_id OR solicitante_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS andamento,
         SUM(CASE WHEN status = 'Arquivada'
                  AND (solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS arquivadas

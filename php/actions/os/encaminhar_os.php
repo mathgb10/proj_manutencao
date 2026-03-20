@@ -51,8 +51,9 @@ if ($resOS->num_rows === 0) {
 
 $os = $resOS->fetch_assoc();
 
-// Apenas o responsável atual pode encaminhar
-if ($os['responsavel_id'] != $usuario_id) {
+// Apenas o responsável atual pode encaminhar (ou ADMIN/GESTOR)
+$permissao = $_SESSION['user_permissao'] ?? 'NORMAL';
+if ($os['responsavel_id'] != $usuario_id && $permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
     echo json_encode(['success' => false, 'message' => 'Apenas o responsável atual pode encaminhar esta O.S.']);
     exit;
 }

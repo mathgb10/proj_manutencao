@@ -45,7 +45,7 @@
         </div>
 
         <!-- Cards de Resumo — 3 Abas -->
-        <div class="os-resumo-container">
+        <div class="os-resumo-container" style="justify-content: center;">
             <div class="os-resumo-card os-resumo-aberto os-tab-ativo" onclick="trocarAba('abertas')">
                 <div class="os-resumo-label"><i class="bi bi-inbox"></i> Abertas</div>
                 <div class="os-resumo-numero" id="contador-abertas">0</div>
@@ -169,6 +169,8 @@
                 const descResumida  = os.descricao.length > 55 ? os.descricao.substring(0, 55) + '...' : os.descricao;
                 const ehResponsavel = parseInt(os.responsavel_id) === parseInt(usuarioId);
                 const ehAdmin       = permissao === 'ADMIN';
+                const ehGestor      = permissao === 'GESTOR';
+                const naoArquivada  = os.status !== 'Arquivada';
 
                 // Botão Ver Detalhes — sempre visível
                 let btns = `
@@ -176,26 +178,26 @@
                         <i class="bi bi-eye-fill"></i>
                     </button>`;
 
-                // Botão Aceitar — se for o responsável E status for Em Aberto ou Aguardando
-                if ((ehResponsavel || ehAdmin) && (os.status === 'Em Aberto' || os.status === 'Aguardando Aprovação')) {
+                // Botão Aceitar — se for o responsável OU Admin/Gestor E status Em Aberto ou Aguardando
+                if ((ehResponsavel || ehAdmin || ehGestor) && (os.status === 'Em Aberto' || os.status === 'Aguardando Aprovação')) {
                     btns += `
                     <button class="btnAcao confirmar" title="Aceitar" onclick="confirmarAceitarOS(${os.id})">
                         <i class="bi bi-check-lg"></i>
                     </button>`;
                 }
 
-                // Botão Recusar — se for o responsável E status = Aguardando Aprovação
-                if ((ehResponsavel || ehAdmin) && os.status === 'Aguardando Aprovação') {
+                // Botão Recusar — se for o responsável OU Admin/Gestor E status Aguardando Aprovação
+                if ((ehResponsavel || ehAdmin || ehGestor) && os.status === 'Aguardando Aprovação') {
                     btns += `
                     <button class="btnAcao deletar" title="Recusar" onclick="abrirRecusarOSTabela(${os.id})">
                         <i class="bi bi-x-lg"></i>
                     </button>`;
                 }
 
-                // Botão Arquivar — se for o responsável E status = Aceita
-                if ((ehResponsavel || ehAdmin) && os.status === 'Aceita') {
+                // Botão Arquivar — se for o responsável OU Admin/Gestor E não arquivada
+                if ((ehAdmin || ehGestor || (ehResponsavel && os.status === 'Aceita')) && naoArquivada) {
                     btns += `
-                    <button class="btnAcao deletar" title="Finalizar/Arquivar" onclick="confirmarArquivarOS(${os.id})">
+                    <button class="btnAcao deletar" title="Finalizar/Arquivar" onclick="confirmarArquivarOS(${os.id})" style="background:var(--corBase); color:white;">
                         <i class="bi bi-archive-fill"></i>
                     </button>`;
                 }
@@ -389,11 +391,11 @@
                     // Mostrar botões condicionais
                     const ehResponsavel = parseInt(os.responsavel_id) === USUARIO_LOGADO_ID;
                     const ehAdmin       = USUARIO_PERMISSAO === 'ADMIN';
-                    const podeAgir      = ehResponsavel || ehAdmin;
+                    const ehGestor      = USUARIO_PERMISSAO === 'GESTOR';
+                    const aceita        = os.status === 'Aceita';
                     const naoArquivada  = os.status !== 'Arquivada';
 
-                    document.getElementById('btn-encaminhar-os').style.display = (podeAgir && naoArquivada) ? '' : 'none';
-                    document.getElementById('btn-recusar-os').style.display    = (podeAgir && os.status === 'Aguardando Aprovação') ? '' : 'none';
+                    document.getElementById('btn-encaminhar-os').style.display = ((ehAdmin || ehGestor || (ehResponsavel && aceita)) && naoArquivada) ? '' : 'none';
 
                     showModal('detalheOS');
                 }
@@ -403,13 +405,10 @@
         }
 
         // ---------- ACEITAR ----------
-        function confirmarAceitarOS(id) {
-            document.getElementById('aceitar_os_id').value = id;
-            showModal('aceitarOSModal');
-        }
-
         async function aceitarOS() {
-            const id = document.getElementById('aceitar_os_id').value;
+            const id = osIdSelecionada;
+            if(!id) return;
+
             try {
                 const res  = await fetch('../actions/os/aceitar_os.php', {
                     method: 'POST',
@@ -418,8 +417,8 @@
                 });
                 const data = await res.json();
 
-                closeModal('aceitarOSModal');
                 if (data.success) {
+                    closeModal('detalheOS');
                     trocarAba('andamento');
                     exibirSucesso(data.message);
                 } else {
@@ -428,6 +427,11 @@
             } catch (err) {
                 console.error('Erro ao aceitar O.S.:', err);
             }
+        }
+
+        function confirmarAceitarOS(id) {
+            document.getElementById('aceitar_os_id').value = id;
+            showModal('aceitarOSModal');
         }
 
         // ---------- ENCAMINHAR ----------
@@ -466,6 +470,10 @@
         }
 
         // ---------- ARQUIVAR ----------
+        function abrirArquivarOSNoDetalhe() {
+            confirmarArquivarOS(osIdSelecionada);
+        }
+
         function confirmarArquivarOS(id) {
             document.getElementById('arquivar_os_id').value = id;
             document.getElementById('arquivar_gasto').value = '';

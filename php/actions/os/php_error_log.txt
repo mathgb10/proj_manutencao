@@ -8,3 +8,63 @@ Stack trace:
 #0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\criar_os.php(73): mysqli_stmt->execute()
 #1 {main}
   thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\criar_os.php on line 73
+[20-Mar-2026 20:13:07 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:13:14 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:13:15 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:13:18 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:15:34 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:15:34 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:15:35 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:15:40 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:15:45 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:15:46 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:15:51 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111
+[20-Mar-2026 20:15:57 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'os.patrimonio' in 'field list' in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php:111
+Stack trace:
+#0 C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php(111): mysqli->prepare('SELECT\n        ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\nr12\manutencaoMath\php\actions\os\listar_os.php on line 111

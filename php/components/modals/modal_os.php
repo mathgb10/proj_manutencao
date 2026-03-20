@@ -7,10 +7,19 @@
     <div class="modal-box modal-box-wide" style="max-width: 620px;">
         <div class="modal-header">
             <h3><i class="bi bi-file-earmark-plus"></i> Nova Ordem de Serviço</h3>
-            <button class="" onclick="closeModal('novaOS')"><i class="bi bi-x-lg"></i></button>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button type="button" onclick="abrirModalMaquinas()" style="
+                    display:flex;align-items:center;gap:6px;
+                    padding:7px 14px;border-radius:8px;border:none;cursor:pointer;
+                    background:var(--editar);color:#fff;font-size:.85rem;font-weight:600;">
+                    <i class="bi bi-search"></i> Pesquisar Máquina
+                </button>
+                <button onclick="closeModal('novaOS')"><i class="bi bi-x-lg"></i></button>
+            </div>
         </div>
 
         <div class="modal-form">
+
             <!-- Descrição -->
             <div class="modal-input">
                 <label for="os_descricao">Descrição do Problema:</label>
@@ -20,7 +29,7 @@
                 </div>
             </div>
 
-            <!-- Tipo (apenas Corretivo) -->
+            <!-- Tipo -->
             <div class="modal-input">
                 <label for="os_tipo">Tipo:</label>
                 <div class="input-wrapper">
@@ -28,43 +37,75 @@
                         style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
                         <option value="" disabled selected>Selecione o tipo</option>
                         <option value="Corretivo">Corretivo</option>
-                        <option value="Manutenção">Manutenção</option>
+                        <option value="Manutencao">Manutenção</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Patrimônio com busca na modal -->
+            <!-- Máquina / Patrimônio selecionado -->
             <div class="modal-input">
-                <label>Patrimônio / N° de Série:</label>
-                <div style="display:flex;gap:8px;align-items:center;">
-                    <input type="text" id="os_patrimonio_busca" placeholder="Digite para buscar..."
-                        oninput="buscarPatrimonio(this.value)"
-                        style="flex:1;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);font-family:inherit;">
-                    <input type="hidden" id="os_patrimonio">
+                <label>Patrimônio / Máquina:</label>
+                <div id="maquina-selecionada-box" onclick="abrirModalMaquinas()" style="
+                    display:flex;align-items:center;gap:10px;
+                    padding:11px 14px;border:1.5px dashed var(--corBordas);
+                    border-radius:8px;background:var(--corFundo);cursor:pointer;
+                    transition:.2s;"
+                    onmouseenter="this.style.borderColor='var(--corBase)'"
+                    onmouseleave="this.style.borderColor='var(--corBordas)'">
+                    <i class="bi bi-cpu" style="color:var(--corBase);font-size:1.2rem;flex-shrink:0;"></i>
+                    <span id="maquina-selecionada-texto" style="color:var(--corTxt3);opacity:.55;font-size:.9rem;">
+                        Clique para selecionar uma máquina...
+                    </span>
                 </div>
-                <!-- Lista de resultados da busca -->
-                <div id="patrimonio-resultados" style="
-                    display:none;
-                    position:absolute;
-                    z-index:9999;
-                    background:var(--corFundo2);
-                    border:1px solid var(--corBordas);
-                    border-radius:8px;
-                    max-height:160px;
-                    overflow-y:auto;
-                    margin-top:4px;
-                    width:calc(100% - 40px);
-                    box-shadow:0 4px 15px rgba(0,0,0,.2);
-                "></div>
-                <div id="patrimonio-selecionado" style="margin-top:6px;font-size:.85rem;color:var(--corBase);display:none;">
-                    <i class="bi bi-check-circle-fill"></i> <span id="patrimonio-selecionado-texto"></span>
-                </div>
+                <input type="hidden" id="os_patrimonio">
+                <input type="hidden" id="os_maquina_id">
             </div>
 
             <div class="modal-footer" style="margin-top:12px;">
                 <button type="button" class="btn-confirmar-full confirmar" onclick="criarOS()">
                     Abrir O.S. <i class="bi bi-send"></i>
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =============================================
+     SUB-MODAL: Pesquisar Máquina
+     ============================================= -->
+<div class="modal-fundo" id="modalPesquisaMaquina" style="display:none; z-index: 10000;">
+    <div class="modal-box modal-box-wide" style="max-width:650px;">
+        <div class="modal-header">
+            <h3><i class="bi bi-cpu"></i> Selecionar Máquina</h3>
+            <button onclick="closeModal('modalPesquisaMaquina')"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        <div class="modal-form" style="padding-bottom:0;">
+            <!-- Busca -->
+            <div style="display:flex;gap:8px;margin-bottom:14px;">
+                <div style="flex:1;position:relative;">
+                    <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--corTxt3);opacity:.5;"></i>
+                    <input type="text" id="maquina-modal-busca"
+                        placeholder="Buscar por nome, patrimônio ou série..."
+                        oninput="filtrarMaquinasModal(this.value)"
+                        style="width:100%;padding:10px 10px 10px 36px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);font-family:inherit;box-sizing:border-box;">
+                </div>
+                <button type="button" onclick="filtrarMaquinasModal('')" style="
+                    padding:10px 14px;border-radius:8px;border:1px solid var(--corBordas);
+                    background:var(--corFundo2);color:var(--corTxt3);cursor:pointer;font-size:.85rem;">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+
+            <!-- Lista de máquinas -->
+            <div id="maquina-modal-lista" style="
+                max-height:380px;overflow-y:auto;
+                display:flex;flex-direction:column;gap:6px;
+                padding-bottom:16px;">
+                <div style="text-align:center;padding:30px;opacity:.5;">
+                    <i class="bi bi-hourglass-split" style="font-size:2rem;"></i>
+                    <p style="margin-top:8px;">Carregando máquinas...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -108,7 +149,6 @@
                     <strong>Descrição:</strong>
                     <p id="detalhe-os-descricao" style="margin-top:5px;"></p>
                 </div>
-                <!-- Gasto e Obs exibido quando Arquivada -->
                 <div class="os-info-item os-info-arquivada" id="detalhe-os-bloco-gasto" style="display:none;">
                     <strong>Gasto (R$):</strong>
                     <span id="detalhe-os-gasto"></span>
@@ -172,7 +212,6 @@
 
         <div class="modal-form" style="max-height: 60vh; overflow-y: auto;">
             <div id="historico-os-timeline" class="os-timeline">
-                <!-- Timeline carregada via JS -->
             </div>
         </div>
 

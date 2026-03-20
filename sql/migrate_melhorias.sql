@@ -1,24 +1,29 @@
 -- =============================================
--- MIGRATION: Melhorias no Sistema de OS
+-- MIGRATION FINAL: Sistema de O.S.
 -- Executar no banco: manutencao_tds2026
+-- Execute cada bloco separadamente.
+-- Erros de "Duplicate column" podem ser ignorados.
 -- =============================================
 USE manutencao_tds2026;
 
--- 1. Adicionar campo para guardar o responsável anterior (para recusar = volta ao anterior)
-ALTER TABLE ordens_servico
-    ADD COLUMN IF NOT EXISTS anterior_responsavel_id INT NULL AFTER responsavel_id,
-    ADD COLUMN IF NOT EXISTS gasto DECIMAL(10,2) NULL AFTER anterior_responsavel_id,
-    ADD COLUMN IF NOT EXISTS obs_finalizacao TEXT NULL AFTER gasto;
+-- =============================================
+-- PASSO 1: Corrigir FK do histórico (aponta para tabela backup errada)
+-- =============================================
+ALTER TABLE os_historico DROP FOREIGN KEY os_historico_ibfk_1;
+ALTER TABLE os_historico ADD CONSTRAINT os_historico_ibfk_1
+    FOREIGN KEY (os_id) REFERENCES ordens_servico(id) ON DELETE CASCADE;
 
--- 2. Ajustar ENUM tipo: manter apenas Manutencao e Corretivo
--- ATENÇÃO: converter os registros existentes antes de alterar
+-- =============================================
+-- PASSO 2: Adicionar colunas que faltam na ordens_servico
+-- (execute um por vez, ignore se já existir)
+-- =============================================
+ALTER TABLE ordens_servico ADD COLUMN patrimonio VARCHAR(255) NULL AFTER tipo;
+ALTER TABLE ordens_servico ADD COLUMN gasto DECIMAL(10,2) NULL AFTER anterior_responsavel_id;
+ALTER TABLE ordens_servico ADD COLUMN obs_finalizacao TEXT NULL AFTER gasto;
+
+-- =============================================
+-- PASSO 3: Ajustar ENUMs
+-- =============================================
 UPDATE ordens_servico SET tipo = 'Manutenção' WHERE tipo NOT IN ('Manutenção', 'Corretivo');
 ALTER TABLE ordens_servico MODIFY COLUMN tipo ENUM('Manutenção','Corretivo') NOT NULL DEFAULT 'Corretivo';
-
--- 3. Ajustar ENUM status: adicionar 'Recusada'
 ALTER TABLE ordens_servico MODIFY COLUMN status ENUM('Em Aberto','Aguardando Aprovação','Aceita','Arquivada','Recusada') NOT NULL DEFAULT 'Em Aberto';
-
--- 4. FK para anterior_responsavel_id
-ALTER TABLE ordens_servico
-    ADD CONSTRAINT fk_anterior_responsavel
-    FOREIGN KEY (anterior_responsavel_id) REFERENCES usuarios(id) ON DELETE SET NULL;

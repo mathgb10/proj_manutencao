@@ -305,10 +305,9 @@
 
         // ---------- CRIAR O.S. ----------
         async function criarOS() {
-            const descricao     = document.getElementById('os_descricao').value.trim();
-            const tipo          = document.getElementById('os_tipo').value;
-            const patrimonio    = document.getElementById('os_patrimonio').value.trim()
-                                || document.getElementById('os_patrimonio_busca').value.trim();
+            const descricao  = document.getElementById('os_descricao').value.trim();
+            const tipo       = document.getElementById('os_tipo').value;
+            const patrimonio = document.getElementById('os_patrimonio').value.trim();
 
             if (!descricao || !tipo) {
                 alert('Preencha Descrição e Tipo!');
@@ -325,11 +324,13 @@
 
                 if (data.success) {
                     closeModal('novaOS');
-                    document.getElementById('os_descricao').value       = '';
-                    document.getElementById('os_tipo').value            = '';
-                    document.getElementById('os_patrimonio').value      = '';
-                    document.getElementById('os_patrimonio_busca').value = '';
-                    document.getElementById('patrimonio-selecionado').style.display = 'none';
+                    document.getElementById('os_descricao').value   = '';
+                    document.getElementById('os_tipo').value        = '';
+                    document.getElementById('os_patrimonio').value  = '';
+                    document.getElementById('os_maquina_id').value  = '';
+                    // Reset display da máquina selecionada
+                    const txt = document.getElementById('maquina-selecionada-texto');
+                    if (txt) { txt.textContent = 'Clique para selecionar uma máquina...'; txt.style.opacity = '.55'; }
                     carregarOS();
                     exibirSucesso(data.message);
                 } else {
@@ -588,7 +589,114 @@
                 console.error('Erro ao carregar histórico:', err);
             }
         }
+        // =============================================
+        // MODAL PESQUISA DE MÁQUINA
+        // =============================================
+        let _maquinasTodas = []; // cache da lista completa
+
+        async function abrirModalMaquinas() {
+            document.getElementById('maquina-modal-busca').value = '';
+            showModal('modalPesquisaMaquina');
+
+            // Carrega/usa cache
+            if (_maquinasTodas.length === 0) {
+                await _carregarTodasMaquinas();
+            } else {
+                _renderMaquinas(_maquinasTodas);
+            }
+        }
+
+        async function _carregarTodasMaquinas() {
+            const lista = document.getElementById('maquina-modal-lista');
+            lista.innerHTML = `<div style="text-align:center;padding:30px;opacity:.5;">
+                <i class="bi bi-hourglass-split" style="font-size:2rem;"></i>
+                <p style="margin-top:8px;">Carregando máquinas...</p></div>`;
+
+            try {
+                const res  = await fetch('../actions/machines/listar_maquinas.php?search=');
+                const data = await res.json();
+                _maquinasTodas = data.dados || [];
+                _renderMaquinas(_maquinasTodas);
+            } catch (e) {
+                lista.innerHTML = `<div style="text-align:center;padding:20px;color:var(--corBase);">
+                    <i class="bi bi-exclamation-triangle" style="font-size:2rem;"></i>
+                    <p>Erro ao carregar máquinas.</p></div>`;
+            }
+        }
+
+        function filtrarMaquinasModal(termo) {
+            if (termo.trim() === '') {
+                _renderMaquinas(_maquinasTodas);
+                return;
+            }
+            const t = termo.toLowerCase();
+            const filtradas = _maquinasTodas.filter(m =>
+                m.nome.toLowerCase().includes(t) ||
+                m.patrimonio.toString().toLowerCase().includes(t) ||
+                (m.setor || '').toLowerCase().includes(t)
+            );
+            _renderMaquinas(filtradas);
+        }
+
+        function _renderMaquinas(lista) {
+            const el = document.getElementById('maquina-modal-lista');
+
+            if (!lista.length) {
+                el.innerHTML = `<div style="text-align:center;padding:30px;opacity:.5;">
+                    <i class="bi bi-search" style="font-size:2rem;"></i>
+                    <p style="margin-top:8px;">Nenhuma máquina encontrada.</p></div>`;
+                return;
+            }
+
+            el.innerHTML = lista.map(m => `
+                <div onclick="selecionarMaquina(${m.id}, '${m.nome.replace(/'/g,"\\'")}', '${m.patrimonio.toString().replace(/'/g,"\\'")}')"
+                    style="
+                        display:flex;align-items:center;gap:14px;
+                        padding:12px 16px;border-radius:10px;
+                        background:var(--corFundo);border:1.5px solid var(--corBordas);
+                        cursor:pointer;transition:.2s;"
+                    onmouseenter="this.style.borderColor='var(--corBase)';this.style.background='rgba(252,35,35,.05)'"
+                    onmouseleave="this.style.borderColor='var(--corBordas)';this.style.background='var(--corFundo)'">
+                    <div style="width:42px;height:42px;border-radius:10px;background:rgba(252,35,35,.1);
+                        display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <i class="bi bi-cpu" style="font-size:1.3rem;color:var(--corBase);"></i>
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-weight:700;color:var(--corTxt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.nome}</div>
+                        <div style="font-size:.8rem;color:var(--corTxt3);opacity:.6;">
+                            NI: ${m.patrimonio}
+                            ${m.setor ? ' &nbsp;|&nbsp; Setor: ' + m.setor : ''}
+                        </div>
+                    </div>
+                    <i class="bi bi-chevron-right" style="color:var(--corBase);opacity:.5;"></i>
+                </div>
+            `).join('');
+        }
+
+        function selecionarMaquina(id, nome, patrimonio) {
+            // Preenche os campos hidden
+            document.getElementById('os_maquina_id').value  = id;
+            document.getElementById('os_patrimonio').value  = patrimonio;
+
+            // Atualiza o display
+            const box   = document.getElementById('maquina-selecionada-texto');
+            box.textContent = '';
+            box.style.opacity = '1';
+
+            // Ícone check + nome + patrimônio
+            const icon = document.createElement('i');
+            icon.className = 'bi bi-check-circle-fill';
+            icon.style.color = 'var(--confirmar)';
+            icon.style.marginRight = '6px';
+            box.appendChild(icon);
+            box.appendChild(document.createTextNode(`${nome}  —  NI: ${patrimonio}`));
+
+            // Fecha modal de pesquisa
+            closeModal('modalPesquisaMaquina');
+        }
+
     </script>
+
 </body>
 
 </html>

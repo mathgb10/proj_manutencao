@@ -1,6 +1,17 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL);
 ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/php_error_log.txt');
+
+// Capturar erros fatais e retornar como JSON
+register_shutdown_function(function() {
+    $error = error_get_last();
+    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR])) {
+        if (!headers_sent()) header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Erro PHP: ' . $error['message'], 'dados' => [], 'contadores' => []]);
+    }
+});
 
 session_start();
 require '../../configs/conexao.php';

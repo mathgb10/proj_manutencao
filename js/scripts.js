@@ -204,6 +204,10 @@ function closeModal(qual) {
         document.getElementById('aceitarOSModal').style.display = 'none';
     } else if (qual == 'arquivarOSModal') {
         document.getElementById('arquivarOSModal').style.display = 'none';
+    } else if (qual == 'recusarOSModal') {
+        document.getElementById('recusarOSModal').style.display = 'none';
+    } else if (qual == 'modalPesquisaMaquina') {
+        document.getElementById('modalPesquisaMaquina').style.display = 'none';
     }
 }
 
@@ -293,6 +297,10 @@ function showModal(qual, id) {
         document.getElementById('aceitarOSModal').style.display = 'flex';
     } else if (qual == 'arquivarOSModal') {
         document.getElementById('arquivarOSModal').style.display = 'flex';
+    } else if (qual == 'recusarOSModal') {
+        document.getElementById('recusarOSModal').style.display = 'flex';
+    } else if (qual == 'modalPesquisaMaquina') {
+        document.getElementById('modalPesquisaMaquina').style.display = 'flex';
     } else if (qual == "sucesso") {
         document.getElementById("sucesso").style.display = "flex";
     }

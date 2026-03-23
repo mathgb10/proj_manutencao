@@ -1,5 +1,9 @@
 <?php
-include_once '../../config/conexao.php';
+// Suprimir warnings/notices que quebram JSON
+error_reporting(0);
+ini_set('display_errors', 0);
+
+require_once '../../configs/conexao.php';
 session_start();
 
 $data = json_decode(file_get_contents('php://input'), true);

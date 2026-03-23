@@ -49,7 +49,7 @@
         </div>
 
         <!-- Cards de Resumo — 3 Abas -->
-        <div class="os-resumo-container" style="justify-content: center;">
+        <div class="os-resumo-container">
             <div class="os-resumo-card os-resumo-aberto os-tab-ativo" onclick="trocarAba('abertas')">
                 <div class="os-resumo-label"><i class="bi bi-inbox"></i> Abertas</div>
                 <div class="os-resumo-numero" id="contador-abertas">0</div>

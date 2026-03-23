@@ -1347,14 +1347,18 @@ select {
 
 /* --- Cards de Resumo --- */
 .os-resumo-container {
-    width: 90%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 0 auto 25px auto;
+    width: 100%;
 }
 
 .os-resumo-card {
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
     background: var(--corFundo2);
     border-radius: 12px;
     padding: 20px;
@@ -3087,62 +3091,11 @@ select {
    SISTEMA DE ORDEM DE SERVIÇO (O.S.)
    ============================================= */
 
-/* --- Cards de Resumo --- */
-.os-resumo-container {
-    width: 90%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-    margin-bottom: 5px;
-}
-
-.os-resumo-card {
-    background: var(--corFundo2);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: var(--sombra);
-    border: 2px solid transparent;
-    position: relative;
-    overflow: hidden;
-}
-
-.os-resumo-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-}
-
-.os-resumo-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.os-resumo-card.os-tab-ativo {
-    border-color: var(--corBase);
-    box-shadow: 0 4px 15px rgba(252, 35, 35, 0.15);
-}
-
-.os-resumo-aberto::before {
-    background: var(--confirmar);
-}
-
-.os-resumo-arquivada::before {
-    background: var(--corBase);
-}
-
-.os-resumo-aguardando::before {
-    background: oklch(75% 0.183 55.934);
-}
-
+/* --- Cores de Topo dos Cards --- */
 .os-resumo-todas::before {
     background: var(--editar);
 }
+
 
 .os-resumo-label {
     font-size: var(--text-sm);
@@ -3397,8 +3350,9 @@ select {
 /* --- Responsivo O.S. --- */
 @media (max-width: 768px) {
     .os-resumo-container {
-        grid-template-columns: repeat(2, 1fr);
+        justify-content: center;
     }
+
 
     .os-detalhe-info {
         grid-template-columns: 1fr;
@@ -3464,7 +3418,8 @@ select {
 
 @media (max-width: 480px) {
     .os-resumo-container {
-        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: center;
     }
 }
 

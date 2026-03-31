@@ -1,12 +1,13 @@
-﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
-<?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
-<?php require_once __DIR__ . "/../configs/conexao.php"; ?>
+﻿<?php require __DIR__ . '\..\controllers\validar_acesso.php'; ?>
+<?php require_once __DIR__ . "\..\configs\conexao.php"; ?>
+<?php require __DIR__ . '\..\components\modals\all_modals.php'; ?>
 
 <?php
 // --- Lógica de Notificações ---
 
 if (!function_exists('calcularStatusDashboard')) {
-    function calcularStatusDashboard($conn, $maquina_id) {
+    function calcularStatusDashboard($conn, $maquina_id)
+    {
         $sql = "SELECT MAX(data_realizada) as ultima FROM historico_manutencao WHERE maquina_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $maquina_id);
@@ -66,6 +67,7 @@ if ($resMaquinas) {
 
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,16 +84,14 @@ if ($resMaquinas) {
     <style>
         /* Ajustes de Responsividade e Estilo do Dashboard */
         .card-box {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            display: flex;
+            gap: 10px;
             width: 90%;
-            margin: 0 auto 30px;
             height: auto !important;
         }
 
         .card {
-            width: 90% !important;
+            flex: 1;
             height: auto !important;
             min-height: 140px;
             padding: 20px;
@@ -135,6 +135,7 @@ if ($resMaquinas) {
             border-radius: 8px;
             transition: 0.3s;
             color: var(--corTxt3);
+            width: 100%;
         }
 
         .div-row:hover {
@@ -148,13 +149,21 @@ if ($resMaquinas) {
             border-radius: 5px;
         }
 
-        .status-danger { background: var(--status-danger); }
-        .status-warning { background: var(--status-warning); }
-        .status-success { background: var(--status-ok); }
+        .status-danger {
+            background: var(--status-danger);
+        }
+
+        .status-warning {
+            background: var(--status-warning);
+        }
+
+        .status-success {
+            background: var(--status-ok);
+        }
 
         .div-items p {
-            font-size: 0.75rem;
-            opacity: 0.7;
+            font-size: 10px;
+            opacity: 0.5;
             margin-bottom: 5px;
             text-transform: uppercase;
             font-weight: bold;
@@ -175,9 +184,10 @@ if ($resMaquinas) {
         }
 
         .div-btn-adc {
+            width: 100%;
             margin-top: 15px;
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
         }
 
         @media (max-width: 992px) {
@@ -191,6 +201,7 @@ if ($resMaquinas) {
             .div-row {
                 grid-template-columns: 5px 1fr;
             }
+
             .card-box {
                 grid-template-columns: 1fr;
             }
@@ -209,8 +220,8 @@ if ($resMaquinas) {
             $count_maquinas = $conn->query("SELECT COUNT(*) as total FROM maquinas")->fetch_assoc()['total'];
             $count_usuarios = $conn->query("SELECT COUNT(*) as total FROM usuarios")->fetch_assoc()['total'];
             $check_acessorios = $conn->query("SHOW TABLES LIKE 'acessorios'");
-            $count_acessorios = ($check_acessorios && $check_acessorios->num_rows > 0) ? 
-                               $conn->query("SELECT COUNT(*) as total FROM acessorios")->fetch_assoc()['total'] : 0;
+            $count_acessorios = ($check_acessorios && $check_acessorios->num_rows > 0) ?
+                $conn->query("SELECT COUNT(*) as total FROM acessorios")->fetch_assoc()['total'] : 0;
             ?>
             <div class="card card-green">
                 <div class="card-header">
@@ -248,7 +259,7 @@ if ($resMaquinas) {
             </h3>
             <div class="div-dad-content">
                 <?php if ($resCorretivas && $resCorretivas->num_rows > 0): ?>
-                    <?php while($os = $resCorretivas->fetch_assoc()): ?>
+                    <?php while ($os = $resCorretivas->fetch_assoc()): ?>
                         <div class="div-row">
                             <div class="status-indicator status-danger"></div>
                             <div class="div-items">
@@ -286,7 +297,7 @@ if ($resMaquinas) {
             </h3>
             <div class="div-dad-content">
                 <?php if (count($preventivasVencidas) > 0): ?>
-                    <?php foreach(array_slice($preventivasVencidas, 0, 3) as $maq): ?>
+                    <?php foreach (array_slice($preventivasVencidas, 0, 3) as $maq): ?>
                         <div class="div-row">
                             <div class="status-indicator status-danger"></div>
                             <div class="div-items">
@@ -324,7 +335,7 @@ if ($resMaquinas) {
             </h3>
             <div class="div-dad-content">
                 <?php if (count($preventivasProximas) > 0): ?>
-                    <?php foreach(array_slice($preventivasProximas, 0, 3) as $maq): ?>
+                    <?php foreach (array_slice($preventivasProximas, 0, 3) as $maq): ?>
                         <div class="div-row">
                             <div class="status-indicator status-warning"></div>
                             <div class="div-items">
@@ -366,4 +377,5 @@ if ($resMaquinas) {
         </script>
     <?php endif; ?>
 </body>
+
 </html>

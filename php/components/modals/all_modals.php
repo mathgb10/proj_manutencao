@@ -205,8 +205,41 @@
 
             <div class="modal-row">
                 <div class="modal-input">
+                    <label for="maquina">Tipo de Máquina:</label>
+                    <select name="setor" id="setor">
+                        <option value="semValor">Selecione uma Opção</option>
+                        <?php
+                        $sql = "SELECT * FROM tipomaquina";
+                        $resultado = $conn_nr12->query($sql);
+                        if ($resultado && $resultado->num_rows > 0) {
+                            while ($linha = $resultado->fetch_assoc()) {
+                                echo "<option value='" . $linha['idtipomaquina'] . "'>" . $linha['tipomaquina_nome'] . "</option>";
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-row">
+                <div class="modal-input">
                     <label for="denominacao">Denominação:</label>
                     <input type="text" name="denominacao" id="denominacao" placeholder="Ex: TORNO MECÂNICO">
+                </div>
+                <div class="modal-input">
+                    <label for="motor">Motor:</label>
+                    <select name="motor" id="motor">
+                        <option value="semValor" disabled selected>Selecione uma opção</option>
+                        <?php
+                        $sql = "SELECT * FROM motor";
+                        $resultado = $conn_nr12->query($sql);
+                        if ($resultado && $resultado->num_rows > 0) {
+                            while ($linha = $resultado->fetch_assoc()) {
+                                echo "<option value='" . $linha['idmotor'] . "'>" . $linha['motor_fabricante'] . " - " . $linha['motor_modelo'] . " - " . $linha['motor_potencia'] . " - " . $linha['motor_tensão'] . " - " . $linha['motor_corrente'] . "</option>";
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
 

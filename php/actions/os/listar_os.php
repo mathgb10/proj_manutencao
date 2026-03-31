@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
@@ -14,7 +14,7 @@ register_shutdown_function(function() {
 });
 
 session_start();
-require '../../configs/conexao.php';
+require __DIR__ . '/../../configs/conexao.php';
 
 header('Content-Type: application/json');
 
@@ -38,14 +38,14 @@ $types  = "";
  *  REGRAS DE VISIBILIDADE POR ABA
  * =============================================
  *
- * ABERTAS   → status = 'Em Aberto'
+ * ABERTAS   â†’ status = 'Em Aberto'
  *             Todo mundo pode ver (é uma solicitação nova).
  *
- * ANDAMENTO → status IN ('Aguardando Aprovação','Aceita')
+ * ANDAMENTO â†’ status IN ('Aguardando Aprovação','Aceita')
  *             Apenas o responsável atual OU quem criou (solicitante) pode ver.
  *             ADMIN vê tudo.
  *
- * ARQUIVADAS → status = 'Arquivada'
+ * ARQUIVADAS â†’ status = 'Arquivada'
  *              Apenas o criador original (solicitante_id) OU quem finalizou (responsavel_id).
  *              ADMIN vê tudo.
  */

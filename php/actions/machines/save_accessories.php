@@ -1,5 +1,5 @@
-<?php
-require '../../configs/conexao.php';
+﻿<?php
+require __DIR__ . '/../../configs/conexao.php';
 
 // Recebe os dados JSON do corpo da requisição
 $dados = json_decode(file_get_contents('php://input'), true);

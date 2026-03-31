@@ -1,6 +1,6 @@
-<?php require '../controllers/validar_acesso.php'; ?>
-<?php require '../configs/conexao.php'; ?>
-<?php require '../components/modals/all_modals.php'; ?>
+﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../configs/conexao.php'; ?>
+<?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="">
@@ -22,12 +22,12 @@
 </head>
 
 <body>
-    <?php require '../components/nav.php'; ?>
+    <?php require __DIR__ . '/../components/nav.php'; ?>
 
     <section class="sec-main">
 
         <!-- Header -->
-        <?php require '../components/header.php'; ?>
+        <?php require __DIR__ . '/../components/header.php'; ?>
 
         <div class="div-btns-pages">
             <form action="" method="GET" class="form-pesquisa">
@@ -65,8 +65,8 @@
                         <th>Denominação</th>
                         <th>Marca</th>
                         <th>Modelo</th>
-                        <th>Nº Identificação</th>
-                        <th>Nº Série</th>
+                        <th>N° Identificação</th>
+                        <th>N° Série</th>
                         <th>Ano</th>
                         <th>Setor</th>
                         <th>Criado em</th>
@@ -106,7 +106,7 @@
                                 echo "<td>" . $linha["ano_fabricacao"] . "</td>";
                                 echo "<td>" . $linha["setor"] . "</td>";
                                 echo "<td>" . $linha["criado_em"] . "</td>";
-                                ?>
+                        ?>
                                 <?php
                                 if ($permissao_usuario == "ADMIN") {
                                     echo "<td>
@@ -117,7 +117,7 @@
                                         <div>
                                     <td>";
                                 } else {
-                                    ?>
+                                ?>
                                     <td>
                                         <div>
                                             <button class='btnAcao ferramentas' type='button'
@@ -127,14 +127,14 @@
                                         </div>
                                     </td>
                                 <?php } ?>
-                                <?php
+                        <?php
                                 // echo "<td>
                                 //         <div>
                                 //             <button class='btnAcao editar' type='button' onclick=\"editarMaquina(" . $linha['id'] . ")\"><i class='bi bi-pencil-square'></i></button>
                                 //             <button class='btnAcao deletar' type='button' onclick=\"excluirMaquina(" . $linha['id'] . ")\"><i class='bi bi-trash'></i></button>
                                 //         </div>
                                 //       </td>";
-                        
+
                                 echo "</tr>";
                             }
                         } else {

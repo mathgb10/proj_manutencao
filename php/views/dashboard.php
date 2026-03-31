@@ -1,6 +1,6 @@
-<?php require '../controllers/validar_acesso.php'; ?>
-<?php require '../components/modals/all_modals.php'; ?>
-<?php require_once "../configs/conexao.php"; ?>
+﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
+<?php require_once __DIR__ . "/../configs/conexao.php"; ?>
 
 <?php
 // --- Lógica de Notificações ---
@@ -199,10 +199,10 @@ if ($resMaquinas) {
 </head>
 
 <body>
-    <?php require '../components/nav.php'; ?>
+    <?php require __DIR__ . '/../components/nav.php'; ?>
 
     <section class="sec-main" style="padding-bottom: 5%;">
-        <?php require '../components/header.php'; ?>
+        <?php require __DIR__ . '/../components/header.php'; ?>
 
         <div class="card-box">
             <?php

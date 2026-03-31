@@ -1,7 +1,7 @@
-<?php require '../controllers/validar_acesso.php'; ?>
-<?php require '../configs/conexao.php'; ?>
-<?php require '../components/modals/all_modals.php'; ?>
-<?php require '../components/modals/modal_os.php'; ?>
+﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../configs/conexao.php'; ?>
+<?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
+<?php require __DIR__ . '/../components/modals/modal_os.php'; ?>
 
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="">
@@ -19,18 +19,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
     <style>
-        .os-hist-observacao { border-left: 4px solid #607d8b !important; }
-        .os-hist-observacao .os-timeline-status { background: #607d8b !important; color: #fff !important; }
+        .os-hist-observacao {
+            border-left: 4px solid #607d8b !important;
+        }
+
+        .os-hist-observacao .os-timeline-status {
+            background: #607d8b !important;
+            color: #fff !important;
+        }
     </style>
 </head>
 
 <body>
-    <?php require '../components/nav.php'; ?>
+    <?php require __DIR__ . '/../components/nav.php'; ?>
 
     <section class="sec-main">
 
         <!-- Header -->
-        <?php require '../components/header.php'; ?>
+        <?php require __DIR__ . '/../components/header.php'; ?>
 
         <!-- Barra de Ações -->
         <div class="div-btns-pages">
@@ -48,7 +54,7 @@
             </button>
         </div>
 
-        <!-- Cards de Resumo — 3 Abas -->
+        <!-- Cards de Resumo â€” 3 Abas -->
         <div class="os-resumo-container">
             <div class="os-resumo-card os-resumo-aberto os-tab-ativo" onclick="trocarAba('abertas')">
                 <div class="os-resumo-label"><i class="bi bi-inbox"></i> Abertas</div>
@@ -68,17 +74,17 @@
         <div class="tabela-bg2" style="height: 55vh;">
             <div class="tabela-titulo">
                 <i class="bi bi-file-earmark-text"></i>
-                <h2 id="os-titulo-tabela">Ordens de Serviço — Abertas</h2>
+                <h2 id="os-titulo-tabela">Ordens de Serviço â€” Abertas</h2>
             </div>
             <div class="tabela-wrapper">
                 <table class="tabela-main" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th style="width: 7%;">Nº O.S.</th>
+                            <th style="width: 7%;">NÃo O.S.</th>
                             <th style="width: 28%;">DESCRIÇÃO</th>
                             <th style="width: 12%;">TIPO</th>
                             <th style="width: 14%;">SOLICITANTE</th>
-                            <th style="width: 14%;">RESPONSÁVEL</th>
+                            <th style="width: 14%;">RESPONSÃVEL</th>
                             <th style="width: 10%;">STATUS</th>
                             <th style="width: 15%; text-align: center;">AÇÕES</th>
                         </tr>
@@ -114,9 +120,9 @@
         let osAtual = null; // dados completos da OS selecionada
 
         const TITULOS_ABA = {
-            abertas:    'Ordens de Serviço — Abertas',
-            andamento:  'Ordens de Serviço — Em Andamento',
-            arquivadas: 'Ordens de Serviço — Arquivadas'
+            abertas: 'Ordens de Serviço â€” Abertas',
+            andamento: 'Ordens de Serviço â€” Em Andamento',
+            arquivadas: 'Ordens de Serviço â€” Arquivadas'
         };
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -128,7 +134,11 @@
             abaAtual = aba;
 
             document.querySelectorAll('.os-resumo-card').forEach(c => c.classList.remove('os-tab-ativo'));
-            const mapCard = { abertas: '.os-resumo-aberto', andamento: '.os-resumo-aguardando', arquivadas: '.os-resumo-arquivada' };
+            const mapCard = {
+                abertas: '.os-resumo-aberto',
+                andamento: '.os-resumo-aguardando',
+                arquivadas: '.os-resumo-arquivada'
+            };
             document.querySelector(mapCard[aba])?.classList.add('os-tab-ativo');
 
             document.getElementById('os-titulo-tabela').textContent = TITULOS_ABA[aba] || 'Ordens de Serviço';
@@ -137,12 +147,14 @@
 
         // ---------- CARREGAR / LISTAR ----------
         async function carregarOS() {
-            const busca  = document.getElementById('pesquisa-os')?.value || '';
-            const params = new URLSearchParams({ aba: abaAtual });
+            const busca = document.getElementById('pesquisa-os')?.value || '';
+            const params = new URLSearchParams({
+                aba: abaAtual
+            });
             if (busca) params.append('search', busca);
 
             try {
-                const res  = await fetch(`../actions/os/listar_os.php?${params.toString()}`);
+                const res = await fetch(`../actions/os/listar_os.php?${params.toString()}`);
                 const data = await res.json();
 
                 if (data.success) {
@@ -169,20 +181,20 @@
             }
 
             tbody.innerHTML = ordens.map(os => {
-                const statusClass   = getStatusClass(os.status);
-                const descResumida  = os.descricao.length > 55 ? os.descricao.substring(0, 55) + '...' : os.descricao;
+                const statusClass = getStatusClass(os.status);
+                const descResumida = os.descricao.length > 55 ? os.descricao.substring(0, 55) + '...' : os.descricao;
                 const ehResponsavel = parseInt(os.responsavel_id) === parseInt(usuarioId);
-                const ehAdmin       = permissao === 'ADMIN';
-                const ehGestor      = permissao === 'GESTOR';
-                const naoArquivada  = os.status !== 'Arquivada';
+                const ehAdmin = permissao === 'ADMIN';
+                const ehGestor = permissao === 'GESTOR';
+                const naoArquivada = os.status !== 'Arquivada';
 
-                // Botão Ver Detalhes — sempre visível
+                // Botão Ver Detalhes â€” sempre visível
                 let btns = `
                     <button class="btnAcao editar" title="Ver Detalhes" onclick="verDetalheOS(${os.id})">
                         <i class="bi bi-eye-fill"></i>
                     </button>`;
 
-                // Botão Aceitar — se for o responsável OU Admin/Gestor E status Em Aberto ou Aguardando
+                // Botão Aceitar â€” se for o responsável OU Admin/Gestor E status Em Aberto ou Aguardando
                 if ((ehResponsavel || ehAdmin || ehGestor) && (os.status === 'Em Aberto' || os.status === 'Aguardando Aprovação')) {
                     btns += `
                     <button class="btnAcao confirmar" title="Aceitar" onclick="confirmarAceitarOS(${os.id})">
@@ -190,7 +202,7 @@
                     </button>`;
                 }
 
-                // Botão Recusar — se for o responsável OU Admin/Gestor E status Aguardando Aprovação
+                // Botão Recusar â€” se for o responsável OU Admin/Gestor E status Aguardando Aprovação
                 if ((ehResponsavel || ehAdmin || ehGestor) && os.status === 'Aguardando Aprovação') {
                     btns += `
                     <button class="btnAcao deletar" title="Recusar" onclick="abrirRecusarOSTabela(${os.id})">
@@ -198,7 +210,7 @@
                     </button>`;
                 }
 
-                // Botão Arquivar — se for o responsável OU Admin/Gestor E não arquivada
+                // Botão Arquivar â€” se for o responsável OU Admin/Gestor E não arquivada
                 if ((ehAdmin || ehGestor || (ehResponsavel && os.status === 'Aceita')) && naoArquivada) {
                     btns += `
                     <button class="btnAcao deletar" title="Finalizar/Arquivar" onclick="confirmarArquivarOS(${os.id})" style="background:var(--corBase); color:white;">
@@ -224,18 +236,18 @@
         }
 
         function atualizarContadores(contadores) {
-            document.getElementById('contador-abertas').textContent    = contadores.abertas    ?? 0;
-            document.getElementById('contador-andamento').textContent  = contadores.andamento  ?? 0;
+            document.getElementById('contador-abertas').textContent = contadores.abertas ?? 0;
+            document.getElementById('contador-andamento').textContent = contadores.andamento ?? 0;
             document.getElementById('contador-arquivadas').textContent = contadores.arquivadas ?? 0;
         }
 
         function getStatusClass(status) {
             const map = {
-                'Em Aberto':            'os-status-aberto',
+                'Em Aberto': 'os-status-aberto',
                 'Aguardando Aprovação': 'os-status-aguardando',
-                'Aceita':               'os-status-aceita',
-                'Arquivada':            'os-status-arquivada',
-                'Recusada':             'os-status-recusada'
+                'Aceita': 'os-status-aceita',
+                'Arquivada': 'os-status-arquivada',
+                'Recusada': 'os-status-recusada'
             };
             return map[status] || 'os-status-aberto';
         }
@@ -243,7 +255,10 @@
         function formatarData(dataStr) {
             if (!dataStr) return '';
             const d = new Date(dataStr);
-            return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
 
         // ---------- BUSCA DE PATRIMÔNIO NA MODAL ----------
@@ -260,7 +275,7 @@
 
             patrimonioTimeout = setTimeout(async () => {
                 try {
-                    const res  = await fetch(`../actions/machines/listar_maquinas.php?search=${encodeURIComponent(termo)}`);
+                    const res = await fetch(`../actions/machines/listar_maquinas.php?search=${encodeURIComponent(termo)}`);
                     const data = await res.json();
 
                     if (data.success && data.dados && data.dados.length > 0) {
@@ -286,7 +301,7 @@
                         </div>`;
                         container.style.display = 'block';
                     }
-                } catch(e) {
+                } catch (e) {
                     // Falha silenciosa na busca
                     container.style.display = 'none';
                 }
@@ -294,11 +309,11 @@
         }
 
         function selecionarPatrimonio(valor, label) {
-            document.getElementById('os_patrimonio').value        = valor;
-            document.getElementById('os_patrimonio_busca').value  = label;
+            document.getElementById('os_patrimonio').value = valor;
+            document.getElementById('os_patrimonio_busca').value = label;
             document.getElementById('patrimonio-resultados').style.display = 'none';
             document.getElementById('patrimonio-selecionado').style.display = 'block';
-            document.getElementById('patrimonio-selecionado-texto').textContent = label + ' (Nº: ' + valor + ')';
+            document.getElementById('patrimonio-selecionado-texto').textContent = label + ' (NÃo: ' + valor + ')';
         }
 
         // Fechar dropdown ao clicar fora
@@ -311,8 +326,8 @@
 
         // ---------- CRIAR O.S. ----------
         async function criarOS() {
-            const descricao  = document.getElementById('os_descricao').value.trim();
-            const tipo       = document.getElementById('os_tipo').value;
+            const descricao = document.getElementById('os_descricao').value.trim();
+            const tipo = document.getElementById('os_tipo').value;
             const patrimonio = document.getElementById('os_patrimonio').value.trim();
 
             if (!descricao || !tipo) {
@@ -321,22 +336,31 @@
             }
 
             try {
-                const res  = await fetch('../actions/os/criar_os.php', {
+                const res = await fetch('../actions/os/criar_os.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ descricao, tipo, patrimonio })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        descricao,
+                        tipo,
+                        patrimonio
+                    })
                 });
                 const data = await res.json();
 
                 if (data.success) {
                     closeModal('novaOS');
-                    document.getElementById('os_descricao').value   = '';
-                    document.getElementById('os_tipo').value        = '';
-                    document.getElementById('os_patrimonio').value  = '';
-                    document.getElementById('os_maquina_id').value  = '';
+                    document.getElementById('os_descricao').value = '';
+                    document.getElementById('os_tipo').value = '';
+                    document.getElementById('os_patrimonio').value = '';
+                    document.getElementById('os_maquina_id').value = '';
                     // Reset display da máquina selecionada
                     const txt = document.getElementById('maquina-selecionada-texto');
-                    if (txt) { txt.textContent = 'Clique para selecionar uma máquina...'; txt.style.opacity = '.55'; }
+                    if (txt) {
+                        txt.textContent = 'Clique para selecionar uma máquina...';
+                        txt.style.opacity = '.55';
+                    }
                     carregarOS();
                     exibirSucesso(data.message);
                 } else {
@@ -352,32 +376,32 @@
         async function verDetalheOS(id) {
             osIdSelecionada = id;
             try {
-                const res  = await fetch(`../actions/os/detalhe_os.php?id=${id}`);
+                const res = await fetch(`../actions/os/detalhe_os.php?id=${id}`);
                 const data = await res.json();
 
                 if (data.success) {
                     osAtual = data.dados;
                     const os = data.dados;
 
-                    document.getElementById('detalhe-os-titulo').textContent   = `Ordem de Serviço: #${os.id}`;
-                    document.getElementById('detalhe-os-data').textContent      = formatarData(os.criado_em);
+                    document.getElementById('detalhe-os-titulo').textContent = `Ordem de Serviço: #${os.id}`;
+                    document.getElementById('detalhe-os-data').textContent = formatarData(os.criado_em);
                     document.getElementById('detalhe-os-solicitante').textContent = os.solicitante_nome;
-                    document.getElementById('detalhe-os-tipo').textContent      = os.tipo;
-                    document.getElementById('detalhe-os-status').innerHTML      = `<span class="os-status-badge ${getStatusClass(os.status)}">${os.status}</span>`;
+                    document.getElementById('detalhe-os-tipo').textContent = os.tipo;
+                    document.getElementById('detalhe-os-status').innerHTML = `<span class="os-status-badge ${getStatusClass(os.status)}">${os.status}</span>`;
                     document.getElementById('detalhe-os-patrimonio').textContent = os.patrimonio || 'Não informado';
                     document.getElementById('detalhe-os-descricao').textContent = os.descricao;
-                    document.getElementById('detalhe-os-origem').textContent    = os.solicitante_nome;
-                    document.getElementById('detalhe-os-destino').textContent   = os.responsavel_nome;
+                    document.getElementById('detalhe-os-origem').textContent = os.solicitante_nome;
+                    document.getElementById('detalhe-os-destino').textContent = os.responsavel_nome;
                     document.getElementById('detalhe-os-destino-fluxo').textContent = os.responsavel_nome;
-                    document.getElementById('encaminhar_os_id').value           = os.id;
+                    document.getElementById('encaminhar_os_id').value = os.id;
 
                     // Campos gasto + obs (só visíveis se Arquivada)
                     const isArquivada = os.status === 'Arquivada';
                     document.getElementById('detalhe-os-bloco-gasto').style.display = isArquivada ? '' : 'none';
-                    document.getElementById('detalhe-os-bloco-obs').style.display   = isArquivada ? '' : 'none';
+                    document.getElementById('detalhe-os-bloco-obs').style.display = isArquivada ? '' : 'none';
                     if (isArquivada) {
                         document.getElementById('detalhe-os-gasto').textContent = os.gasto ? 'R$ ' + parseFloat(os.gasto).toFixed(2).replace('.', ',') : 'Não informado';
-                        document.getElementById('detalhe-os-obs').textContent   = os.obs_finalizacao || 'Não informado';
+                        document.getElementById('detalhe-os-obs').textContent = os.obs_finalizacao || 'Não informado';
                     }
 
                     // Anexos
@@ -394,11 +418,11 @@
 
                     // Mostrar botões condicionais
                     const ehResponsavel = parseInt(os.responsavel_id) === USUARIO_LOGADO_ID;
-                    const ehAdmin       = USUARIO_PERMISSAO === 'ADMIN';
-                    const ehGestor      = USUARIO_PERMISSAO === 'GESTOR';
-                    const aceita        = os.status === 'Aceita';
-                    const aguardando    = os.status === 'Aguardando Aprovação';
-                    const naoArquivada  = os.status !== 'Arquivada';
+                    const ehAdmin = USUARIO_PERMISSAO === 'ADMIN';
+                    const ehGestor = USUARIO_PERMISSAO === 'GESTOR';
+                    const aceita = os.status === 'Aceita';
+                    const aguardando = os.status === 'Aguardando Aprovação';
+                    const naoArquivada = os.status !== 'Arquivada';
 
                     document.getElementById('btn-observacao-os').style.display = ((ehResponsavel || ehAdmin) && naoArquivada) ? '' : 'none';
                     document.getElementById('btn-encaminhar-os').style.display = ((ehAdmin || ehGestor || (ehResponsavel && (aceita || aguardando))) && naoArquivada) ? '' : 'none';
@@ -413,13 +437,17 @@
         // ---------- ACEITAR ----------
         async function aceitarOS() {
             const id = document.getElementById('aceitar_os_id').value || osIdSelecionada;
-            if(!id) return;
+            if (!id) return;
 
             try {
-                const res  = await fetch('../actions/os/aceitar_os.php', {
+                const res = await fetch('../actions/os/aceitar_os.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ os_id: parseInt(id) })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        os_id: parseInt(id)
+                    })
                 });
                 const data = await res.json();
 
@@ -444,9 +472,9 @@
 
         // ---------- ENCAMINHAR ----------
         async function encaminharOS() {
-            const os_id          = document.getElementById('encaminhar_os_id').value || osIdSelecionada;
+            const os_id = document.getElementById('encaminhar_os_id').value || osIdSelecionada;
             const responsavel_id = document.getElementById('encaminhar_responsavel').value;
-            const motivo         = document.getElementById('encaminhar_motivo').value.trim();
+            const motivo = document.getElementById('encaminhar_motivo').value.trim();
 
             if (!responsavel_id || !motivo) {
                 alert('Preencha todos os campos!');
@@ -454,16 +482,22 @@
             }
 
             try {
-                const res  = await fetch('../actions/os/encaminhar_os.php', {
+                const res = await fetch('../actions/os/encaminhar_os.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ os_id: parseInt(os_id), responsavel_id: parseInt(responsavel_id), motivo })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        os_id: parseInt(os_id),
+                        responsavel_id: parseInt(responsavel_id),
+                        motivo
+                    })
                 });
                 const data = await res.json();
 
                 closeModal('encaminharOS');
                 closeModal('detalheOS');
-                document.getElementById('encaminhar_motivo').value      = '';
+                document.getElementById('encaminhar_motivo').value = '';
                 document.getElementById('encaminhar_responsavel').value = '';
 
                 if (data.success) {
@@ -485,20 +519,26 @@
         function confirmarArquivarOS(id) {
             document.getElementById('arquivar_os_id').value = id;
             document.getElementById('arquivar_gasto').value = '';
-            document.getElementById('arquivar_obs').value   = '';
+            document.getElementById('arquivar_obs').value = '';
             showModal('arquivarOSModal');
         }
 
         async function arquivarOS() {
-            const id  = document.getElementById('arquivar_os_id').value;
+            const id = document.getElementById('arquivar_os_id').value;
             const gasto = document.getElementById('arquivar_gasto').value;
-            const obs   = document.getElementById('arquivar_obs').value.trim();
+            const obs = document.getElementById('arquivar_obs').value.trim();
 
             try {
-                const res  = await fetch('../actions/os/arquivar_os.php', {
+                const res = await fetch('../actions/os/arquivar_os.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ os_id: parseInt(id), gasto: gasto !== '' ? parseFloat(gasto) : null, obs_finalizacao: obs })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        os_id: parseInt(id),
+                        gasto: gasto !== '' ? parseFloat(gasto) : null,
+                        obs_finalizacao: obs
+                    })
                 });
                 const data = await res.json();
 
@@ -526,13 +566,13 @@
         function abrirRecusarOSTabela(id) {
             // Chamado diretamente da tabela
             osIdSelecionada = id;
-            document.getElementById('recusar_os_id').value  = id;
+            document.getElementById('recusar_os_id').value = id;
             document.getElementById('recusar_motivo').value = '';
             showModal('recusarOSModal');
         }
 
         async function recusarOS() {
-            const id     = document.getElementById('recusar_os_id').value;
+            const id = document.getElementById('recusar_os_id').value;
             const motivo = document.getElementById('recusar_motivo').value.trim();
 
             if (!motivo) {
@@ -541,10 +581,15 @@
             }
 
             try {
-                const res  = await fetch('../actions/os/recusar_os.php', {
+                const res = await fetch('../actions/os/recusar_os.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ os_id: parseInt(id), motivo_recusa: motivo })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        os_id: parseInt(id),
+                        motivo_recusa: motivo
+                    })
                 });
                 const data = await res.json();
 
@@ -570,7 +615,7 @@
         }
 
         async function salvarObservacao() {
-            const id  = document.getElementById('obs_os_id').value;
+            const id = document.getElementById('obs_os_id').value;
             const obs = document.getElementById('campo_observacao').value.trim();
 
             if (!obs) {
@@ -579,10 +624,15 @@
             }
 
             try {
-                const res  = await fetch('../actions/os/adicionar_observacao.php', {
+                const res = await fetch('../actions/os/adicionar_observacao.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ os_id: parseInt(id), observacao: obs })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        os_id: parseInt(id),
+                        observacao: obs
+                    })
                 });
                 const data = await res.json();
 
@@ -603,7 +653,7 @@
             if (!id) return;
 
             try {
-                const res  = await fetch(`../actions/os/get_historico.php?os_id=${id}`);
+                const res = await fetch(`../actions/os/get_historico.php?os_id=${id}`);
                 const data = await res.json();
 
                 if (data.success) {
@@ -614,12 +664,12 @@
                         timeline.innerHTML = '<p style="text-align: center; color: var(--corTxt3); opacity: 0.6;">Nenhum registro no histórico</p>';
                     } else {
                         timeline.innerHTML = data.dados.map(h => {
-                            const statusClass = h.status.includes('Criada')      ? 'os-hist-criada' :
-                                                h.status.includes('Aceita')      ? 'os-hist-aceita' :
-                                                h.status.includes('Encaminhada') ? 'os-hist-encaminhada' :
-                                                h.status.includes('Arquivada')   ? 'os-hist-arquivada' :
-                                                h.status.includes('Recusada')    ? 'os-hist-recusada' :
-                                                h.status.includes('Observação')  ? 'os-hist-observacao' : '';
+                            const statusClass = h.status.includes('Criada') ? 'os-hist-criada' :
+                                h.status.includes('Aceita') ? 'os-hist-aceita' :
+                                h.status.includes('Encaminhada') ? 'os-hist-encaminhada' :
+                                h.status.includes('Arquivada') ? 'os-hist-arquivada' :
+                                h.status.includes('Recusada') ? 'os-hist-recusada' :
+                                h.status.includes('Observação') ? 'os-hist-observacao' : '';
 
                             return `
                                 <div class="os-timeline-item ${statusClass}">
@@ -643,7 +693,7 @@
             }
         }
         // =============================================
-        // MODAL PESQUISA DE MÁQUINA
+        // MODAL PESQUISA DE MÃQUINA
         // =============================================
         let _maquinasTodas = []; // cache da lista completa
 
@@ -666,7 +716,7 @@
                 <p style="margin-top:8px;">Carregando máquinas...</p></div>`;
 
             try {
-                const res  = await fetch('../actions/machines/listar_maquinas.php?search=');
+                const res = await fetch('../actions/machines/listar_maquinas.php?search=');
                 const data = await res.json();
                 _maquinasTodas = data.dados || [];
                 _renderMaquinas(_maquinasTodas);
@@ -728,26 +778,25 @@
 
         function selecionarMaquina(id, nome, patrimonio) {
             // Preenche os campos hidden
-            document.getElementById('os_maquina_id').value  = id;
-            document.getElementById('os_patrimonio').value  = patrimonio;
+            document.getElementById('os_maquina_id').value = id;
+            document.getElementById('os_patrimonio').value = patrimonio;
 
             // Atualiza o display
-            const box   = document.getElementById('maquina-selecionada-texto');
+            const box = document.getElementById('maquina-selecionada-texto');
             box.textContent = '';
             box.style.opacity = '1';
 
-            // Ícone check + nome + patrimônio
+            // Ãcone check + nome + patrimônio
             const icon = document.createElement('i');
             icon.className = 'bi bi-check-circle-fill';
             icon.style.color = 'var(--confirmar)';
             icon.style.marginRight = '6px';
             box.appendChild(icon);
-            box.appendChild(document.createTextNode(`${nome}  —  NI: ${patrimonio}`));
+            box.appendChild(document.createTextNode(`${nome}  â€”  NI: ${patrimonio}`));
 
             // Fecha modal de pesquisa
             closeModal('modalPesquisaMaquina');
         }
-
     </script>
 
 </body>

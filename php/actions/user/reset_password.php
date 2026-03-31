@@ -1,6 +1,6 @@
-<?php
-require "../../configs/conexao.php";
-require "../../controllers/validar_acesso.php";
+﻿<?php
+require __DIR__ . "/../../configs/conexao.php";
+require __DIR__ . "/../../controllers/validar_acesso.php";
 
 // Verifica se é administrador
 if ($_SESSION['user_permissao'] !== 'ADMIN') {
@@ -26,3 +26,4 @@ if (isset($_GET['id'])) {
 } else {
     header("Location: ../../views/usuarios.php?erro=id_invalido");
 }
+

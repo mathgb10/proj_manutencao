@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -8,14 +8,14 @@ if (!isset($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'dados' => []]);
     exit;
 }
-require '../../configs/conexao.php';
+require __DIR__ . '/../../configs/conexao.php';
 
 header('Content-Type: application/json');
 
 $search = trim($_GET['search'] ?? '');
 $dados  = [];
 
-// Se search vazio → lista tudo (limite 50). Se tem texto → filtra.
+// Se search vazio â†’ lista tudo (limite 50). Se tem texto â†’ filtra.
 if ($search === '') {
     $sqlM = "SELECT id, denominacao, numero_identificacao, numero_serie, setor
              FROM maquinas
@@ -50,3 +50,4 @@ if ($stmtM) {
 
 echo json_encode(['success' => true, 'dados' => $dados]);
 ?>
+

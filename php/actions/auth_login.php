@@ -1,6 +1,6 @@
-<?php
+﻿<?php
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    require '../configs/conexao.php';
+    require __DIR__ . '/../configs/conexao.php';
 
     $email = $_POST['email'];
     $senha = $_POST['senha'];   
@@ -36,3 +36,4 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     // qnd o banco tiver ok nois testa, por enquanto eu vo pedir pro se pq se vai dar conta ai dos seus jeitos
     // deixa a navbar responsiva
 }
+

@@ -1,7 +1,7 @@
-<?php
-require '../controllers/validar_acesso.php';
-require '../configs/conexao.php';
-require '../components/modals/all_modals.php';
+﻿<?php
+require __DIR__ . '/../controllers/validar_acesso.php';
+require __DIR__ . '/../configs/conexao.php';
+require __DIR__ . '/../components/modals/all_modals.php';
 
 // --- VERIFICAÇÃO DE SEGURANÇA (Evita o erro Fatal) ---
 if (!isset($conn)) {
@@ -32,12 +32,12 @@ if (!isset($conn)) {
 </head>
 
 <body>
-    <?php require '../components/nav.php'; ?>
+    <?php require __DIR__ . '/../components/nav.php'; ?>
 
     <section class="sec-main">
 
         <!-- Header -->
-        <?php require '../components/header.php'; ?>
+        <?php require __DIR__ . '/../components/header.php'; ?>
 
         <div class="div-btns-pages">
             <form action="" method="GET" class="form-pesquisa">

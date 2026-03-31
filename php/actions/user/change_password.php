@@ -1,5 +1,5 @@
-<?php
-require "../../configs/conexao.php";
+﻿<?php
+require __DIR__ . "/../../configs/conexao.php";
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -27,3 +27,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     header("Location: ../../index.php");
 }
+

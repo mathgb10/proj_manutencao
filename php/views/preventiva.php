@@ -1,7 +1,7 @@
-<?php
-require '../controllers/validar_acesso.php';
-require '../configs/conexao.php';
-require '../components/modals/all_modals.php';
+﻿<?php
+require __DIR__ . '/../controllers/validar_acesso.php';
+require __DIR__ . '/../configs/conexao.php';
+require __DIR__ . '/../components/modals/all_modals.php';
 
 // --- Lógica de Data e Status (Simplificada) ---
 function calcularStatus($conn, $maquina_id)
@@ -70,12 +70,12 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
 </head>
 
 <body>
-    <?php require '../components/nav.php'; ?>
+    <?php require __DIR__ . '/../components/nav.php'; ?>
 
     <section class="sec-main">
 
         <!-- Header -->
-        <?php require '../components/header.php'; ?>
+        <?php require __DIR__ . '/../components/header.php'; ?>
 
         <!-- Dashboard (Inserido conforme solicitado, Única diferença para maquinas.php) -->
         <div class="row dashboard-row" style="margin: 20px 0;">

@@ -1,5 +1,5 @@
 <?php if (isset($_GET['acesso']) && $_GET['acesso'] == 'negado') {
-    ?>
+?>
     <div class="modal-fundo" id="acesso" style="display: flex;">
         <div class="modal-box-acesso">
             <div class="modal-header-acesso">
@@ -1120,4 +1120,3 @@
         </div>
     </div>
 </div>
-```

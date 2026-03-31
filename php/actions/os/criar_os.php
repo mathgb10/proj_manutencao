@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
@@ -13,7 +13,7 @@ register_shutdown_function(function() {
 });
 
 session_start();
-require '../../configs/conexao.php';
+require __DIR__ . '/../../configs/conexao.php';
 
 header('Content-Type: application/json');
 
@@ -60,7 +60,7 @@ $gestor = $resGestor->fetch_assoc();
 $responsavel_id   = $gestor['id'];
 $responsavel_nome = $gestor['nome'];
 
-// Inserir a Ordem de Serviço — tipo padrão Corretivo, responsável = gestor
+// Inserir a Ordem de Serviço â€” tipo padrão Corretivo, responsável = gestor
 $sql = "INSERT INTO ordens_servico (descricao, tipo, patrimonio, status, solicitante_id, responsavel_id, anterior_responsavel_id)
         VALUES (?, ?, ?, 'Em Aberto', ?, ?, ?)";
 $stmt = $conn->prepare($sql);
@@ -91,3 +91,4 @@ if ($stmt->execute()) {
     echo json_encode(['success' => false, 'message' => 'Erro ao criar O.S.: ' . $conn->error]);
 }
 ?>
+

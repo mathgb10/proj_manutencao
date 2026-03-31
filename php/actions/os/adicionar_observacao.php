@@ -1,9 +1,9 @@
-<?php
+﻿<?php
 // Suprimir warnings/notices que quebram JSON
 error_reporting(0);
 ini_set('display_errors', 0);
 
-require_once '../../configs/conexao.php';
+require_once __DIR__ . '/../../configs/conexao.php';
 session_start();
 
 $data = json_decode(file_get_contents('php://input'), true);
@@ -43,3 +43,4 @@ if ($stmtHist->execute()) {
     echo json_encode(['success' => false, 'message' => 'Erro ao salvar: ' . $conn->error]);
 }
 ?>
+

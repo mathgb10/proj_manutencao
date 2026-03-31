@@ -1,6 +1,6 @@
-<?php
+﻿<?php
 session_start();
-require '../configs/conexao.php'; // Ajuste o caminho conforme sua estrutura
+require __DIR__ . '/../configs/conexao.php'; // Ajuste o caminho conforme sua estrutura
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -43,3 +43,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Se tentar acessar o arquivo diretamente sem post
     header("Location: ../pages/usuarios.php");
 }
+

@@ -1,5 +1,5 @@
-<?php
-require_once "../../configs/conexao.php";
+﻿<?php
+require_once __DIR__ . "/../../configs/conexao.php";
 
 header('Content-Type: application/json');
 
@@ -34,3 +34,4 @@ if (isset($_GET['id'])) {
 } else {
     echo json_encode(['error' => 'ID não fornecido']);
 }
+

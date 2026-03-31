@@ -1,5 +1,5 @@
-<?php
-require_once "../../configs/conexao.php";
+﻿<?php
+require_once __DIR__ . "/../../configs/conexao.php";
 
 header('Content-Type: application/json');
 
@@ -27,3 +27,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     echo json_encode(['success' => false, 'message' => 'Método inválido']);
 }
+

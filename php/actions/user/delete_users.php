@@ -1,5 +1,5 @@
-<?php
-require "../../configs/conexao.php";
+﻿<?php
+require __DIR__ . "/../../configs/conexao.php";
 
 header('Content-Type: application/json');
 

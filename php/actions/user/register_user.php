@@ -1,5 +1,5 @@
-<?php
-require "../../configs/conexao.php";
+﻿<?php
+require __DIR__ . "/../../configs/conexao.php";
 
 $nome = $_POST['nome'];
 $email = $_POST['email'];
@@ -30,3 +30,4 @@ if ($row > 0) {
 
     header("Location: ../../views/usuarios.php?sucesso=Usuário cadastrado com sucesso!");
 }
+

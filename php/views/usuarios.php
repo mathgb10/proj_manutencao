@@ -1,6 +1,6 @@
-<?php require '../controllers/validar_acesso.php'; ?>
-<?php require '../configs/conexao.php'; ?>
-<?php require '../components/modals/all_modals.php'; ?>
+﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../configs/conexao.php'; ?>
+<?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="">
@@ -21,12 +21,12 @@
 </head>
 
 <body>
-    <?php require '../components/nav.php'; ?>
+    <?php require __DIR__ . '/../components/nav.php'; ?>
 
     <section class="sec-main">
 
         <!-- Header -->
-        <?php require '../components/header.php'; ?>
+        <?php require __DIR__ . '/../components/header.php'; ?>
 
         <div class="div-btns-pages">
             <form action="" method="GET" class="form-pesquisa">
@@ -128,24 +128,24 @@
             if (urlParams.has('msg')) {
                 const msg = urlParams.get('msg');
                 if (msg === 'senha_alterada') {
-                    alert('✓ Senha do usuário alterada com sucesso!');
+                    alert('âœ“ Senha do usuário alterada com sucesso!');
                 } else if (msg === 'senha_resetada') {
                     alert('Senha alterada para senaisp por padrão.');
                 }
-                // Remove o parâmetro da URL
+                // Remove o parÃ¢metro da URL
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
             if (urlParams.has('erro')) {
                 const erro = urlParams.get('erro');
                 if (erro === 'senhas_nao_coincidem') {
-                    alert('✗ As senhas informadas não coincidem!');
+                    alert('âœ— As senhas informadas não coincidem!');
                 } else if (erro === 'sem_permissao') {
-                    alert('✗ Você não tem permissão para realizar esta ação!');
+                    alert('âœ— Você não tem permissão para realizar esta ação!');
                 } else if (erro === 'erro_banco') {
-                    alert('✗ Erro ao processar a requisição no banco de dados!');
+                    alert('âœ— Erro ao processar a requisição no banco de dados!');
                 }
-                // Remove o parâmetro da URL
+                // Remove o parÃ¢metro da URL
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         });

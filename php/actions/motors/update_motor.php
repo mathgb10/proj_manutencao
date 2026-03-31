@@ -1,5 +1,5 @@
-<?php
-require_once "../../configs/conexao.php";
+﻿<?php
+require_once __DIR__ . "/../../configs/conexao.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id = intval($_POST['idmotor']);
@@ -21,3 +21,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     mysqli_stmt_close($stmt);
 }
+

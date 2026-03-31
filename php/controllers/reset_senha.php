@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 // controllers/reset_senha.php
 session_start();
-require '../configs/conexao.php'; // Certifique-se que este caminho está correto
+require __DIR__ . '/../configs/conexao.php'; // Certifique-se que este caminho está correto
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -47,3 +47,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: ../pages/usuarios.php");
     exit;
 }
+

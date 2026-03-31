@@ -1,5 +1,5 @@
-<?php
-require_once "../../configs/conexao.php";
+﻿<?php
+require_once __DIR__ . "/../../configs/conexao.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nome = $_POST['tipomaquina_nome'];
@@ -17,3 +17,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     mysqli_stmt_close($stmt);
 }
+

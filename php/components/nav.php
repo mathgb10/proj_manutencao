@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . "/../configs/conexao.php";
 $atualmente_em = basename($_SERVER['PHP_SELF']);
 $permissao_usuario = $_SESSION['user_permissao'];
@@ -77,10 +77,10 @@ $permissao_usuario = $_SESSION['user_permissao'];
                     <i class="bi bi-gear-fill"></i> Máquinas
                 </a>
 
-                <a href="motores.php" class="<?php if ($atualmente_em == 'motores.php')
+                <!-- <a href="motores.php" class="<?php if ($atualmente_em == 'motores.php')
     echo 'ativo'; ?> links-sub">
                     <i class="bi bi-lightning-fill"></i> Motores
-                </a>
+                </a> -->
 
             </div>
         </div>

@@ -1,9 +1,12 @@
+CREATE DATABASE manutencao_tds2026;
+USE manutencao_tds2026;
+
 -- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05/05/2026 às 19:13
+-- Tempo de geração: 05/05/2026 às 21:37
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.0.30
 
@@ -4477,6 +4480,7 @@ CREATE TABLE `usuarios` (
   `nome` varchar(200) NOT NULL,
   `email` varchar(200) NOT NULL,
   `senha` varchar(245) NOT NULL,
+  `senha_padrao` int(11) NOT NULL DEFAULT 1,
   `permissao` enum('ADMIN','GESTOR','NORMAL') NOT NULL DEFAULT 'NORMAL'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -4484,17 +4488,17 @@ CREATE TABLE `usuarios` (
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `permissao`) VALUES
-(1, 'Beneguiguiris', 'matheus@email.com', '$2y$10$0pvYeA0o0KmZvaCVgYA7iuX2LgciuEIwo9/wQ9WldnufpKsDFCamK', 'ADMIN'),
-(2, 'Miguel', 'miguel@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN'),
-(3, 'Ruan Duas Torres', 'ruan@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN'),
-(4, 'Pereira', 'pereira@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN'),
-(5, 'Lais', 'lais@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN'),
-(6, 'Gideao', 'gideao@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN'),
-(7, 'Pedro', 'pedro@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 'ADMIN'),
-(8, 'Kaua Reis', 'kaua@email.com', '$2y$10$A2AhXY8vrgisCyOimxkfT.HnJUlneIvxqgEvEUJ0Rep8hRMB1FgBK', 'ADMIN'),
-(9, 'Rafael', 'rafael@email.com', '$2y$10$A2AhXY8vrgisCyOimxkfT.HnJUlneIvxqgEvEUJ0Rep8hRMB1FgBK', 'ADMIN'),
-(10, 'Admin', 'ola@gmail.com', '$2y$10$Jo4bXucSLiVsZIEUBQyQBO6.9jg0pz5beTuH3PaVqJKPSiiZCwIJ2', 'ADMIN');
+INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `senha_padrao`, `permissao`) VALUES
+(1, 'Beneguiguiris', 'matheus@email.com', '$2y$10$/pkrY1YW3pnwuHi2D87ex.4QIvA/pJmniCjWp/Zd3w9Lre5R8iSkq', 1, 'ADMIN'),
+(2, 'Miguel', 'miguel@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
+(3, 'Ruan Duas Torres', 'ruan@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
+(4, 'Pereira', 'pereira@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
+(5, 'Lais', 'lais@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
+(6, 'Gideao', 'gideao@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
+(7, 'Pedro', 'pedro@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
+(8, 'Kaua Reis', 'kaua@email.com', '$2y$10$A2AhXY8vrgisCyOimxkfT.HnJUlneIvxqgEvEUJ0Rep8hRMB1FgBK', 0, 'ADMIN'),
+(9, 'Rafael', 'rafael@email.com', '$2y$10$A2AhXY8vrgisCyOimxkfT.HnJUlneIvxqgEvEUJ0Rep8hRMB1FgBK', 0, 'ADMIN'),
+(10, 'Admin', 'ola@gmail.com', '$2y$10$Jo4bXucSLiVsZIEUBQyQBO6.9jg0pz5beTuH3PaVqJKPSiiZCwIJ2', 0, 'ADMIN');
 
 --
 -- Índices para tabelas despejadas

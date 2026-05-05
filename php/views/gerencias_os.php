@@ -74,17 +74,17 @@
         <div class="tabela-bg2" style="height: 55vh;">
             <div class="tabela-titulo">
                 <i class="bi bi-file-earmark-text"></i>
-                <h2 id="os-titulo-tabela">Ordens de Serviço â€” Abertas</h2>
+                <h2 id="os-titulo-tabela">Ordens de Serviço - Abertas</h2>
             </div>
             <div class="tabela-wrapper">
                 <table class="tabela-main" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th style="width: 7%;">NÃo O.S.</th>
+                            <th style="width: 7%;">Nº O.S.</th>
                             <th style="width: 28%;">DESCRIÇÃO</th>
                             <th style="width: 12%;">TIPO</th>
                             <th style="width: 14%;">SOLICITANTE</th>
-                            <th style="width: 14%;">RESPONSÃVEL</th>
+                            <th style="width: 14%;">RESPONSÁVEL</th>
                             <th style="width: 10%;">STATUS</th>
                             <th style="width: 15%; text-align: center;">AÇÕES</th>
                         </tr>
@@ -120,9 +120,9 @@
         let osAtual = null; // dados completos da OS selecionada
 
         const TITULOS_ABA = {
-            abertas: 'Ordens de Serviço â€” Abertas',
-            andamento: 'Ordens de Serviço â€” Em Andamento',
-            arquivadas: 'Ordens de Serviço â€” Arquivadas'
+            abertas: 'Ordens de Serviço - Abertas',
+            andamento: 'Ordens de Serviço - Em Andamento',
+            arquivadas: 'Ordens de Serviço - Arquivadas'
         };
 
         document.addEventListener('DOMContentLoaded', () => {

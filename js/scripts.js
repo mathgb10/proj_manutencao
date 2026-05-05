@@ -151,12 +151,7 @@ function closeModal(qual) {
         // Seria Legal tirar o ?acesso=negado dps que fechar
     } else if (qual == 'adicaoUser') {
         document.getElementById('adicaoUser').style.display = 'none';
-    } else if (qual == 'adicaoMotor') {
-        document.getElementById('adicaoMotor').style.display = 'none';
-    } else if (qual == 'editarMotor') {
-        document.getElementById('editarMotor').style.display = 'none';
-    } else if (qual == 'dellMotor') {
-        document.getElementById('dellMotor').style.display = 'none';
+
     } else if (qual == 'adicaoTipoMaquina') {
         document.getElementById('adicaoTipoMaquina').style.display = 'none';
     } else if (qual == 'edicaoTipoMaquina') {
@@ -228,6 +223,9 @@ function showModal(qual, id) {
         editarUsuario(id);
     } else if (qual == "adicaoMachine") {
         document.getElementById(qual).style.display = "flex";
+    } else if (qual == "maquinasLote") {
+        document.getElementById("maquinasLote").style.display = "flex";
+        document.getElementById("adicaoMachine").style.display = "none";
     } else if (qual == "adicaoMotor") {
         document.getElementById(qual).style.display = "flex";
     } else if (qual == "editarMotor") {
@@ -370,7 +368,7 @@ function editarTipoMaquina(id) {
         })
         .catch(error => {
             console.error('Erro:', error);
-            alert('Erro ao buscar dados do tipo de máquina.');
+            alert('Erro ao buscar dados da descrição de máquina.');
         });
 }
 
@@ -802,7 +800,6 @@ document.addEventListener("DOMContentLoaded", function () {
         "tabela-maquinas",
         "tabela-logs",
         "tabela-os",
-        "tabela-motores",
         "tabela-tipo_maquinas"
     ];
 

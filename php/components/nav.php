@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . "/../configs/conexao.php";
 $atualmente_em = basename($_SERVER['PHP_SELF']);
-$permissao_usuario = $_SESSION['user_permissao'];
+$permissao_usuario = $_SESSION['user_permissao'] ?? $_SESSION['colaborador_permissao'] ?? 'NORMAL';
 ?>
 
 <nav class="sidebar">
@@ -69,18 +69,13 @@ $permissao_usuario = $_SESSION['user_permissao'];
                 <a href="tipo_maquina.php"
                     class="<?php if ($atualmente_em == 'tipo_maquina.php')
     echo 'ativo'; ?> links-sub">
-                    <i class="bi bi-tags-fill"></i> Tipo Máquinas
+                    <i class="bi bi-tags-fill"></i> Descrição Máquinas
                 </a>
 
                 <a href="maquinas.php" class="<?php if ($atualmente_em == 'maquinas.php')
     echo 'ativo'; ?> links-sub">
                     <i class="bi bi-gear-fill"></i> Máquinas
                 </a>
-
-                <!-- <a href="motores.php" class="<?php if ($atualmente_em == 'motores.php')
-    echo 'ativo'; ?> links-sub">
-                    <i class="bi bi-lightning-fill"></i> Motores
-                </a> -->
 
             </div>
         </div>
@@ -151,7 +146,7 @@ $permissao_usuario = $_SESSION['user_permissao'];
             {
                 btnId: "btn-maquinas",
                 submenuId: "submenu-maquinas",
-                paginas: ["tipo_maquinas.php", "maquinas.php", "motores.php"]
+                paginas: ["tipo_maquinas.php", "maquinas.php"]
             }
         ];
 

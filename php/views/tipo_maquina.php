@@ -1,4 +1,4 @@
-﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
 <?php require __DIR__ . '/../configs/conexao.php'; ?>
 <?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 
@@ -8,7 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tipo Máquinas - SENAI MANUTENÇÃO</title>
+    <title>Descrição Máquinas - SENAI MANUTENÇÃO</title>
 
     <link rel="stylesheet" href="../../css/global.css">
     <link rel="stylesheet" href="../../css/nav.css">
@@ -50,7 +50,7 @@
                 </div>
             </form>
 
-            <button class="btn" onclick="showModal('adicaoTipoMaquina')">Tipo Máquina <i
+            <button class="btn" onclick="showModal('adicaoTipoMaquina')">Descrição Máquina <i
                     class="bi bi-plus-circle"></i></button>
         </div>
 

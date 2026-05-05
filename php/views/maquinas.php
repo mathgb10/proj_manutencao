@@ -1,4 +1,4 @@
-﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
 <?php require __DIR__ . '/../configs/conexao.php'; ?>
 <?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 
@@ -154,7 +154,8 @@
 
     </section>
 
-    <script src="../../js/scripts.js" defer></script>
+    <script src="../../js/scripts.js?v=2" defer></script>
+    <script src="../../js/processa_lotes_maquinas.js?v=2" defer></script>
 </body>
 
 </html>

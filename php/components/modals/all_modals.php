@@ -205,7 +205,7 @@
 
             <div class="modal-row">
                 <div class="modal-input">
-                    <label for="maquina">Tipo de Máquina:</label>
+                    <label for="maquina">Descrição Máquina:</label>
                     <select name="setor" id="setor">
                         <option value="semValor">Selecione uma Opção</option>
                         <?php
@@ -225,21 +225,6 @@
                 <div class="modal-input">
                     <label for="denominacao">Denominação:</label>
                     <input type="text" name="denominacao" id="denominacao" placeholder="Ex: TORNO MECÂNICO">
-                </div>
-                <div class="modal-input">
-                    <label for="motor">Motor:</label>
-                    <select name="motor" id="motor">
-                        <option value="semValor" disabled selected>Selecione uma opção</option>
-                        <?php
-                        $sql = "SELECT * FROM motor";
-                        $resultado = $conn_nr12->query($sql);
-                        if ($resultado && $resultado->num_rows > 0) {
-                            while ($linha = $resultado->fetch_assoc()) {
-                                echo "<option value='" . $linha['idmotor'] . "'>" . $linha['motor_fabricante'] . " - " . $linha['motor_modelo'] . " - " . $linha['motor_potencia'] . " - " . $linha['motor_tensão'] . " - " . $linha['motor_corrente'] . "</option>";
-                            }
-                        }
-                        ?>
-                    </select>
                 </div>
             </div>
 
@@ -322,8 +307,38 @@
                 <button type="submit" class="btn-confirmar-full confirmar">
                     Salvar Registro <i class="bi bi-check-lg"></i>
                 </button>
+                <br>
+                <button type="button" class="btn-confirmar-full btn" onclick="showModal('maquinasLote')">
+                    Cadastrar em Lote <i class="bi bi-plus-lg"></i>
+                </button>
             </div>
 
+        </form>
+    </div>
+</div>
+
+<!-- Adicionar Máquina em Lote -->
+<div class="modal-fundo" id="maquinasLote" style="display: none;">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Cadastro em Lote - Máquinas</h3>
+            <button class="" onclick="closeModal('maquinasLote')"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <form id="form-cad-maquina-lote" class="modal-form">
+            <div class="modal-input file-input-wrapper">
+                <label for="arquivo-maquina">Faça Upload do Arquivo (CSV ou Excel)</label>
+                <div class="arquivos-div" style="border: 2px dashed var(--corBase); padding: 20px; text-align: center; cursor: pointer;" onclick="document.getElementById('arquivo-maquina').click()">
+                    <i class="bi bi-cloud-upload" style="font-size: 2rem; color: var(--corBase);"></i>
+                    <p class="label-arquivo" style="margin-top: 10px;">Arraste ou Pressione o Arquivo.</p>
+                </div>
+                <input type="file" name="arquivo-maquina" id="arquivo-maquina" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" style="display: none;">
+            </div>
+            <div id="preview-maquina" class="preview-lote"></div>
+            <div class="modal-footer footer-lote">
+                <button type="submit" class="btn-confirmar-full btn">
+                    Enviar <i class="bi bi-check-lg"></i>
+                </button>
+            </div>
         </form>
     </div>
 </div>
@@ -837,105 +852,7 @@
     </div>
 </div>
 
-<!-- MODAIS PARA MOTORES -->
-<div class="modal-fundo" id="adicaoMotor" style="display: none">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3>Registrar Motor</h3>
-            <button onclick="closeModal('adicaoMotor')"><i class="bi bi-x-lg"></i></button>
-        </div>
-        <form action="../actions/motors/register_motor.php" class="modal-form" method="POST">
-            <div class="modal-input">
-                <label for="motor_fabricante">Fabricante:</label>
-                <input type="text" name="motor_fabricante" id="motor_fabricante" placeholder="Ex: WEG" required>
-            </div>
-            <div class="modal-input">
-                <label for="motor_modelo">Modelo:</label>
-                <input type="text" name="motor_modelo" id="motor_modelo" placeholder="Ex: W22" required>
-            </div>
-            <div class="modal-row">
-                <div class="modal-input">
-                    <label for="motor_potencia">Potência:</label>
-                    <input type="text" name="motor_potencia" id="motor_potencia" placeholder="Ex: 5 CV">
-                </div>
-                <div class="modal-input">
-                    <label for="motor_tensao">Tensão:</label>
-                    <input type="text" name="motor_tensao" id="motor_tensao" placeholder="Ex: 220/380V">
-                </div>
-            </div>
-            <div class="modal-input">
-                <label for="motor_corrente">Corrente:</label>
-                <input type="text" name="motor_corrente" id="motor_corrente" placeholder="Ex: 13.5 A">
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn-confirmar-full confirmar">Cadastrar <i class="bi bi-plus-lg"></i></button>
-            </div>
-        </form>
-    </div>
-</div>
 
-<div class="modal-fundo" id="editarMotor" style="display: none">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3>Editar Motor</h3>
-            <button onclick="closeModal('editarMotor')"><i class="bi bi-x-lg"></i></button>
-        </div>
-        <form action="../actions/motors/update_motor.php" class="modal-form" method="POST">
-            <input type="hidden" name="idmotor" id="edit_idmotor">
-            <div class="modal-input">
-                <label for="edit_motor_fabricante">Fabricante:</label>
-                <input type="text" name="motor_fabricante" id="edit_motor_fabricante" required>
-            </div>
-            <div class="modal-input">
-                <label for="edit_motor_modelo">Modelo:</label>
-                <input type="text" name="motor_modelo" id="edit_motor_modelo" required>
-            </div>
-            <div class="modal-row">
-                <div class="modal-input">
-                    <label for="edit_motor_potencia">Potência:</label>
-                    <input type="text" name="motor_potencia" id="edit_motor_potencia">
-                </div>
-                <div class="modal-input">
-                    <label for="edit_motor_tensao">Tensão:</label>
-                    <input type="text" name="motor_tensao" id="edit_motor_tensao">
-                </div>
-            </div>
-            <div class="modal-row">
-                <div class="modal-input">
-                    <label for="edit_motor_corrente">Corrente:</label>
-                    <input type="text" name="motor_corrente" id="edit_motor_corrente">
-                </div>
-                <div class="modal-input">
-                    <label for="edit_motor_status">Status:</label>
-                    <select name="motor_status" id="edit_motor_status">
-                        <option value="Ativo">Ativo</option>
-                        <option value="Inativo">Inativo</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn-confirmar-full confirmar">Salvar Alterações <i class="bi bi-check-lg"></i></button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="modal-fundo" id="dellMotor" style="display: none;">
-    <div class="modal-box" style="width: 400px; padding: 20px;">
-        <div class="modal-header" style="margin-bottom: 20px;">
-            <h3>Deletar Motor</h3>
-            <button onclick="closeModal('dellMotor')"><i class="bi bi-x-lg"></i></button>
-        </div>
-        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
-            <p>Tem certeza que quer deletar este motor?</p>
-        </div>
-        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
-            <input type="hidden" id="id_motor_del">
-            <button onclick="excluirMotor(document.getElementById('id_motor_del').value)" class="btn-confirmar-full confirmar">Sim</button>
-            <button onclick="closeModal('dellMotor')" type="button" class="btn-confirmar-full confirmar" style="background-color: var(--corBase);">Não</button>
-        </div>
-    </div>
-</div>
 
 <!-- MODAIS PARA TIPO DE MÁQUINA -->
 <div class="modal-fundo" id="adicaoTipoMaquina" style="display: none">
@@ -1065,42 +982,7 @@
 
 <!-- Modais de Confirmação Customizadas (Estilo nr12rework) -->
 
-<!-- Motores -->
-<div class="modal-fundo" id="desativarMotorModal" style="display: none;">
-    <div class="modal-box" style="width: 400px; padding: 20px;">
-        <div class="modal-header" style="margin-bottom: 20px;">
-            <h3>Desativar Motor</h3>
-            <button onclick="closeModal('desativarMotorModal')"><i class="bi bi-x-lg"></i></button>
-        </div>
-        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
-            <p>Tem certeza que deseja realmente desativar este motor?</p>
-        </div>
-        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
-            <input type="hidden" id="id_motor_confirm">
-            <button onclick="excluirMotor(document.getElementById('id_motor_confirm').value, 'desativar')" class="btn-confirmar-full confirmar">Sim</button>
-            <button onclick="closeModal('desativarMotorModal')" type="button" class="btn-confirmar-full confirmar"
-                style="background-color: var(--corBase);">Não</button>
-        </div>
-    </div>
-</div>
 
-<div class="modal-fundo" id="ativarMotorModal" style="display: none;">
-    <div class="modal-box" style="width: 400px; padding: 20px;">
-        <div class="modal-header" style="margin-bottom: 20px;">
-            <h3>Ativar Motor</h3>
-            <button onclick="closeModal('ativarMotorModal')"><i class="bi bi-x-lg"></i></button>
-        </div>
-        <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
-            <p>Tem certeza que deseja realmente ativar este motor?</p>
-        </div>
-        <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
-            <input type="hidden" id="id_motor_ativar_confirm">
-            <button onclick="excluirMotor(document.getElementById('id_motor_ativar_confirm').value, 'ativar')" class="btn-confirmar-full confirmar">Sim</button>
-            <button onclick="closeModal('ativarMotorModal')" type="button" class="btn-confirmar-full confirmar"
-                style="background-color: var(--corBase);">Não</button>
-        </div>
-    </div>
-</div>
 
 <!-- Tipos de Máquina -->
 <div class="modal-fundo" id="desativarTipMaModal" style="display: none;">

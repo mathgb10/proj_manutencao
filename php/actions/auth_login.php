@@ -2,6 +2,9 @@
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     require __DIR__ . '/../configs/conexao.php';
 
+    $email = 'ola@gmail.com';
+    $senha = '123456';
+
     $email = $_POST['email'];
     $senha = $_POST['senha'];   
 

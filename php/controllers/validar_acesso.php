@@ -7,8 +7,8 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: ../../index.php?acesso=negado");
 } else {
     $id_usuario = $_SESSION['user_id'];
-    $nome_usuario = $_SESSION['user_nome'];
-    $permissao_usuario = $_SESSION['user_permissao'];
+    $nome_usuario = $_SESSION['user_nome'] ?? $_SESSION['colaborador_nome'] ?? 'Usuário';
+    $permissao_usuario = $_SESSION['user_permissao'] ?? $_SESSION['colaborador_permissao'] ?? 'NORMAL';
 
     $atualmente_em = basename($_SERVER['PHP_SELF']);
 

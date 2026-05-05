@@ -851,9 +851,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         function refresh() {
-            // Coleta apenas as linhas que não foram ocultas pela pesquisa
+            // Coleta apenas as linhas que não foram ocultas pela pesquisa ou filtro
             linhas = Array.from(tbody.querySelectorAll("tr")).filter(tr => 
-                !tr.classList.contains('hidden-by-search') && 
+                !tr.classList.contains('hidden-by-filter') && 
                 !tr.querySelector('td[colspan]')
             );
             
@@ -1075,54 +1075,109 @@ function openHistory(maquinaNome, maquinaId) {
 
 
 /**
- * Função genérica para pesquisa em tempo real nas tabelas
+ * Função genérica para aplicar múltiplos filtros (Busca + Status)
  */
-function pesquisarTabela() {
-    const inputPesquisa = document.getElementById('pesquisa');
-    if (!inputPesquisa) return;
+function aplicarFiltrosTabela(config) {
+    const { tbodyId, selectId, inputId, statusAttr = 'data-status', colIndex = -1 } = config;
+    
+    const tbody = document.getElementById(tbodyId);
+    if (!tbody) return;
 
-    const termoPesquisa = inputPesquisa.value.toLowerCase().trim();
-    const tabela = document.querySelector('.tabela-main tbody');
-    if (!tabela) return;
+    const termo = document.getElementById(inputId)?.value.toLowerCase().trim() || '';
+    const filtroStatus = document.getElementById(selectId)?.value.toLowerCase().trim() || 'todos';
 
-    const tabelaBg = document.querySelector('.tabela-bg2');
-    const linhas = Array.from(tabela.querySelectorAll('tr')).filter(tr => !tr.querySelector('td[colspan]'));
-    let resultadosEncontrados = 0;
-
-    // Remove mensagem anterior se existir
-    const msgAnterior = document.getElementById('msg-sem-resultado');
-    if (msgAnterior) msgAnterior.remove();
+    const linhas = Array.from(tbody.querySelectorAll('tr')).filter(tr => !tr.querySelector('td[colspan]'));
+    let visiveis = 0;
 
     linhas.forEach(linha => {
-        const textoLinha = linha.textContent.toLowerCase();
-        
-        if (termoPesquisa === '' || textoLinha.includes(termoPesquisa)) {
+        const texto = linha.textContent.toLowerCase();
+        let statusLinha = '';
+
+        if (colIndex >= 0) {
+            statusLinha = linha.getElementsByTagName('td')[colIndex]?.textContent.toLowerCase().trim() || '';
+        } else {
+            statusLinha = linha.getAttribute(statusAttr)?.toLowerCase().trim() || '';
+        }
+
+        const matchBusca = termo === '' || texto.includes(termo);
+        const matchStatus = filtroStatus === 'todos' || statusLinha === filtroStatus || (filtroStatus === 'abertas' && (statusLinha === 'em aberto' || statusLinha === 'aguardando aprovação'));
+
+        if (matchBusca && matchStatus) {
             linha.style.display = '';
-            linha.classList.remove('hidden-by-search');
-            resultadosEncontrados++;
+            linha.classList.remove('hidden-by-filter');
         } else {
             linha.style.display = 'none';
-            linha.classList.add('hidden-by-search');
+            linha.classList.add('hidden-by-filter');
         }
     });
 
-    // Controla o overflow baseado na pesquisa
-    if (tabelaBg) {
-        tabelaBg.style.overflowY = (termoPesquisa !== '') ? 'hidden' : 'auto';
-    }
+    // Dispara evento para paginação
+    document.dispatchEvent(new CustomEvent('tabelaFiltrada'));
+}
 
-    // Exibe mensagem se não houver resultados
-    if (termoPesquisa !== '' && resultadosEncontrados === 0) {
-        const colCount = tabela.closest('table').querySelectorAll('thead th').length;
-        const trMensagem = document.createElement('tr');
-        trMensagem.id = 'msg-sem-resultado';
-        trMensagem.innerHTML = `<td colspan="${colCount}" style="text-align: center; padding: 20px; color: var(--corBase); font-weight: bold;">Nenhum resultado foi encontrado para "${inputPesquisa.value}".</td>`;
-        tabela.appendChild(trMensagem);
-    }
+function filtrarOS() {
+    // Para a tela de O.S., se o usuário quer carregar do banco por aba, mantemos o trocarAba
+    // Mas se for apenas filtro visual de linhas já carregadas:
+    aplicarFiltrosTabela({
+        tbodyId: 'tabela-os-body',
+        selectId: 'select-filtro-os',
+        inputId: 'pesquisa-os',
+        colIndex: 5 // Coluna Status
+    });
+}
 
-    // Dispara um evento customizado para a paginação recalcular
-    const event = new CustomEvent('tabelaFiltrada');
-    document.dispatchEvent(event);
+function filtrarPreventiva() {
+    aplicarFiltrosTabela({
+        tbodyId: 'tabela-maquinas-body',
+        selectId: 'select-filtro-preventiva',
+        inputId: 'pesquisa',
+        statusAttr: 'data-status'
+    });
+}
+
+function filtrarMaquinas() {
+    aplicarFiltrosTabela({
+        tbodyId: 'tabela-usuarios', // ID estranho mas é o que está no HTML
+        selectId: 'select-filtro-maquinas',
+        inputId: 'pesquisa',
+        colIndex: 7 // Coluna Status (se houver)
+    });
+}
+
+/**
+ * Função genérica para pesquisa em tempo real nas tabelas
+ */
+function pesquisarTabela() {
+    const inputPesquisa = document.getElementById('pesquisa') || document.getElementById('pesquisa-os');
+    if (!inputPesquisa) return;
+
+    // Identifica qual filtro de status está ativo para rodar em conjunto
+    if (document.getElementById('select-filtro-os')) {
+        filtrarOS();
+    } else if (document.getElementById('select-filtro-preventiva')) {
+        filtrarPreventiva();
+    } else if (document.getElementById('select-filtro-maquinas')) {
+        filtrarMaquinas();
+    } else {
+        // Fallback para tabelas sem select de status
+        const termoPesquisa = inputPesquisa.value.toLowerCase().trim();
+        const tabela = document.querySelector('.tabela-main tbody');
+        if (!tabela) return;
+
+        const linhas = Array.from(tabela.querySelectorAll('tr')).filter(tr => !tr.querySelector('td[colspan]'));
+        
+        linhas.forEach(linha => {
+            const textoLinha = linha.textContent.toLowerCase();
+            if (termoPesquisa === '' || textoLinha.includes(termoPesquisa)) {
+                linha.style.display = '';
+                linha.classList.remove('hidden-by-filter');
+            } else {
+                linha.style.display = 'none';
+                linha.classList.add('hidden-by-filter');
+            }
+        });
+        document.dispatchEvent(new CustomEvent('tabelaFiltrada'));
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {

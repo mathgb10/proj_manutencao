@@ -45,6 +45,14 @@
                                     class="bi bi-x-lg"></i></a>
                         <?php endif; ?>
                     </div>
+                    <div class="filtrar-status">
+                        <label for="">Status:</label>
+                        <select id="select-filtro-maquinas" name="filtro-status" onchange="filtrarMaquinas()">
+                            <option value="todos">Todos</option>
+                            <option value="ativo">Ativo</option>
+                            <option value="inativo">Inativo</option>
+                        </select>
+                    </div>
                     <!-- Hidden submit button to allow Enter to search -->
                     <button type="submit" style="display: none;"></button>
                 </div>

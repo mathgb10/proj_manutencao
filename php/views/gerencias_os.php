@@ -50,27 +50,20 @@
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>
+
+                    <div class="filtrar-status">
+                        <label for="select-filtro-os">Status:</label>
+                        <select id="select-filtro-os" name="aba" onchange="filtrarOS()">
+                            <option value="abertas">Abertas</option>
+                            <option value="andamento">Andamento</option>
+                            <option value="arquivadas">Arquivadas</option>
+                        </select>
+                    </div>
                 </div>
             </form>
             <button class="btn" onclick="showModal('novaOS')">
                 <i class="bi bi-plus-lg"></i> Nova O.S.
             </button>
-        </div>
-
-        <!-- Cards de Resumo â€” 3 Abas -->
-        <div class="os-resumo-container">
-            <div class="os-resumo-card os-resumo-aberto os-tab-ativo" onclick="trocarAba('abertas')">
-                <div class="os-resumo-label"><i class="bi bi-inbox"></i> Abertas</div>
-                <div class="os-resumo-numero" id="contador-abertas">0</div>
-            </div>
-            <div class="os-resumo-card os-resumo-aguardando" onclick="trocarAba('andamento')">
-                <div class="os-resumo-label"><i class="bi bi-hourglass-split"></i> Andamento</div>
-                <div class="os-resumo-numero" id="contador-andamento">0</div>
-            </div>
-            <div class="os-resumo-card os-resumo-arquivada" onclick="trocarAba('arquivadas')">
-                <div class="os-resumo-label"><i class="bi bi-archive"></i> Arquivadas</div>
-                <div class="os-resumo-numero" id="contador-arquivadas">0</div>
-            </div>
         </div>
 
         <!-- Tabela de O.S. -->
@@ -139,17 +132,21 @@
             }
         });
 
+        // ---------- FILTRO OS (PADRÃO NR12) ----------
+        function filtrarOS() {
+            const select = document.getElementById('select-filtro-os');
+            if (select) {
+                trocarAba(select.value);
+            }
+        }
+
         // ---------- TROCAR ABA ----------
         function trocarAba(aba) {
             abaAtual = aba;
 
-            document.querySelectorAll('.os-resumo-card').forEach(c => c.classList.remove('os-tab-ativo'));
-            const mapCard = {
-                abertas: '.os-resumo-aberto',
-                andamento: '.os-resumo-aguardando',
-                arquivadas: '.os-resumo-arquivada'
-            };
-            document.querySelector(mapCard[aba])?.classList.add('os-tab-ativo');
+            // Sincroniza o select caso a troca venha de outro lugar
+            const select = document.getElementById('select-filtro-os');
+            if (select) select.value = aba;
 
             document.getElementById('os-titulo-tabela').textContent = TITULOS_ABA[aba] || 'Ordens de Serviço';
             carregarOS();
@@ -214,13 +211,13 @@
                 const ehGestor = permissao === 'GESTOR';
                 const naoArquivada = os.status !== 'Arquivada';
 
-                // Botão Ver Detalhes â€” sempre visível
+                // Botão Ver Detalhes — sempre visível
                 let btns = `
                     <button class="btnAcao editar" title="Ver Detalhes" onclick="verDetalheOS(${os.id})">
                         <i class="bi bi-eye-fill"></i>
                     </button>`;
 
-                // Botão Aceitar â€” se for o responsável OU Admin/Gestor E status Em Aberto ou Aguardando
+                // Botão Aceitar — se for o responsável OU Admin/Gestor E status Em Aberto ou Aguardando
                 if ((ehResponsavel || ehAdmin || ehGestor) && (os.status === 'Em Aberto' || os.status === 'Aguardando Aprovação')) {
                     btns += `
                     <button class="btnAcao confirmar" title="Aceitar" onclick="confirmarAceitarOS(${os.id})">
@@ -228,7 +225,7 @@
                     </button>`;
                 }
 
-                // Botão Recusar â€” se for o responsável OU Admin/Gestor E status Aguardando Aprovação
+                // Botão Recusar — se for o responsável OU Admin/Gestor E status Aguardando Aprovação
                 if ((ehResponsavel || ehAdmin || ehGestor) && os.status === 'Aguardando Aprovação') {
                     btns += `
                     <button class="btnAcao deletar" title="Recusar" onclick="abrirRecusarOSTabela(${os.id})">
@@ -236,7 +233,7 @@
                     </button>`;
                 }
 
-                // Botão Arquivar â€” se for o responsável OU Admin/Gestor E não arquivada
+                // Botão Arquivar — se for o responsável OU Admin/Gestor E não arquivada
                 if ((ehAdmin || ehGestor || (ehResponsavel && os.status === 'Aceita')) && naoArquivada) {
                     btns += `
                     <button class="btnAcao deletar" title="Finalizar/Arquivar" onclick="confirmarArquivarOS(${os.id})" style="background:var(--corBase); color:white;">
@@ -262,9 +259,7 @@
         }
 
         function atualizarContadores(contadores) {
-            document.getElementById('contador-abertas').textContent = contadores.abertas ?? 0;
-            document.getElementById('contador-andamento').textContent = contadores.andamento ?? 0;
-            document.getElementById('contador-arquivadas').textContent = contadores.arquivadas ?? 0;
+            // Os contadores agora são omitidos para manter a interface limpa (Design Premium)
         }
 
         function getStatusClass(status) {

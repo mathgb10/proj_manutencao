@@ -608,19 +608,15 @@ img {
 
 /* 1. Input styling */
 .input-pesquisa {
-    width: 780px !important;
-    max-width: 100% !important;
-    padding: 10px 15px 10px 45px !important;
-    /* padding-left space for icon */
+    width: 100% !important;
+    padding: 12px 15px 12px 45px !important;
     border: 1px solid var(--corBordas) !important;
-    /* theme-based border */
-    border-radius: 8px !important;
+    border-radius: 10px !important;
     background: var(--corFundo2) !important;
     color: var(--corTxt3) !important;
     font-size: 14px !important;
     outline: none;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
-    margin: 0 !important;
+    transition: all 0.3s ease;
 }
 
 .input-pesquisa::placeholder {
@@ -689,44 +685,82 @@ select {
 
 /* STATUS */
 
+/* FILTRO STATUS PREMIUM */
 .filtrar-status {
     display: flex;
     align-items: center;
-    gap: 8px;
     background: var(--corFundo2);
     border: 1px solid var(--corBordas);
-    border-radius: 8px;
-    padding: 8px 12px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    width: auto !important;
-    margin-bottom: 0px;
-    transition: 0.3s ease;
+    border-radius: 10px;
+    height: 45px;
+    padding: 0 15px;
+    transition: all 0.3s ease;
+    gap: 0;
+}
+
+.filtrar-status:focus-within {
+    border-color: var(--corBase);
 }
 
 .filtrar-status label {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 800;
     color: var(--corTxt3);
     text-transform: uppercase;
-    margin: 0;
+    letter-spacing: 1px;
+    padding-right: 12px;
+    margin-right: 12px;
+    border-right: 1px solid var(--corBordas);
+    white-space: nowrap;
+    opacity: 0.8;
 }
 
-.status-ativo {
-    background-color: var(--confirmar);
-    color: var(--txtClaro);
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
+.filtrar-status select {
+    border: none !important;
+    background: transparent !important;
+    color: var(--corTxt3) !important;
+    font-size: 14px !important;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    padding: 0 !important;
+    min-width: 100px;
 }
 
-.status-inativo {
-    background-color: var(--corBase);
-    color: var(--txtClaro);
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
+.filtrar-status select option {
+    background: var(--corFundo2);
+    color: var(--corTxt3);
+}
+
+.div-btns-pages {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.form-pesquisa {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.box-pesquisa {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    position: relative;
+    max-width: 500px;
 }
 
 /* ------------------------------------------------------------------------------------------------------------------------- */

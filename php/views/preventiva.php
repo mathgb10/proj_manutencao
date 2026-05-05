@@ -71,51 +71,9 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
         <!-- Header -->
         <?php require __DIR__ . '/../components/header.php'; ?>
 
-        <!-- Dashboard (Inserido conforme solicitado, Única diferença para maquinas.php) -->
-        <div class="row dashboard-row" style="margin: 20px 0;">
-            <div class="col-md-3">
-                <div class="card-dash card-ok" onclick="filtrarListaPrincipal('ok')">
-                    <small>Equipamentos em Dia</small>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 id="count-ok">0</h2>
-                        <i class="bi bi-check-circle-fill text-success" style="color: var(--status-ok);"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card-dash card-warning" onclick="filtrarListaPrincipal('proximos')">
-                    <small>Próximos (7 dias)</small>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 id="count-proximos">0</h2>
-                        <i class="bi bi-clock-history text-warning" style="color: var(--status-warning);"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card-dash card-danger" onclick="filtrarListaPrincipal('vencidos')">
-                    <small>Vencidos / Atrasados</small>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 id="count-vencidos">0</h2>
-                        <i class="bi bi-exclamation-triangle-fill text-danger" style="color: var(--status-danger);"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card-dash card-pereira"
-                    onclick="filtrarListaPrincipal('todos')">
-                    <small>Total de Ativos</small>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h2 id="count-total">0</h2>
-                        <i class="bi bi-gear-wide-connected text-primary" style="color: var(--status-pereira);"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Botões e Pesquisa (Igual estrutura maquinas.php) -->
+        <!-- Botões e Pesquisa -->
         <div class="div-btns-pages">
-
-            <form action="" method="GET" class="form-pesquisa">
+            <form action="" method="GET" class="form-pesquisa" onsubmit="event.preventDefault();">
                 <div class="search-container">
                     <?php
                     $busca_atual = isset($_GET['search']) ? $_GET['search'] : '';
@@ -130,13 +88,24 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
                                     class="bi bi-x-lg"></i></a>
                         <?php endif; ?>
                     </div>
+
+                    <div class="filtrar-status">
+                        <label for="select-filtro-preventiva">Status:</label>
+                        <select id="select-filtro-preventiva" name="filtro-status" onchange="filtrarPreventiva()">
+                            <option value="todos">Todos</option>
+                            <option value="ok">Em Dia</option>
+                            <option value="proximos">Próximos</option>
+                            <option value="vencidos">Vencidos</option>
+                        </select>
+                    </div>
+
                     <!-- Hidden submit button to allow Enter to search -->
                     <button type="submit" style="display: none;"></button>
                 </div>
             </form>
+            <button class="btn" onclick="showModal('preventiva')">Novo Registro <i class="bi bi-plus-circle"></i></button>
         </div>
 
-        <!-- Tabela Padronizada -->
         <div class="tabela-bg2" id="tabe">
             <div class="tabela-titulo">
                 <i class="bi bi-shield-check"></i>
@@ -153,7 +122,7 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
                             <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tabela-maquinas-body">
                         <?php
                         if ($resMaquinas && $resMaquinas->num_rows > 0) {
                             while ($maquina = $resMaquinas->fetch_assoc()) {
@@ -223,14 +192,6 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
     <!-- Scripts de Funcionalidade -->
     <script src="../../js/scripts.js"></script>
     <script src="../../js/preventiva.js"></script>
-
-    <script>
-        // Atualizar contadores na tela com PHP values
-        document.getElementById('count-ok').innerText = "<?php echo $contadores['ok']; ?>";
-        document.getElementById('count-proximos').innerText = "<?php echo $contadores['proximos']; ?>";
-        document.getElementById('count-vencidos').innerText = "<?php echo $contadores['vencidos']; ?>";
-        document.getElementById('count-total').innerText = "<?php echo $contadores['total']; ?>";
-    </script>
 </body>
 
 </html>

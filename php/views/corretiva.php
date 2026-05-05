@@ -1,4 +1,4 @@
-﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
 <?php require __DIR__ . '/../configs/conexao.php'; ?>
 <?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 
@@ -66,39 +66,26 @@
                     </thead>
                     <tbody id="tabela-usuarios">
                         <?php
-
-                        if (!empty($busca_atual)) {
-
-                            $termo_seguro = $conn->real_escape_string($busca_atual);
-
-                            $sql = "SELECT * FROM maquinas WHERE 
-                                denominacao LIKE '%$termo_seguro%' OR
-                                marca LIKE '%$termo_seguro%' OR
-                                modelo LIKE '%$termo_seguro%' OR
-                                numero_identificacao LIKE '%$termo_seguro%'";
-                        } else {
-
-                            $sql = "SELECT * FROM maquinas";
-                        }
-
-
+                        // Carregamos todos os registros para permitir a pesquisa em tempo real (Live Search) via JS
+                        $sql = "SELECT * FROM maquinas";
                         $resultado = $conn->query($sql);
-
 
                         if ($resultado && $resultado->num_rows > 0) {
                             while ($linha = $resultado->fetch_assoc()) {
                                 echo "<tr>";
-                                echo "<td>" . $linha["denominacao"] . "</td>";
-                                echo "<td>" . $linha["marca"] . "</td>";
-                                echo "<td>" . $linha["modelo"] . "</td>";
-                                echo "<td>" . $linha["numero_identificacao"] . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["denominacao"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["marca"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["modelo"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["numero_identificacao"]) . "</td>";
                                 echo "<td>
                                     <div>
-                                        <button class='btnAcao deletar' type='button' onclick=\"showModal('corretiva'," . $linha['id'] . ")\"><i class='bi bi-wrench-adjustable'></i></button>
+                                        <button class='btnAcao deletar' type='button' title='Abrir Corretiva' onclick=\"showModal('corretiva'," . $linha['id'] . ")\"><i class='bi bi-wrench-adjustable'></i></button>
                                     </div>
                                   </td>";
                                 echo "</tr>";
                             }
+                        } else {
+                            echo "<tr><td colspan='5' style='text-align:center; padding:15px;'>Nenhuma máquina encontrada.</td></tr>";
                         }
                         ?>
                     </tbody>
@@ -106,9 +93,8 @@
             </div>
 
             <div class="div-btns-change">
-                <button id="btn-ant" type="button"><i class="bi bi-arrow-left"></i></button>
-
-                <button id="btn-prox" type="button"><i class="bi bi-arrow-right"></i></button>
+                <button id="btn-ant" type="button"><i class="bi bi-chevron-left"></i></button>
+                <button id="btn-prox" type="button"><i class="bi bi-chevron-right"></i></button>
             </div>
         </div>
 

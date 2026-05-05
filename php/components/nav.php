@@ -108,7 +108,12 @@ $permissao_usuario = $_SESSION['user_permissao'] ?? $_SESSION['colaborador_permi
 
             <button id="notificacao" onclick="showModal('notificacao-modal')">
                 <i class="bi bi-bell-fill"></i>
-                <div class="div-noti" style="color: var(--corFundo2);">0</div>
+                <?php
+                // Cálculo rápido para notificações reais
+                $resNotiOS = $conn->query("SELECT COUNT(*) as total FROM ordens_servico WHERE status IN ('Em Aberto', 'Aguardando Aprovação')");
+                $totalNoti = ($resNotiOS) ? $resNotiOS->fetch_assoc()['total'] : 0;
+                ?>
+                <div class="div-noti" style="color: var(--corFundo2);"><?= $totalNoti ?></div>
             </button>
         </div>
 

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require __DIR__ . '/../controllers/validar_acesso.php';
 require __DIR__ . '/../configs/conexao.php';
 require __DIR__ . '/../components/modals/all_modals.php';
@@ -33,14 +33,8 @@ function calcularStatus($conn, $maquina_id)
     }
 }
 
-// Buscar máquinas
-$search = $_GET['search'] ?? '';
-$where = "";
-if ($search) {
-    $s = $conn->real_escape_string($search);
-    $where = "WHERE denominacao LIKE '%$s%' OR numero_identificacao LIKE '%$s%'";
-}
-$sql = "SELECT * FROM maquinas $where";
+// Buscar máquinas (todas para permitir live search no front-end)
+$sql = "SELECT * FROM maquinas";
 $resMaquinas = $conn->query($sql);
 
 $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
@@ -185,14 +179,14 @@ $contadores = ['ok' => 0, 'proximos' => 0, 'vencidos' => 0, 'total' => 0];
 
                                 ?>
                                 <tr data-status="<?php echo $filterStatus; ?>">
-                                    <td><?php echo $maquina['numero_identificacao']; ?></td>
-                                    <td><?php echo $maquina['denominacao']; ?> <small
-                                            style="color: #888;">(<?php echo $maquina['modelo']; ?>)</small></td>
+                                    <td><?php echo htmlspecialchars($maquina['numero_identificacao']); ?></td>
+                                    <td><?php echo htmlspecialchars($maquina['denominacao']); ?> <small
+                                            style="color: #888;">(<?php echo htmlspecialchars($maquina['modelo']); ?>)</small></td>
                                     <td><span
-                                            class="badge-status bg-<?php echo $dataStatus['class']; ?>"><?php echo $dataStatus['label']; ?></span>
+                                             class="badge-status bg-<?php echo $dataStatus['class']; ?>"><?php echo $dataStatus['label']; ?></span>
                                     </td>
                                     <td><b
-                                            class="text-<?php echo $dataStatus['class']; ?>"><?php echo $dataStatus['data']; ?></b>
+                                             class="text-<?php echo $dataStatus['class']; ?>"><?php echo $dataStatus['data']; ?></b>
                                     </td>
                                     <td>
                                         <div style="display: flex; gap: 5px; justify-content: center;">

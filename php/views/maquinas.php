@@ -74,71 +74,47 @@
                     </thead>
                     <tbody id="tabela-usuarios">
                         <?php
-
-                        if (!empty($busca_atual)) {
-
-                            $termo_seguro = $conn->real_escape_string($busca_atual);
-
-                            $sql = "SELECT * FROM maquinas WHERE 
-                                denominacao LIKE '%$termo_seguro%' OR
-                                marca LIKE '%$termo_seguro%' OR
-                                modelo LIKE '%$termo_seguro%' OR
-                                numero_identificacao LIKE '%$termo_seguro%' OR
-                                numero_serie LIKE '%$termo_seguro%' OR
-                                ano_fabricacao LIKE '%$termo_seguro%' OR
-                                setor LIKE '%$termo_seguro%'";
-                        } else {
-                            $sql = "SELECT * FROM maquinas";
-                        }
-
-
+                        // Carregamos todos os registros para permitir a pesquisa em tempo real (Live Search) via JS
+                        $sql = "SELECT * FROM maquinas";
                         $resultado = $conn->query($sql);
-
 
                         if ($resultado && $resultado->num_rows > 0) {
                             while ($linha = $resultado->fetch_assoc()) {
                                 echo "<tr>";
-                                echo "<td>" . $linha["denominacao"] . "</td>";
-                                echo "<td>" . $linha["marca"] . "</td>";
-                                echo "<td>" . $linha["modelo"] . "</td>";
-                                echo "<td>" . $linha["numero_identificacao"] . "</td>";
-                                echo "<td>" . $linha["numero_serie"] . "</td>";
-                                echo "<td>" . $linha["ano_fabricacao"] . "</td>";
-                                echo "<td>" . $linha["setor"] . "</td>";
-                                echo "<td>" . $linha["criado_em"] . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["denominacao"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["marca"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["modelo"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["numero_identificacao"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["numero_serie"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["ano_fabricacao"]) . "</td>";
+                                echo "<td>" . htmlspecialchars($linha["setor"]) . "</td>";
+                                echo "<td>" . date('d/m/Y H:i', strtotime($linha["criado_em"])) . "</td>";
                         ?>
                                 <?php
                                 if ($permissao_usuario == "ADMIN") {
                                     echo "<td>
                                         <div>
-                                        <button class='btnAcao editar' type='button' onclick=\"editarMaquina(" . $linha['id'] . ")\"><i class='bi bi-pencil-square'></i></button>
-                                        <button class='btnAcao deletar' type='button' onclick=\"showModal('dellMachine', " . $linha['id'] . ")\"><i class='bi bi-trash'></i></button>
-                                        <button class='btnAcao ferramentas' type='button' onclick=\"showModal('modalAcessorios', " . $linha['id'] . ")\"><i class='bi bi-tools'></i></button>
-                                        <div>
-                                    <td>";
+                                        <button class='btnAcao editar' type='button' title='Editar Máquina' onclick=\"editarMaquina(" . $linha['id'] . ")\"><i class='bi bi-pencil-square'></i></button>
+                                        <button class='btnAcao deletar' type='button' title='Excluir Máquina' onclick=\"showModal('dellMachine', " . $linha['id'] . ")\"><i class='bi bi-trash'></i></button>
+                                        <button class='btnAcao ferramentas' type='button' title='Acessórios' onclick=\"showModal('modalAcessorios', " . $linha['id'] . ")\"><i class='bi bi-tools'></i></button>
+                                        </div>
+                                    </td>";
                                 } else {
                                 ?>
                                     <td>
                                         <div>
-                                            <button class='btnAcao ferramentas' type='button'
-                                                onclick="excluirMaquina($linha['id'])"><i class="bi bi-tools"></i></button>
-                                            <button class='btnAcao clipes' type='button' onclick="excluirMaquina($linha['id'])"><i
+                                            <button class='btnAcao ferramentas' type='button' title='Acessórios'
+                                                onclick="showModal('modalAcessorios', <?= $linha['id'] ?>)"><i class="bi bi-tools"></i></button>
+                                            <button class='btnAcao clipes' type='button' title='Anexos' onclick="showModal('anexos', <?= $linha['id'] ?>)"><i
                                                     class="bi bi-paperclip"></i></button>
                                         </div>
                                     </td>
                                 <?php } ?>
                         <?php
-                                // echo "<td>
-                                //         <div>
-                                //             <button class='btnAcao editar' type='button' onclick=\"editarMaquina(" . $linha['id'] . ")\"><i class='bi bi-pencil-square'></i></button>
-                                //             <button class='btnAcao deletar' type='button' onclick=\"excluirMaquina(" . $linha['id'] . ")\"><i class='bi bi-trash'></i></button>
-                                //         </div>
-                                //       </td>";
-
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='9' style='text-align:center'>Nenhum registro encontrado.</td></tr>";
+                            echo "<tr><td colspan='9' style='text-align:center; padding: 20px;'>Nenhuma máquina encontrada para o termo pesquisado.</td></tr>";
                         }
                         ?>
                     </tbody>

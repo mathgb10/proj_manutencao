@@ -1,4 +1,4 @@
-﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
 <?php require __DIR__ . '/../configs/conexao.php'; ?>
 <?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 <?php require __DIR__ . '/../components/modals/modal_os.php'; ?>
@@ -46,6 +46,9 @@
                         <i class="bi bi-search search-icon"></i>
                         <input type="text" name="search" id="pesquisa-os" placeholder="Pesquisar O.S..."
                             class="input-pesquisa" oninput="carregarOS()">
+                        <button type="button" class="btn-clear-search" id="btn-limpar-os" style="display: none;" onclick="limparBuscaOS()">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
                     </div>
                 </div>
             </form>
@@ -127,6 +130,13 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             carregarOS();
+
+            // Verifica se há um ID de O.S. na URL para abrir automaticamente (vindo das notificações)
+            const urlParams = new URLSearchParams(window.location.search);
+            const osIdUrl = urlParams.get('os_id');
+            if (osIdUrl) {
+                verDetalheOS(osIdUrl);
+            }
         });
 
         // ---------- TROCAR ABA ----------
@@ -147,7 +157,15 @@
 
         // ---------- CARREGAR / LISTAR ----------
         async function carregarOS() {
-            const busca = document.getElementById('pesquisa-os')?.value || '';
+            const buscaInput = document.getElementById('pesquisa-os');
+            const btnLimpar = document.getElementById('btn-limpar-os');
+            const busca = buscaInput?.value || '';
+
+            // Mostrar/Ocultar botão de limpar
+            if (btnLimpar) {
+                btnLimpar.style.display = busca ? 'block' : 'none';
+            }
+
             const params = new URLSearchParams({
                 aba: abaAtual
             });
@@ -163,6 +181,14 @@
                 }
             } catch (err) {
                 console.error('Erro ao carregar O.S.:', err);
+            }
+        }
+
+        function limparBuscaOS() {
+            const buscaInput = document.getElementById('pesquisa-os');
+            if (buscaInput) {
+                buscaInput.value = '';
+                carregarOS();
             }
         }
 

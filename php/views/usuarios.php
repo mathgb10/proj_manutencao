@@ -1,4 +1,4 @@
-﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
 <?php require __DIR__ . '/../configs/conexao.php'; ?>
 <?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 
@@ -67,44 +67,30 @@
                     </thead>
                     <tbody id="tabela-usuarios">
                     <?php
-                    // --- LÓGICA DE PESQUISA ---
-
-                    if (!empty($busca_atual)) {
-                        // Limpa o termo para segurança do Banco de Dados
-                        $termo_seguro = $conn->real_escape_string($busca_atual);
-
-                        // SQL filtrando por Nome, Email ou Permissão
-                        $sql = "SELECT * FROM usuarios WHERE 
-                                nome LIKE '%$termo_seguro%' OR 
-                                email LIKE '%$termo_seguro%' OR 
-                                permissao LIKE '%$termo_seguro%'";
-                    } else {
-                        // Se não tiver pesquisa, traz todos os usuários
-                        $sql = "SELECT * FROM usuarios";
-                    }
-
+                    // Carregamos todos os registros para permitir a pesquisa em tempo real (Live Search) via JS
+                    $sql = "SELECT * FROM usuarios";
                     $resultado = $conn->query($sql);
 
                     if ($resultado && $resultado->num_rows > 0) {
                         while ($linha = $resultado->fetch_assoc()) {
                             echo "<tr>";
-                            echo "<td>" . $linha["nome"] . "</td>";
-                            echo "<td>" . $linha["email"] . "</td>";
+                            echo "<td>" . htmlspecialchars($linha["nome"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($linha["email"]) . "</td>";
                             echo "<td>******</td>"; // Senha oculta
-                            echo "<td> <div class='div-permissao'>" . $linha["permissao"] . "</div></td>";
+                            echo "<td> <div class='div-permissao'>" . htmlspecialchars($linha["permissao"]) . "</div></td>";
 
                             // Botões de Ação
                             echo "<td>
                                     <div>
-                                        <button class='btnAcao editar' type='button' onclick=\"showModal('edicaoUser', " . $linha['id'] . ")\"><i class='bi bi-pencil-square'></i></button>
+                                        <button class='btnAcao editar' type='button' title='Editar Usuário' onclick=\"showModal('edicaoUser', " . $linha['id'] . ")\"><i class='bi bi-pencil-square'></i></button>
                                         <button class='btnAcao deletar' type='button' style='background-color: #ffc107; color: #000;' title='Resetar Senha' onclick=\"showModal('resetPass', " . $linha['id'] . ")\"><i class='bi bi-key-fill'></i></button>
-                                        <button class='btnAcao deletar' type='button' onclick=\"showModal('dell', " . $linha['id'] . ",'usuario')\"><i class='bi bi-trash'></i></button>
+                                        <button class='btnAcao deletar' type='button' title='Excluir Usuário' onclick=\"showModal('dell', " . $linha['id'] . ",'usuario')\"><i class='bi bi-trash'></i></button>
                                     </div>
                                   </td>";
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='5' style='text-align:center; padding:15px;'>Nenhum usuário encontrado.</td></tr>";
+                        echo "<tr><td colspan='5' style='text-align:center; padding: 20px;'>Nenhum usuário encontrado para o termo pesquisado.</td></tr>";
                     }
                     ?>
                 </tbody>

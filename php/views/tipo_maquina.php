@@ -69,23 +69,15 @@
                 </thead>
                 <tbody id="tabela-tipo_maquinas">
                     <?php
-                    if (!empty($busca_atual)) {
-                        $termo_seguro = $conn_nr12->real_escape_string($busca_atual);
-
-                        $sql = "SELECT * FROM tipomaquina WHERE 
-                                tipomaquina_nome LIKE '%$termo_seguro%' OR 
-                                tipomaquina_arquivo LIKE '%$termo_seguro%'";
-                    } else {
-                        $sql = "SELECT * FROM tipomaquina";
-                    }
-
+                    // Carregamos todos os registros para permitir a pesquisa em tempo real (Live Search) via JS
+                    $sql = "SELECT * FROM tipomaquina";
                     $resultado = $conn_nr12->query($sql);
 
                     if ($resultado && $resultado->num_rows > 0) {
                         while ($linha = $resultado->fetch_assoc()) {
                             echo "<tr>";
-                            echo "<td>" . $linha["tipomaquina_nome"] . "</td>";
-                            echo "<td>" . $linha["tipomaquina_arquivo"] . "</td>";
+                            echo "<td>" . htmlspecialchars($linha["tipomaquina_nome"]) . "</td>";
+                            echo "<td>" . htmlspecialchars($linha["tipomaquina_arquivo"]) . "</td>";
 
                             $status = strtolower($linha["tipomaquina_status"]);
 
@@ -95,12 +87,12 @@
                                 $classe = 'status-inativo';
                             }
 
-                            echo "<td><span class='$classe'>" . $linha["tipomaquina_status"] . "</span></td>";
+                            echo "<td><span class='$classe'>" . htmlspecialchars($linha["tipomaquina_status"]) . "</span></td>";
 
                             echo "<td>
                                     <div style='display: flex; gap: 5px; justify-content: center;'>
-                                        <button class='btnAcao editar' type='button' onclick=\"showModal('edicaoTipoMaquina', " . $linha['idtipomaquina'] . ")\"><i class='bi bi-pencil-square'></i></button>
-                                        <button class='btnAcao deletar' type='button' onclick=\"showModal('deletarTipoMaquina', " . $linha['idtipomaquina'] . ",'')\"><i class='bi bi-trash'></i></button>
+                                        <button class='btnAcao editar' type='button' title='Editar' onclick=\"showModal('edicaoTipoMaquina', " . $linha['idtipomaquina'] . ")\"><i class='bi bi-pencil-square'></i></button>
+                                        <button class='btnAcao deletar' type='button' title='Excluir' onclick=\"showModal('deletarTipoMaquina', " . $linha['idtipomaquina'] . ",'')\"><i class='bi bi-trash'></i></button>
                                         " . ($status == 'ativo' 
                                             ? "<button class='btnAcao deletar' title='Desativar' type='button' onclick=\"showModal('desativarTipMa', " . $linha['idtipomaquina'] . ",'')\"><i class='bi bi-x-lg'></i></button>"
                                             : "<button class='btnAcao confirmar' title='Ativar' type='button' onclick=\"showModal('ativarTipMa', " . $linha['idtipomaquina'] . ",'')\"><i class='bi bi-check-lg'></i></button>") . "
@@ -109,7 +101,7 @@
                             echo "</tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='4' style='text-align:center; padding:15px;'>Nenhum tipo de máquina encontrado no NR12.</td></tr>";
+                        echo "<tr><td colspan='4' style='text-align:center; padding: 20px;'>Nenhum tipo de máquina encontrado para o termo pesquisado.</td></tr>";
                     }
                     ?>
                 </tbody>

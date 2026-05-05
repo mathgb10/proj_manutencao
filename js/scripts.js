@@ -255,6 +255,7 @@ function showModal(qual, id) {
     } else if (qual == "notificacao-modal") {
         document.getElementById(qual).style.display = "flex";
         document.querySelector('.modal-notificacao').style.display = 'flex';
+        carregarNotificacoes();
     } else if (qual == 'dell') {
         document.getElementById('dell').style.display = 'flex';
         document.getElementById("id_usuario").value = id;
@@ -849,12 +850,21 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // Permite atualizar linhas (útil caso a tabela seja filtrada dinamicamente)
         function refresh() {
-            linhas = Array.from(tbody.getElementsByTagName("tr"));
+            // Coleta apenas as linhas que não foram ocultas pela pesquisa
+            linhas = Array.from(tbody.querySelectorAll("tr")).filter(tr => 
+                !tr.classList.contains('hidden-by-search') && 
+                !tr.querySelector('td[colspan]')
+            );
+            
             if (paginaAtual > totalPaginas()) paginaAtual = totalPaginas();
-            mostrarPagina(paginaAtual);
+            mostrarPagina(1); // Volta para a primeira página ao filtrar
         }
+
+        // Escuta o evento de filtro para atualizar a paginação
+        document.addEventListener('tabelaFiltrada', () => {
+            refresh();
+        });
 
         return { mostrarPagina, refresh, next() { mostrarPagina(paginaAtual + 1); }, prev() { mostrarPagina(paginaAtual - 1); } };
     }
@@ -1064,56 +1074,10 @@ function openHistory(maquinaNome, maquinaId) {
 }
 
 
-function pesquisarMaquinas() {
-    const inputPesquisa = document.getElementById('pesquisa');
-    if (!inputPesquisa) return;
-
-    const termoPesquisa = inputPesquisa.value.toLowerCase().trim();
-    const tabela = document.querySelector('.tabela-main tbody');
-    if (!tabela) return;
-
-    const linhas = tabela.querySelectorAll('tr');
-    let resultadosEncontrados = 0;
-
-    const msgAnterior = document.getElementById('msg-sem-resultado');
-    if (msgAnterior) {
-        msgAnterior.remove();
-    }
-
-    linhas.forEach(linha => {
-        if (linha.querySelector('td[colspan]')) {
-            linha.style.display = termoPesquisa === '' ? '' : 'none';
-            return;
-        }
-
-        const colunas = linha.querySelectorAll('td');
-        let correspondeu = false;
-
-        colunas.forEach((coluna, index) => {
-            if (index < colunas.length - 1) {
-                if (coluna.textContent.toLowerCase().includes(termoPesquisa)) {
-                    correspondeu = true;
-                }
-            }
-        });
-
-        if (correspondeu || termoPesquisa === '') {
-            linha.style.display = '';
-            if (termoPesquisa !== '') resultadosEncontrados++;
-        } else {
-            linha.style.display = 'none';
-        }
-    });
-
-    if (termoPesquisa !== '' && resultadosEncontrados === 0) {
-        const trMensagem = document.createElement('tr');
-        trMensagem.id = 'msg-sem-resultado';
-        trMensagem.innerHTML = '<td colspan="9" style="text-align: center; padding: 20px; color: var(--corBase); font-weight: bold;">Nenhum resultado foi encontrado.</td>';
-        tabela.appendChild(trMensagem);
-    }
-}
-
-function pesquisarMaquinas() {
+/**
+ * Função genérica para pesquisa em tempo real nas tabelas
+ */
+function pesquisarTabela() {
     const inputPesquisa = document.getElementById('pesquisa');
     if (!inputPesquisa) return;
 
@@ -1122,66 +1086,54 @@ function pesquisarMaquinas() {
     if (!tabela) return;
 
     const tabelaBg = document.querySelector('.tabela-bg2');
-    const linhas = tabela.querySelectorAll('tr');
+    const linhas = Array.from(tabela.querySelectorAll('tr')).filter(tr => !tr.querySelector('td[colspan]'));
     let resultadosEncontrados = 0;
 
+    // Remove mensagem anterior se existir
     const msgAnterior = document.getElementById('msg-sem-resultado');
-    if (msgAnterior) {
-        msgAnterior.remove();
-    }
+    if (msgAnterior) msgAnterior.remove();
 
     linhas.forEach(linha => {
-        if (linha.querySelector('td[colspan]')) {
-            linha.style.display = termoPesquisa === '' ? '' : 'none';
-            return;
-        }
-
-        const colunas = linha.querySelectorAll('td');
-        let correspondeu = false;
-
-        colunas.forEach((coluna, index) => {
-            if (index < colunas.length - 1) {
-                if (coluna.textContent.toLowerCase().includes(termoPesquisa)) {
-                    correspondeu = true;
-                }
-            }
-        });
-
-        if (correspondeu || termoPesquisa === '') {
+        const textoLinha = linha.textContent.toLowerCase();
+        
+        if (termoPesquisa === '' || textoLinha.includes(termoPesquisa)) {
             linha.style.display = '';
-            if (termoPesquisa !== '') resultadosEncontrados++;
+            linha.classList.remove('hidden-by-search');
+            resultadosEncontrados++;
         } else {
             linha.style.display = 'none';
+            linha.classList.add('hidden-by-search');
         }
     });
 
     // Controla o overflow baseado na pesquisa
     if (tabelaBg) {
-        if (termoPesquisa !== '') {
-            tabelaBg.style.overflowY = 'hidden';
-        } else {
-            tabelaBg.style.overflowY = 'auto';
-        }
+        tabelaBg.style.overflowY = (termoPesquisa !== '') ? 'hidden' : 'auto';
     }
 
+    // Exibe mensagem se não houver resultados
     if (termoPesquisa !== '' && resultadosEncontrados === 0) {
+        const colCount = tabela.closest('table').querySelectorAll('thead th').length;
         const trMensagem = document.createElement('tr');
         trMensagem.id = 'msg-sem-resultado';
-        trMensagem.innerHTML = '<td colspan="9" style="text-align: center; padding: 20px; color: var(--corBase); font-weight: bold;">Nenhum resultado foi encontrado.</td>';
+        trMensagem.innerHTML = `<td colspan="${colCount}" style="text-align: center; padding: 20px; color: var(--corBase); font-weight: bold;">Nenhum resultado foi encontrado para "${inputPesquisa.value}".</td>`;
         tabela.appendChild(trMensagem);
     }
+
+    // Dispara um evento customizado para a paginação recalcular
+    const event = new CustomEvent('tabelaFiltrada');
+    document.dispatchEvent(event);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     const inputPesquisa = document.getElementById('pesquisa');
     if (inputPesquisa) {
-        const paginaAtual = window.location.pathname;
-        if (paginaAtual.includes('usuarios.php')) {
-            inputPesquisa.addEventListener('input', pesquisarUsuarios);
-        } else if (paginaAtual.includes('maquinas.php')) {
-            inputPesquisa.addEventListener('input', pesquisarMaquinas);
-        } else {
-            inputPesquisa.addEventListener('input', pesquisarMaquinas);
+        inputPesquisa.addEventListener('input', pesquisarTabela);
+        
+        // Impede que o formulário recarregue a página ao dar Enter
+        const form = inputPesquisa.closest('form');
+        if (form) {
+            form.addEventListener('submit', (e) => e.preventDefault());
         }
     }
 });
@@ -1361,3 +1313,69 @@ document.addEventListener("DOMContentLoaded", function () {
         window.history.replaceState({}, document.title, newUrl);
     }
 });
+
+/**
+ * Carrega as notificações (Ordens de Serviço Pendentes) via AJAX
+ */
+async function carregarNotificacoes() {
+    const lista = document.getElementById('notificacoes-lista');
+    if (!lista) return;
+
+    lista.innerHTML = `
+        <div style="text-align: center; padding: 30px; opacity: 0.6;">
+            <i class="bi bi-hourglass-split" style="font-size: 2rem;"></i>
+            <p style="margin-top: 10px;">Carregando notificações...</p>
+        </div>`;
+
+    try {
+        // Usamos listar_os.php com a aba 'abertas' que já traz o que precisamos
+        const res = await fetch(`${window.location.origin}/juntos/manutencao/php/actions/os/listar_os.php?aba=abertas`);
+        const data = await res.json();
+
+        if (data.success && data.dados.length > 0) {
+            lista.innerHTML = data.dados.map(os => `
+                <div class="noti-item" onclick="window.location.href='${window.location.origin}/juntos/manutencao/php/views/gerencias_os.php?os_id=${os.id}'" 
+                     style="padding: 15px; border-bottom: 1px solid var(--corBordas); cursor: pointer; transition: 0.2s; position: relative;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(252, 35, 35, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <i class="bi bi-exclamation-circle" style="color: var(--corBase); font-size: 1.2rem;"></i>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="font-weight: 700; color: var(--corTxt3); font-size: 0.9rem; margin-bottom: 2px;">Nova O.S. #${os.id}</div>
+                            <div style="font-size: 0.8rem; color: var(--corTxt3); opacity: 0.7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                ${os.descricao}
+                            </div>
+                            <div style="font-size: 0.75rem; color: var(--corBase); font-weight: 600; margin-top: 4px;">
+                                <i class="bi bi-clock"></i> ${new Date(os.criado_em).toLocaleString('pt-BR')}
+                            </div>
+                        </div>
+                        <i class="bi bi-chevron-right" style="opacity: 0.3;"></i>
+                    </div>
+                    <div class="noti-badge" style="position: absolute; top: 15px; right: 15px; width: 8px; height: 8px; border-radius: 50%; background: var(--corBase);"></div>
+                </div>
+            `).join('');
+        } else {
+            lista.innerHTML = `
+                <div style="text-align: center; padding: 40px; opacity: 0.5;">
+                    <i class="bi bi-check2-all" style="font-size: 2.5rem; color: #28a745;"></i>
+                    <p style="margin-top: 10px; font-weight: 600;">Tudo em dia!</p>
+                    <p style="font-size: 0.85rem;">Você não possui notificações pendentes.</p>
+                </div>`;
+        }
+
+        // Atualiza o contador no nav se houver
+        const dot = document.querySelector('.div-noti');
+        if (dot && data.contadores) {
+            dot.textContent = data.contadores.abertas || 0;
+            dot.style.display = data.contadores.abertas > 0 ? 'flex' : 'none';
+        }
+
+    } catch (err) {
+        console.error('Erro ao carregar notificações:', err);
+        lista.innerHTML = `
+            <div style="text-align: center; padding: 30px; color: var(--corBase);">
+                <i class="bi bi-exclamation-triangle" style="font-size: 2rem;"></i>
+                <p style="margin-top: 10px;">Erro ao carregar notificações.</p>
+            </div>`;
+    }
+}

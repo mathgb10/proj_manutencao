@@ -159,13 +159,16 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
         }
 
         .preventiva-search-box input {
-            border: none;
-            background: transparent;
-            outline: none;
+            border: none !important;
+            background: transparent !important;
+            outline: none !important;
+            box-shadow: none !important;
             color: var(--corTxt3);
             font-size: 0.95rem;
             width: 100%;
             height: 100%;
+            padding: 0;
+            margin: 0;
         }
 
         .preventiva-search-box input::placeholder {
@@ -363,9 +366,9 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
             <form action="" method="GET" class="preventiva-form">
                 <div class="preventiva-search-box">
                     <i class="bi bi-search search-icon"></i>
-                    <input type="text" name="search"
+                    <input type="text" name="search" id="pesquisa"
                         value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar NI ou Nome..."
-                        class="input-pesquisa">
+                        class="preventiva-input">
                     <?php if ($busca_atual): ?>
                         <a href="?filtro-status=<?php echo urlencode($status_atual); ?>" class="btn-clear-search"><i class="bi bi-x-lg"></i></a>
                     <?php endif; ?>

@@ -854,14 +854,14 @@
 
 
 
-<!-- MODAIS PARA TIPO DE MÁQUINA -->
+<!-- MODAIS PARA DESCRIÇÃO DE MÁQUINA -->
 <div class="modal-fundo" id="adicaoTipoMaquina" style="display: none">
     <div class="modal-box">
         <div class="modal-header">
-            <h3>Registrar Tipo Maquina</h3>
+            <h3>Registrar Descrição Máquina</h3>
             <button onclick="closeModal('adicaoTipoMaquina')"><i class="bi bi-x-lg"></i></button>
         </div>
-        <form action="../actions/tipo_maquina/register_tipo_maquina.php" class="modal-form" method="POST">
+        <form action="../actions/descricao_maquina/register_descricao_maquina.php" class="modal-form" method="POST">
             <div class="modal-input">
                 <label for="tipomaquina_nome">Nome:</label>
                 <input type="text" name="tipomaquina_nome" id="tipomaquina_nome" placeholder="Ex: Torno Mecânico" required>
@@ -880,10 +880,10 @@
 <div class="modal-fundo" id="edicaoTipoMaquina" style="display: none">
     <div class="modal-box">
         <div class="modal-header">
-            <h3>Editar Tipo Maquina</h3>
+            <h3>Editar Descrição Máquina</h3>
             <button onclick="closeModal('edicaoTipoMaquina')"><i class="bi bi-x-lg"></i></button>
         </div>
-        <form action="../actions/tipo_maquina/update_tipo_maquina.php" class="modal-form" method="POST">
+        <form action="../actions/descricao_maquina/update_descricao_maquina.php" class="modal-form" method="POST">
             <input type="hidden" name="idtipomaquina" id="edit_idtipomaquina">
             <div class="modal-input">
                 <label for="edit_tipomaquina_nome">Nome:</label>
@@ -910,11 +910,11 @@
 <div class="modal-fundo" id="dellTipoMaquina" style="display: none;">
     <div class="modal-box" style="width: 400px; padding: 20px;">
         <div class="modal-header" style="margin-bottom: 20px;">
-            <h3>Deletar Tipo Máquina</h3>
+            <h3>Deletar Descrição Máquina</h3>
             <button onclick="closeModal('dellTipoMaquina')"><i class="bi bi-x-lg"></i></button>
         </div>
         <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
-            <p>Tem certeza que quer deletar este tipo de máquina?</p>
+            <p>Tem certeza que quer deletar esta descrição de máquina?</p>
         </div>
         <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
             <input type="hidden" id="id_tipma_del">
@@ -988,11 +988,11 @@
 <div class="modal-fundo" id="desativarTipMaModal" style="display: none;">
     <div class="modal-box" style="width: 400px; padding: 20px;">
         <div class="modal-header" style="margin-bottom: 20px;">
-            <h3>Desativar Tipo Máquina</h3>
+            <h3>Desativar Descrição Máquina</h3>
             <button onclick="closeModal('desativarTipMaModal')"><i class="bi bi-x-lg"></i></button>
         </div>
         <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
-            <p>Tem certeza que deseja realmente desativar este tipo de máquina?</p>
+            <p>Tem certeza que deseja realmente desativar esta descrição de máquina?</p>
         </div>
         <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
             <input type="hidden" id="id_tipma_confirm">
@@ -1006,11 +1006,11 @@
 <div class="modal-fundo" id="ativarTipMaModal" style="display: none;">
     <div class="modal-box" style="width: 400px; padding: 20px;">
         <div class="modal-header" style="margin-bottom: 20px;">
-            <h3>Ativar Tipo Máquina</h3>
+            <h3>Ativar Descrição Máquina</h3>
             <button onclick="closeModal('ativarTipMaModal')"><i class="bi bi-x-lg"></i></button>
         </div>
         <div style="text-align: center; margin-bottom: 25px; color: var(--corTxt3);">
-            <p>Tem certeza que deseja realmente ativar este tipo de máquina?</p>
+            <p>Tem certeza que deseja realmente ativar esta descrição de máquina?</p>
         </div>
         <div style="width: 100%; display: flex; gap: 10px; justify-content: center;">
             <input type="hidden" id="id_tipma_ativar_confirm">

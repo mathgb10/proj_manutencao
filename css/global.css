@@ -15,7 +15,60 @@ body {
     min-height: 100vh;
     background: var(--corFundo);
     animation: animacaoCoringa 0.4s forwards ease-in-out;
+    overflow-x: hidden;
 }
+
+.sec-main {
+    transition: padding-left 0.3s ease;
+    padding-left: 310px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 40px;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+body.sidebar-collapsed .sec-main {
+    padding-left: 45px; /* Espaço para a aba do botão */
+}
+
+
+
+
+
+@media (max-width: 900px) {
+    .sec-main {
+        padding-left: 100px;
+        padding-right: 15px;
+    }
+    body.sidebar-collapsed .sec-main {
+        padding-left: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sec-main {
+        padding-left: 85px; /* Espaço para o sidebar compacto de ícones */
+        padding-right: 10px;
+        padding-top: 15px;
+        gap: 20px;
+    }
+    body.sidebar-collapsed .sec-main {
+        padding-left: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sec-main {
+        padding-left: 70px;
+        padding-right: 10px;
+    }
+}
+
 
 @keyframes animacaoCoringa {
     0% {
@@ -88,7 +141,7 @@ html[data-tema='escuro'] {
     --sombra2: 0 2px 10px rgba(255, 255, 255, .05);
 
     --corTxt: #FFFFFF;
-    --corTxt2: #000000;
+    --corTxt2: #e0e0e0;   /* Antes era #000000 — texto claro para tema escuro */
     --corTxt3: #FFF;
 
     --corBordas: #75757586;
@@ -102,8 +155,8 @@ html[data-tema='claro'] {
     --sombra2: 0 2px 10px rgba(0, 0, 0, .05);
 
     --corTxt2: #1e1e1e;
-    --corTxt: #FFFFFF;
-    --corTxt3: #000;
+    --corTxt: #FFFFFF;  /* Mantido — usado em fundos coloridos (botões vermelhos, etc.) */
+    --corTxt3: #1a1a1a; /* Antes era #000 — levemente suavizado */
 
     --corBordas: #e0e0e0;
     --corBarra: #ca2525;

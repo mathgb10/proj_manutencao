@@ -1,195 +1,295 @@
-.card-box {
+/* 
+   DASHBOARD PREMIUM - REWORK DO ZERO 
+   Focado em Visual de Centro de Comando e UX Direta
+*/
+
+/* 1. Grade Principal */
+.dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 25px;
-    width: 90%;
+    grid-template-columns: 1fr 380px;
+    gap: 30px; /* Aumentado para melhor separação */
+    width: 98%;
+    align-items: start;
     margin-bottom: 40px;
 }
 
-.card {
-    flex: none;
-    width: 100%;
-    min-height: 130px;
-    padding: 20px 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: var(--corFundo2);
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    border: 1px solid var(--corBordas);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 4px;
-    background: var(--card-color, var(--corBase));
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: none;
-    padding: 0;
-    opacity: 1;
-}
-
-.card-header p {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--corTxt3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin: 0;
-}
-
-.card-header i {
-    font-size: 2rem;
-    opacity: 0.15;
-    transition: 0.3s ease;
-}
-
-.card:hover .card-header i {
-    transform: scale(1.1) rotate(5deg);
-    opacity: 0.3;
-}
-
-.card-info h3 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin: 10px 0 0 0;
-    line-height: 1;
-}
-
-.div-dad {
-    width: 90%;
-    background: var(--corFundo2);
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    border: 1px solid var(--corBordas);
+/* 2. KPI Cards (Topo) */
+.kpi-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    width: 98%;
     margin-bottom: 30px;
 }
 
-.div-dad h3 {
+.kpi-card {
+    background: var(--corFundo2);
+    border: 1px solid var(--corBordas);
+    border-radius: 16px;
+    padding: 20px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 1.15rem;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--corBordas);
-    color: var(--corTxt3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 700;
+    gap: 15px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-.div-dad-content {
+.kpi-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--corBase);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.kpi-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--card-color, var(--corBase));
+}
+
+.kpi-content p {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--corTxt3);
+    opacity: 0.7;
+    margin: 0;
+}
+
+.kpi-content h3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin: 2px 0 0 0;
+    color: var(--corTxt3);
+}
+
+/* 3. Seções Estilo "Padrão" */
+.dash-panel {
+    background: var(--corFundo2);
+    border-radius: 20px;
+    border: 1px solid var(--corBordas);
+    overflow: hidden;
+    box-shadow: var(--sombra);
     display: flex;
     flex-direction: column;
-    gap: 12px;
 }
 
-.div-row {
-    display: grid;
-    grid-template-columns: 5px 1.5fr 2fr 1.5fr 1fr;
-    gap: 20px;
+.dash-panel-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--corBordas);
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    background: var(--corFundo);
-    border-radius: 12px;
-    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
-    color: var(--corTxt3);
-    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.02);
 }
 
-.div-row:hover {
-    border-color: var(--corBordas);
-    background: var(--corFundo2);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transform: translateX(4px);
-}
-
-.status-indicator {
-    height: 35px;
-    width: 6px;
-    border-radius: 6px;
-}
-
-.status-danger {
-    background: var(--status-danger);
-}
-
-.status-warning {
-    background: var(--status-warning);
-}
-
-.status-success {
-    background: var(--status-ok);
-}
-
-.div-items p {
-    font-size: 0.65rem;
-    opacity: 0.6;
-    margin-bottom: 2px;
-    text-transform: uppercase;
+.dash-panel-header h2 {
+    font-size: 1rem;
     font-weight: 700;
-}
-
-.div-items div:last-child {
-    font-weight: 600;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.empty-msg {
-    text-align: center;
-    padding: 20px;
-    opacity: 0.5;
-    font-style: italic;
-    font-size: 0.9rem;
     color: var(--corTxt3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.badge-status {
-    padding: 3px 8px;
-    border-radius: 4px;
+.dash-panel-content {
+    padding: 25px;
+}
+
+/* 4. Tabela de O.S. (Reestilizada) */
+.os-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px; /* Mais espaço entre linhas */
+}
+
+.os-table th {
+    text-align: left;
+    padding: 10px 15px;
     font-size: 0.7rem;
+    text-transform: uppercase;
+    color: var(--corTxt3);
+    opacity: 0.6;
+    letter-spacing: 1px;
+}
+
+.os-table td {
+    padding: 18px 15px;
+    background: rgba(255, 255, 255, 0.03);
+    font-size: 0.85rem;
+    color: var(--corTxt3);
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.os-table td:first-child { border-radius: 12px 0 0 12px; border-left: 2px solid transparent; }
+.os-table td:last-child { border-radius: 0 12px 12px 0; }
+
+.os-table tr:hover td {
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+}
+
+.os-table tr:hover td:first-child {
+    border-left-color: var(--corBase);
+}
+
+.os-patrimonio {
     font-weight: 700;
+    color: var(--corBase) !important;
+}
+
+.os-status-badge {
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.65rem;
+    font-weight: 800;
     text-transform: uppercase;
 }
 
-.badge-aberto {
-    background: rgba(255, 193, 7, 0.2);
-    color: #ffc107;
+.status-aberto { background: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.2); }
+.status-aceito { background: rgba(23, 162, 184, 0.15); color: #17a2b8; border: 1px solid rgba(23, 162, 184, 0.2); }
+
+/* 5. Coluna Lateral (Analytics) */
+.side-analytics {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Aumentado */
 }
 
-.badge-aceita {
-    background: rgba(40, 167, 69, 0.2);
-    color: #28a745;
+.chart-box {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-@media (max-width: 992px) {
-    .div-row {
-        grid-template-columns: 5px 1fr 1fr;
+/* 6. Lista de Alertas (Compacta) */
+.alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.alert-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--corBordas);
+    transition: 0.3s;
+}
+
+.alert-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
+}
+
+.alert-info strong {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--corTxt3);
+}
+
+.alert-info small {
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+.alert-date {
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.btn-dash-action {
+    background: var(--corBase);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 10px rgba(252, 35, 35, 0.2);
+}
+
+.btn-dash-action:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(252, 35, 35, 0.3);
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--corBase);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.page-actions-bar {
+    width: 98%;
+    margin-bottom: 30px;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .side-analytics {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .kpi-container {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
     }
 
-    .div-items:nth-child(n+4) {
-        display: none;
+    .dash-panel-header {
+        padding: 15px;
+    }
+
+    .dash-panel-content {
+        padding: 15px;
+    }
+
+    .os-table td, .os-table th {
+        padding: 12px 10px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .kpi-container {
+        grid-template-columns: 1fr;
+    }
+
+    .dash-panel-header h2 {
+        font-size: 0.9rem;
+    }
+
+    .side-analytics {
+        grid-template-columns: 1fr;
     }
 }

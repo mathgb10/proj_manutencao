@@ -1,54 +1,121 @@
 /* NavBar (SideBar nossa) */
 .sidebar {
     width: 275px;
-    height: 97%;
+    height: calc(100vh - 30px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
     position: fixed;
-    z-index: 999;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
     background: var(--corBarra);
     padding: 20px 0px;
     border: 1px solid var(--corBordas);
     box-shadow: var(--sombra);
-    margin: 15px;
     border-radius: 7px;
+    transition: width 0.3s ease, left 0.3s ease;
 }
+
+body.sidebar-collapsed .sidebar {
+    width: 0;
+    left: -15px; /* Esconde totalmente incluindo a borda */
+    border: none;
+    box-shadow: none;
+}
+
+
+body.sidebar-collapsed .sidebar > *:not(.botao-fechar) {
+    display: none !important;
+}
+
+
 
 .botao-fechar button {
-    position: absolute;
-    left: 92%;
+    position: fixed;
+    left: 290px;
+    /* Sidebar (275px) + margin (15px) */
     top: 50%;
-    border-radius: 50%;
-    font-size: 2.5rem;
+    transform: translateY(-50%);
+    border-radius: 0 8px 8px 0;
+    width: 25px;
+    height: 60px;
+    font-size: 1.2rem;
     border: none;
-    background-color: var(--corTxt3);
-    color: var(--corFundo);
-    border: 2px solid var(--corFundo);
-    z-index: 999;
+    background: var(--corBarra);
+    color: var(--corTxt3);
+    border: 1px solid var(--corBordas);
+    border-left: none;
+    z-index: 1200;
     cursor: pointer;
-    transition: all 0.5s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
 
     &:hover {
-        scale: 1.1;
-        background: var(--corFundo);
-        color: var(--corTxt3);
+        width: 32px;
+        background: var(--corBase);
+        color: white;
     }
 }
+
+body.sidebar-collapsed .botao-fechar button {
+    left: 0;
+    border-radius: 0 8px 8px 0;
+}
+
 
 .div-links {
     width: 100%;
     height: 75%;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 7px;
-    border-radius: 15px;
     background: transparent;
     padding: 20px 0px;
+    transition: all 0.3s ease;
 }
+
+body.sidebar-collapsed .div-links span,
+body.sidebar-collapsed .div-links .seta,
+body.sidebar-collapsed .div-links .links {
+    justify-content: center;
+}
+
+body.sidebar-collapsed .div-links span,
+body.sidebar-collapsed .div-links .seta,
+body.sidebar-collapsed .div-links h2,
+body.sidebar-collapsed .div-links p,
+body.sidebar-collapsed .div-img,
+body.sidebar-collapsed .sair span {
+    display: none;
+}
+
+body.sidebar-collapsed .links i,
+body.sidebar-collapsed .links-sub i {
+    margin-right: 0;
+    font-size: 1.4rem;
+}
+
+body.sidebar-collapsed .links {
+    width: 45px;
+    height: 45px;
+    padding: 0;
+    justify-content: center;
+}
+
+body.sidebar-collapsed .submenu {
+    margin-left: 0;
+    padding-left: 0;
+    border-left: none;
+}
+
 
 .links {
     width: 90%;
@@ -250,6 +317,13 @@
         color: var(--txtClaro);
     }
 }
+
+body.sidebar-collapsed .sair {
+    width: 45px;
+    padding: 0;
+    justify-content: center;
+}
+
 
 
 /* Div da logo do senai no nav.ph */
@@ -479,5 +553,49 @@ img {
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    /* Submenu no mobile — mantém ícones centralizados */
+    .submenu.aberto .links-sub {
+        justify-content: center;
+        font-size: 0;
+    }
+
+    .submenu.aberto .links-sub i {
+        margin-right: 0;
+        font-size: 1.1rem;
+    }
+
+    /* Botão menu accordion — ícone centralizado */
+    .manutencao-btn,
+    .maquinas-btn {
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+    .manutencao-btn .seta,
+    .maquinas-btn .seta {
+        display: none;
+        /* Esconde seta no mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 56px;
+        margin: 0;
+    }
+
+    .links {
+        padding: 10px 0;
+    }
+
+    .links i {
+        font-size: var(--text-lg);
+    }
+
+    .sair {
+        width: 42px;
+        height: 42px;
     }
 }

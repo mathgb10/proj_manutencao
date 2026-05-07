@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . "/../../configs/conexao.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -11,9 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_bind_param($stmt, "sss", $nome, $arquivo, $status);
 
     if (mysqli_stmt_execute($stmt)) {
-        header("Location: ../../views/tipo_maquina.php?sucesso=Tipo de máquina cadastrado com sucesso!");
+        header("Location: ../../views/descricao_maquina.php?sucesso=Descrição de máquina cadastrada com sucesso!");
     } else {
-        echo "Erro ao cadastrar tipo de máquina: " . mysqli_error($conn_nr12);
+        echo "Erro ao cadastrar descrição de máquina: " . mysqli_error($conn_nr12);
     }
     mysqli_stmt_close($stmt);
 }

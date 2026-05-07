@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . "/../../configs/conexao.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -12,9 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_bind_param($stmt, "sssi", $nome, $arquivo, $status, $id);
 
     if (mysqli_stmt_execute($stmt)) {
-        header("Location: ../../views/tipo_maquina.php?sucesso=Tipo de máquina atualizado com sucesso!");
+        header("Location: ../../views/descricao_maquina.php?sucesso=Descrição de máquina atualizada com sucesso!");
     } else {
-        echo "Erro ao atualizar tipo de máquina: " . mysqli_error($conn_nr12);
+        echo "Erro ao atualizar descrição de máquina: " . mysqli_error($conn_nr12);
     }
     mysqli_stmt_close($stmt);
 }

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
@@ -28,6 +28,10 @@ $permissao         = $_SESSION['user_permissao'] ?? 'NORMAL';
 
 $aba   = isset($_GET['aba'])    ? trim($_GET['aba'])    : 'abertas';
 $busca = isset($_GET['search']) ? trim($_GET['search']) : '';
+$pagina_atual = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($pagina_atual < 1) $pagina_atual = 1;
+$limite = 10;
+$offset = ($pagina_atual - 1) * $limite;
 
 $where  = "WHERE 1=1";
 $params = [];
@@ -114,6 +118,27 @@ $sql = "SELECT
         $where
         ORDER BY os.criado_em DESC";
 
+// --- Cálculo de Paginação ---
+$sql_count = "SELECT COUNT(*) as total 
+              FROM ordens_servico os
+              INNER JOIN usuarios sol  ON os.solicitante_id = sol.id
+              INNER JOIN usuarios resp ON os.responsavel_id = resp.id
+              $where";
+$stmt_count = $conn->prepare($sql_count);
+if ($stmt_count) {
+    if (!empty($params)) {
+        $stmt_count->bind_param($types, ...$params);
+    }
+    $stmt_count->execute();
+    $total_registros = $stmt_count->get_result()->fetch_assoc()['total'];
+    $total_paginas = ceil($total_registros / $limite);
+} else {
+    $total_paginas = 1;
+}
+if ($total_paginas == 0) $total_paginas = 1;
+
+$sql .= " LIMIT $limite OFFSET $offset";
+
 $stmt = $conn->prepare($sql);
 
 if (!$stmt) {
@@ -163,10 +188,12 @@ if ($resCount && $row = $resCount->fetch_assoc()) {
 }
 
 echo json_encode([
-    'success'    => true,
-    'dados'      => $ordens,
-    'contadores' => $contadores,
-    'usuario_id' => $usuario_logado_id,
-    'permissao'  => $permissao
+    'success'       => true,
+    'dados'         => $ordens,
+    'contadores'    => $contadores,
+    'usuario_id'    => $usuario_logado_id,
+    'permissao'     => $permissao,
+    'pagina_atual'  => $pagina_atual,
+    'total_paginas' => $total_paginas
 ]);
 ?>

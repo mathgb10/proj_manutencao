@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . "/../../configs/conexao.php";
 
 header('Content-Type: application/json');
@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
     if ($row = mysqli_fetch_assoc($result)) {
         echo json_encode($row);
     } else {
-        echo json_encode(['error' => 'Tipo de máquina não encontrado']);
+        echo json_encode(['error' => 'Descrição de máquina não encontrada']);
     }
     mysqli_stmt_close($stmt);
 } else {

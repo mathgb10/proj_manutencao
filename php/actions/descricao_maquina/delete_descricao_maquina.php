@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . "/../../configs/conexao.php";
 
 header('Content-Type: application/json');
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_bind_param($stmt, "i", $id);
 
     if (mysqli_stmt_execute($stmt)) {
-        echo json_encode(['success' => true, 'message' => 'Tipo de máquina ' . ($acao == 'desativar' ? 'desativado' : 'excluído') . ' com sucesso!']);
+        echo json_encode(['success' => true, 'message' => 'Descrição de máquina ' . ($acao == 'desativar' ? 'desativada' : 'excluída') . ' com sucesso!']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Erro ao processar: ' . mysqli_error($conn_nr12)]);
     }

@@ -38,30 +38,29 @@
         <!-- Header -->
         <?php require __DIR__ . '/../components/header.php'; ?>
 
-        <!-- Barra de Ações -->
-        <div class="div-btns-pages">
-            <form action="" method="GET" class="form-pesquisa" onsubmit="event.preventDefault(); carregarOS();">
-                <div class="search-container">
-                    <div class="box-pesquisa">
-                        <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" id="pesquisa-os" placeholder="Pesquisar O.S..."
-                            class="input-pesquisa" oninput="carregarOS()">
-                        <button type="button" class="btn-clear-search" id="btn-limpar-os" style="display: none;" onclick="limparBuscaOS()">
-                            <i class="bi bi-x-lg"></i>
-                        </button>
-                    </div>
-
-                    <div class="filtrar-status">
-                        <label for="select-filtro-os">Status:</label>
-                        <select id="select-filtro-os" name="aba" onchange="filtrarOS()">
-                            <option value="abertas">Abertas</option>
-                            <option value="andamento">Andamento</option>
-                            <option value="arquivadas">Arquivadas</option>
-                        </select>
-                    </div>
+        <div class="page-actions-bar">
+            <form action="" method="GET" class="page-search-form" onsubmit="event.preventDefault(); carregarOS();">
+                <div class="page-search-box">
+                    <input type="text" name="search" id="pesquisa-os" placeholder="Pesquisar O.S..."
+                         oninput="carregarOS(1)">
+                    <button type="button" class="page-clear-btn" id="btn-limpar-os" style="display: none;" onclick="limparBuscaOS()">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+                <button type="submit" class="btn-search">
+                    <i class="bi bi-search"></i>
+                </button>
+                
+                <div class="page-filter-box">
+                    <label for="select-filtro-os">Status:</label>
+                    <select id="select-filtro-os" name="aba" onchange="filtrarOS()">
+                        <option value="abertas">Abertas</option>
+                        <option value="andamento">Andamento</option>
+                        <option value="arquivadas">Arquivadas</option>
+                    </select>
                 </div>
             </form>
-            <button class="btn" onclick="showModal('novaOS')">
+            <button class="btn-page-action" onclick="showModal('novaOS')">
                 <i class="bi bi-plus-lg"></i> Nova O.S.
             </button>
         </div>
@@ -98,6 +97,8 @@
             </div>
         </div>
 
+        <!-- Paginação AJAX Unificada -->
+        <div id="pagination-os-container" class="page-pagination" style="margin-top: 15px;"></div>
     </section>
 
     <script src="../../js/scripts.js" defer></script>
@@ -112,6 +113,7 @@
         const USUARIO_PERMISSAO = "<?= htmlspecialchars($_SESSION['user_permissao'] ?? 'NORMAL') ?>";
 
         let abaAtual = 'abertas';
+        let paginaAtualOS = 1;
         let osIdSelecionada = null;
         let osAtual = null; // dados completos da OS selecionada
 
@@ -143,6 +145,7 @@
         // ---------- TROCAR ABA ----------
         function trocarAba(aba) {
             abaAtual = aba;
+            paginaAtualOS = 1; // Reseta página ao trocar aba
 
             // Sincroniza o select caso a troca venha de outro lugar
             const select = document.getElementById('select-filtro-os');
@@ -153,7 +156,9 @@
         }
 
         // ---------- CARREGAR / LISTAR ----------
-        async function carregarOS() {
+        async function carregarOS(pagina = null) {
+            if (pagina !== null) paginaAtualOS = pagina;
+
             const buscaInput = document.getElementById('pesquisa-os');
             const btnLimpar = document.getElementById('btn-limpar-os');
             const busca = buscaInput?.value || '';
@@ -164,7 +169,8 @@
             }
 
             const params = new URLSearchParams({
-                aba: abaAtual
+                aba: abaAtual,
+                page: paginaAtualOS
             });
             if (busca) params.append('search', busca);
 
@@ -174,6 +180,7 @@
 
                 if (data.success) {
                     renderizarTabela(data.dados, data.usuario_id, data.permissao);
+                    renderizarPaginacaoOS(data.pagina_atual, data.total_paginas);
                     atualizarContadores(data.contadores);
                 }
             } catch (err) {
@@ -181,10 +188,41 @@
             }
         }
 
+        function renderizarPaginacaoOS(atual, total) {
+            const container = document.getElementById('pagination-os-container');
+            if (!container) return;
+
+            if (total <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            
+            // Botão Anterior
+            if (atual > 1) {
+                html += `<button onclick="carregarOS(${atual - 1})" class="pag-btn"><i class="bi bi-chevron-left"></i> Anterior</button>`;
+            } else {
+                html += `<span class="pag-btn disabled"><i class="bi bi-chevron-left"></i> Anterior</span>`;
+            }
+
+            html += `<span class="pag-current">Página ${atual} de ${total}</span>`;
+
+            // Botão Próximo
+            if (atual < total) {
+                html += `<button onclick="carregarOS(${atual + 1})" class="pag-btn">Próxima <i class="bi bi-chevron-right"></i></button>`;
+            } else {
+                html += `<span class="pag-btn disabled">Próxima <i class="bi bi-chevron-right"></i></span>`;
+            }
+
+            container.innerHTML = html;
+        }
+
         function limparBuscaOS() {
             const buscaInput = document.getElementById('pesquisa-os');
             if (buscaInput) {
                 buscaInput.value = '';
+                paginaAtualOS = 1; // Reseta página ao limpar busca
                 carregarOS();
             }
         }

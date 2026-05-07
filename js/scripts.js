@@ -76,6 +76,22 @@ window.onload = () => {
     }
 
     startRealTimeClock();
+
+    // Lógica da Sidebar (Refatorada)
+    const arrow = document.getElementById("fechar-nav");
+    const body = document.body;
+
+    if (arrow) {
+        arrow.addEventListener('click', () => {
+            body.classList.toggle('sidebar-collapsed');
+            
+            if (body.classList.contains('sidebar-collapsed')) {
+                arrow.innerHTML = '<i class="bi bi-arrow-right-circle-fill"></i>';
+            } else {
+                arrow.innerHTML = '<i class="bi bi-arrow-left-circle-fill"></i>';
+            }
+        });
+    }
 }
 
 // Garante que a data apareça mesmo com defer
@@ -354,7 +370,7 @@ function excluirMotor(id, acao = 'deletar') {
 }
 
 function editarTipoMaquina(id) {
-    fetch('../actions/tipo_maquina/get_tipo_maquina.php?id=' + id)
+    fetch('../actions/descricao_maquina/get_descricao_maquina.php?id=' + id)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -374,7 +390,7 @@ function editarTipoMaquina(id) {
 }
 
 function excluirTipoMaquina(id, acao = 'deletar') {
-    fetch('../actions/tipo_maquina/delete_tipo_maquina.php', {
+    fetch('../actions/descricao_maquina/delete_descricao_maquina.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -411,97 +427,8 @@ if (notificacao != undefined) {
     })
 }
 
-let arrow = document.getElementById("fechar-nav");
-
-// função fechar e abrir navbar
-if (arrow != undefined) {
-    let sidebar = document.querySelector(".sidebar");
-    let main = document.querySelector(".sec-main")
-    let navLinks = document.querySelector(".div-links");
-    let divImg = document.querySelector(".div-img");
-    let btnSair = document.querySelector(".sair");
-    let divConfig = document.querySelector(".div-configs");
-    const mediaQuery = window.matchMedia('(min-width: 768px)');
-
-    if (mediaQuery.matches) {
-        sidebar.style.width = '275px';
-    } else {
-        sidebar.style.width = '10px';
-        navLinks.style.display = 'none';
-        divImg.style.display = 'none';
-        sidebar.style.width = '10px';
-        divConfig.style.display = 'none';
-        btnSair.style.fontSize = '0px';
-        btnSair.style.width = '0px';
-        main.style = 'padding-left: 10px';
-        arrow.innerHTML = '<i class="bi bi-arrow-right-circle-fill"></i>';
-        arrow.style.animation = 'none';
-    }
-
-    arrow.addEventListener('click', () => {
-        if (arrow.innerHTML.match('<i class="bi bi-arrow-left-circle-fill"></i>')) {
-
-            if (mediaQuery.matches) {
-                sidebar.style.animation = 'navbarAnim 0.25s linear';
-            } else {
-                sidebar.style.animation = 'navbarMobile 0.25s linear';
-            }
-
-            setTimeout(() => {
-                navLinks.style.display = 'none';
-                divImg.style.display = 'none';
-                sidebar.style.width = '10px';
-                divConfig.style.display = 'none';
-                btnSair.style.fontSize = '0px';
-                btnSair.style.width = '0px';
-                main.style = 'padding-left: 10px';
-                arrow.innerHTML = '<i class="bi bi-arrow-right-circle-fill"></i>';
-                arrow.style.animation = 'none';
-                clearTimeout();
-            }, 25)
-        }
-
-        if (arrow.innerHTML.match('<i class="bi bi-arrow-right-circle-fill"></i>')) {
-
-            if (mediaQuery.matches) {
-                sidebar.style.width = '275px';
-            } else {
-                sidebar.style.width = '144px';
-            }
-            arrow.innerHTML = '<i class="bi bi-arrow-left-circle-fill"></i>';
-
-            if (mediaQuery.matches) {
-                setTimeout(() => {
-                    divImg.style.display = 'flex';
-                    divConfig.style.display = 'flex';
-                    navLinks.style.display = 'flex';
-                    main.style = 'padding-left: 12%';
-                    clearTimeout();
-                }, 65)
-            }
-            else {
-                setTimeout(() => {
-                    divImg.style.display = 'flex';
-                    divConfig.style.display = 'flex';
-                    navLinks.style.display = 'flex';
-                    main.style = 'padding-left: 35%';
-                    clearTimeout();
-                }, 65)
-            }
 
 
-            setTimeout(() => {
-                if (mediaQuery.matches) {
-                    btnSair.style.width = '230px';
-                    btnSair.style.fontSize = '16px';
-                } else {
-                    btnSair.style.width = '45px';
-                }
-
-            }, 95)
-        }
-    });
-}
 //oque?
 function excluir(qual, id) {
     if (qual == 'usuario') {
@@ -800,8 +727,9 @@ document.addEventListener("DOMContentLoaded", function () {
         "tabela-usuarios",
         "tabela-maquinas",
         "tabela-logs",
-        "tabela-os",
-        "tabela-tipo_maquinas"
+        "tabela-preventiva",
+        "tabela-corretiva",
+        "tabela-descricao_maquinas"
     ];
 
     // Encontra a primeira tabela presente na página
@@ -1147,51 +1075,76 @@ function filtrarMaquinas() {
 /**
  * Função genérica para pesquisa em tempo real nas tabelas
  */
-function pesquisarTabela() {
-    const inputPesquisa = document.getElementById('pesquisa') || document.getElementById('pesquisa-os');
-    if (!inputPesquisa) return;
+/**
+ * SISTEMA DE PESQUISA UNIFICADO (V2)
+ * Filtra qualquer tabela em tempo real e gerencia o estado visual do campo.
+ */
+function inicializarPesquisaUnificada() {
+    const inputsPesquisa = document.querySelectorAll('input[name="search"], #pesquisa, .input-pesquisa');
 
-    // Identifica qual filtro de status está ativo para rodar em conjunto
-    if (document.getElementById('select-filtro-os')) {
-        filtrarOS();
-    } else if (document.getElementById('select-filtro-preventiva')) {
-        filtrarPreventiva();
-    } else if (document.getElementById('select-filtro-maquinas')) {
-        filtrarMaquinas();
-    } else {
-        // Fallback para tabelas sem select de status
-        const termoPesquisa = inputPesquisa.value.toLowerCase().trim();
-        const tabela = document.querySelector('.tabela-main tbody');
-        if (!tabela) return;
-
-        const linhas = Array.from(tabela.querySelectorAll('tr')).filter(tr => !tr.querySelector('td[colspan]'));
+    inputsPesquisa.forEach(input => {
+        const box = input.closest('.page-search-box') || input.closest('.box-pesquisa');
         
-        linhas.forEach(linha => {
-            const textoLinha = linha.textContent.toLowerCase();
-            if (termoPesquisa === '' || textoLinha.includes(termoPesquisa)) {
-                linha.style.display = '';
-                linha.classList.remove('hidden-by-filter');
-            } else {
-                linha.style.display = 'none';
-                linha.classList.add('hidden-by-filter');
+        // Função para atualizar o estado do box (mostrar/esconder "X")
+        const atualizarEstado = () => {
+            if (box) {
+                if (input.value.trim() !== "") {
+                    box.classList.add('has-content');
+                } else {
+                    box.classList.remove('has-content');
+                }
+            }
+        };
+
+        // Evento de input para filtragem em tempo real
+        input.addEventListener('input', function() {
+            atualizarEstado();
+            
+            // Busca a tabela ativa (geralmente a .tabela-main ou a definida no contexto)
+            const termo = this.value.toLowerCase().trim();
+            const tabelaBody = document.querySelector('.tabela-main tbody, .checklist-table tbody, .custom-table tbody');
+            
+            if (tabelaBody) {
+                const linhas = Array.from(tabelaBody.querySelectorAll('tr')).filter(tr => !tr.querySelector('td[colspan]'));
+                
+                linhas.forEach(linha => {
+                    const texto = linha.textContent.toLowerCase();
+                    if (termo === '' || texto.includes(termo)) {
+                        linha.style.display = '';
+                        linha.classList.remove('hidden-by-filter');
+                    } else {
+                        linha.style.display = 'none';
+                        linha.classList.add('hidden-by-filter');
+                    }
+                });
+
+                // Dispara evento para que a paginação se recalcule (se existir)
+                document.dispatchEvent(new CustomEvent('tabelaFiltrada'));
             }
         });
-        document.dispatchEvent(new CustomEvent('tabelaFiltrada'));
-    }
+
+        // Inicializa o estado (caso já venha preenchido pelo PHP)
+        atualizarEstado();
+
+        // Gerencia o botão de limpar (se existir)
+        const clearBtn = box?.querySelector('.page-clear-btn, .btn-clear-search');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function(e) {
+                // Se for um link (<a>), o PHP cuida do reload. 
+                // Se for um botão, limpamos via JS.
+                if (this.tagName !== 'A') {
+                    e.preventDefault();
+                    input.value = '';
+                    input.dispatchEvent(new Event('input'));
+                    input.focus();
+                }
+            });
+        }
+    });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const inputPesquisa = document.getElementById('pesquisa');
-    if (inputPesquisa) {
-        inputPesquisa.addEventListener('input', pesquisarTabela);
-        
-        // Impede que o formulário recarregue a página ao dar Enter
-        const form = inputPesquisa.closest('form');
-        if (form) {
-            form.addEventListener('submit', (e) => e.preventDefault());
-        }
-    }
-});
+// Inicializa ao carregar a página
+document.addEventListener('DOMContentLoaded', inicializarPesquisaUnificada);
 
 const hoje = new Date();
 

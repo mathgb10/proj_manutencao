@@ -1,17 +1,39 @@
-﻿<?php
+<?php 
 require __DIR__ . '/../controllers/validar_acesso.php';
 require __DIR__ . '/../configs/conexao.php';
-require __DIR__ . '/../components/modals/all_modals.php';
+require __DIR__ . '/../components/modals/all_modals.php'; 
 
-// --- VERIFICAÇÃO DE SEGURANÇA (Evita o erro Fatal) ---
-if (!isset($conn)) {
-    // Tenta usar $mysqli se $conn não existir, ou para o script
-    if (isset($mysqli)) {
-        $conn = $mysqli;
-    } else {
-        die("<h3>Erro Crítico:</h3> A conexão com o banco de dados falhou. <br>Verifique se a variável no arquivo <b>conexao.php</b> se chama <b>\$conn</b>.");
-    }
+// --- Lógica de Paginação e Busca (Padrão Unificado) ---
+$busca_atual = isset($_GET['search']) ? trim($_GET['search']) : '';
+$pagina_atual = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($pagina_atual < 1) $pagina_atual = 1;
+$limite = 10; // Logs podem mostrar um pouco mais
+
+// 1. Contar total de registros com filtro
+$sql_count = "SELECT COUNT(*) as total FROM logs 
+              LEFT JOIN usuarios ON logs.usuario_id = usuarios.id";
+if (!empty($busca_atual)) {
+    $termo = mysqli_real_escape_string($conn, $busca_atual);
+    $sql_count .= " WHERE usuarios.nome LIKE '%$termo%' OR logs.ip_address LIKE '%$termo%' OR logs.sql_command LIKE '%$termo%'";
 }
+$res_count = $conn->query($sql_count);
+$total_registros = $res_count->fetch_assoc()['total'];
+$total_paginas = ceil($total_registros / $limite);
+if ($total_paginas == 0) $total_paginas = 1;
+if ($pagina_atual > $total_paginas) $pagina_atual = $total_paginas;
+
+$offset = ($pagina_atual - 1) * $limite;
+
+// 2. Buscar registros paginados
+$sql = "SELECT logs.*, usuarios.nome AS nome_real 
+        FROM logs 
+        LEFT JOIN usuarios ON logs.usuario_id = usuarios.id";
+if (!empty($busca_atual)) {
+    $termo = mysqli_real_escape_string($conn, $busca_atual);
+    $sql .= " WHERE usuarios.nome LIKE '%$termo%' OR logs.ip_address LIKE '%$termo%' OR logs.sql_command LIKE '%$termo%'";
+}
+$sql .= " ORDER BY logs.id DESC LIMIT $limite OFFSET $offset";
+$resultado = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -39,24 +61,19 @@ if (!isset($conn)) {
         <!-- Header -->
         <?php require __DIR__ . '/../components/header.php'; ?>
 
-        <div class="div-btns-pages">
-            <form action="" method="GET" class="form-pesquisa">
-                <div class="search-container">
-                    <?php
-                    $busca_atual = isset($_GET['search']) ? $_GET['search'] : '';
-                    ?>
-                    <div class="box-pesquisa">
-                        <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" id="pesquisa"
-                            value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar..."
-                            class="input-pesquisa">
-                        <?php if ($busca_atual): ?>
-                            <a href="<?php echo $_SERVER['PHP_SELF'] ?>" class="btn-clear-search"><i
-                                    class="bi bi-x-lg"></i></a>
-                        <?php endif; ?>
-                    </div>
-                    <button type="submit" style="display: none;"></button>
+        <!-- Barra de Ações Unificada -->
+        <div class="page-actions-bar">
+            <form action="" method="GET" class="page-search-form">
+                <div class="page-search-box <?php echo $busca_atual ? 'has-content' : ''; ?>">
+                    <input type="text" name="search" id="pesquisa" value="<?php echo htmlspecialchars($busca_atual); ?>"
+                        placeholder="Pesquisar descrição ou arquivo...">
+                    <?php if ($busca_atual): ?>
+                        <a href="?" class="page-clear-btn"><i class="bi bi-x-lg"></i></a>
+                    <?php endif; ?>
                 </div>
+                <button type="submit" class="btn-search">
+                    <i class="bi bi-search"></i>
+                </button>
             </form>
         </div>
 
@@ -76,35 +93,8 @@ if (!isset($conn)) {
                     </thead>
                     <tbody id="tabela-logs">
                         <?php
-                        // --- LÓGICA DE PESQUISA AVANÇADA COM NOME ---
-                        
-                        // SQL Base: Traz os logs e junta com a tabela de usuários para pegar o nome
-                        // Usamos 'usuarios.nome AS nome_real' para não confundir
-                        $sql_base = "SELECT logs.*, usuarios.nome AS nome_real 
-                                 FROM logs 
-                                 LEFT JOIN usuarios ON logs.usuario_id = usuarios.id";
-
-                        if (!empty($busca_atual)) {
-                            $termo_seguro = mysqli_real_escape_string($conn, $busca_atual);
-
-                            // Filtra pelo Nome do usuário (da tabela usuarios) ou dados do log
-                            $sql = $sql_base . " WHERE 
-                                usuarios.nome LIKE '%$termo_seguro%' OR 
-                                logs.ip_address LIKE '%$termo_seguro%' OR 
-                                logs.sql_command LIKE '%$termo_seguro%'";
-                        } else {
-                            $sql = $sql_base;
-                        }
-
-                        // Ordena do mais recente para o mais antigo
-                        $sql .= " ORDER BY logs.id DESC";
-
-                        // Executa a query
-                        $resultado = $conn->query($sql);
-
                         if ($resultado && $resultado->num_rows > 0) {
                             while ($linha = $resultado->fetch_assoc()) {
-
                                 // Verifica se encontrou o nome (se o usuário não foi excluído)
                                 $nome_exibicao = !empty($linha["nome_real"]) ? htmlspecialchars($linha["nome_real"]) : "<span style='color: #ff6b6b; font-size: 0.9em;'>Ex-Usuário (ID: " . $linha['usuario_id'] . ")</span>";
 
@@ -112,23 +102,33 @@ if (!isset($conn)) {
                                 echo "<td>" . htmlspecialchars($linha["id"]) . "</td>";
                                 echo "<td>" . $nome_exibicao . "</td>";
                                 echo "<td>" . htmlspecialchars($linha["ip_address"]) . "</td>";
-                                // Limita o tamanho do comando SQL visualmente se for muito grande
                                 echo "<td title='" . htmlspecialchars($linha["sql_command"]) . "'>" . substr(htmlspecialchars($linha["sql_command"]), 0, 50) . (strlen($linha["sql_command"]) > 50 ? '...' : '') . "</td>";
-                                echo "<td>" . date("d/m/Y H:i", strtotime($linha["data_hora"])) . "</td>"; // Formata a data BR
+                                echo "<td>" . date("d/m/Y H:i", strtotime($linha["data_hora"])) . "</td>"; 
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='5' style='text-align:center; padding:20px; color: #888;'>Nenhum registro encontrado.</td></tr>";
+                            echo "<tr><td colspan='5' style='text-align:center; padding:30px; color: #888;'>Nenhum registro encontrado.</td></tr>";
                         }
                         ?>
                     </tbody>
                 </table>
             </div>
 
-            <div class="div-btns-change">
-                <button id="btn-ant" type="button"><i class="bi bi-chevron-left"></i></button>
+            <!-- Paginação Unificada -->
+            <div class="page-pagination">
+                <?php if ($pagina_atual > 1): ?>
+                    <a href="?search=<?php echo urlencode($busca_atual); ?>&page=<?php echo $pagina_atual - 1; ?>" class="pag-btn"><i class="bi bi-chevron-left"></i> Anterior</a>
+                <?php else: ?>
+                    <span class="pag-btn disabled"><i class="bi bi-chevron-left"></i> Anterior</span>
+                <?php endif; ?>
 
-                <button id="btn-prox" type="button"><i class="bi bi-chevron-right"></i></button>
+                <span class="pag-current">Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
+
+                <?php if ($pagina_atual < $total_paginas): ?>
+                    <a href="?search=<?php echo urlencode($busca_atual); ?>&page=<?php echo $pagina_atual + 1; ?>" class="pag-btn">Próxima <i class="bi bi-chevron-right"></i></a>
+                <?php else: ?>
+                    <span class="pag-btn disabled">Próxima <i class="bi bi-chevron-right"></i></span>
+                <?php endif; ?>
             </div>
         </div>
 

@@ -115,144 +115,12 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
     <link rel="shortcut icon" href="../../../favicon.ico" type="image/x-icon">
     
     <style>
-        /* Estilos da Pesquisa e Filtros (Isolados e modernos) */
-        .preventiva-search-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            gap: 20px;
-        }
-
-        .preventiva-form {
-            flex: 1;
-            max-width: 800px;
-            display: flex;
-            gap: 15px;
-            height: 48px;
-        }
-
-        .preventiva-search-box {
-            display: flex;
-            align-items: center;
-            background: rgba(40, 40, 40, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            padding: 0 15px;
-            flex: 1;
-            transition: 0.3s;
-        }
-        
-        html[data-tema='claro'] .preventiva-search-box {
-            background: #f8f9fa;
-            border-color: #ddd;
-        }
-
-        .preventiva-search-box:focus-within {
-            border-color: #777;
-        }
-
-        .preventiva-search-box i.search-icon {
-            color: #888;
-            font-size: 1.1rem;
-            margin-right: 12px;
-        }
-
-        .preventiva-search-box input {
-            border: none !important;
-            background: transparent !important;
-            outline: none !important;
-            box-shadow: none !important;
-            color: var(--corTxt3);
-            font-size: 0.95rem;
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
-
-        .preventiva-search-box input::placeholder {
-            color: #777;
-        }
-
-        .preventiva-search-box .btn-clear-search {
-            color: #777;
-            text-decoration: none;
-            transition: 0.2s;
-            margin-left: 10px;
-            display: flex;
-            align-items: center;
-        }
-        .preventiva-search-box .btn-clear-search:hover {
-            color: var(--status-danger, #ff2d35);
-        }
-
-        .preventiva-select-box {
-            display: flex;
-            align-items: center;
-            background: rgba(40, 40, 40, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            padding: 0 15px;
-            gap: 10px;
-            min-width: 200px;
-            transition: 0.3s;
-        }
-
-        html[data-tema='claro'] .preventiva-select-box {
-            background: #f8f9fa;
-            border-color: #ddd;
-        }
-
-        .preventiva-select-box:focus-within {
-            border-color: #777;
-        }
-
-        .preventiva-select-box label {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--corTxt3);
-            text-transform: uppercase;
-        }
-
-        .preventiva-select-box select {
-            border: none;
-            background: transparent;
-            outline: none;
-            color: var(--corTxt3);
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            appearance: none;
-            padding-right: 25px;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right center;
-            background-size: 10px auto;
-        }
-        
-        html[data-tema='claro'] .preventiva-select-box select {
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-        }
-
-        .preventiva-select-box select option {
-            background: var(--corFundo2);
-            color: var(--corTxt3);
-        }
-
-        .btn-novo-registro {
-            height: 48px;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        /* Estilos da Tabela Main */
+        /* Estilos específicos da Preventiva — badge de status e botões de ação */
         .tabela-main td {
             padding: 15px;
             text-align: center;
             border-bottom: 1px solid var(--corBordas);
+            color: var(--corTxt3);
         }
         .btnAcao {
             padding: 6px 12px;
@@ -271,85 +139,21 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
         .btnAcao.checklist:hover { filter: brightness(1.2); }
         .btnAcao.history { background: #6c757d; }
         .btnAcao.history:hover { background: #5a6268; }
-        
+
         .badge-status {
             padding: 6px 12px;
             border-radius: 6px;
             font-weight: 800;
             font-size: 0.75rem;
-            color: #000;
             display: inline-block;
         }
-        .bg-warning { background: var(--status-warning); }
-        .bg-danger { background: var(--status-danger); color: white; }
-        .bg-success { background: var(--status-ok); }
-        
+        .bg-warning { background: var(--status-warning); color: #000; }
+        .bg-danger { background: var(--status-danger); color: #fff; }
+        .bg-success { background: var(--status-ok); color: #000; }
+
         .text-warning { color: var(--status-warning); }
         .text-danger { color: var(--status-danger); }
         .text-success { color: var(--status-ok); }
-
-        /* Paginação Moderna Estilo Referência */
-        .preventiva-paginacao {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            margin-top: 30px;
-            padding: 10px 0;
-        }
-
-        .btn-ant-novo {
-            color: #777;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.2s;
-        }
-        .btn-ant-novo:not(.disabled):hover {
-            color: var(--status-danger, #ff2d35);
-        }
-        .btn-ant-novo.disabled {
-            color: #444;
-            cursor: not-allowed;
-            opacity: 0.8;
-        }
-
-        .pagina-atual-texto {
-            background: #1e3a8a; /* Azul sofisticado escuro */
-            color: #60a5fa; /* Azul clarinho pro texto */
-            padding: 6px 16px;
-            border-radius: 6px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        html[data-tema='claro'] .pagina-atual-texto {
-            background: #e0f2fe;
-            color: #0369a1;
-        }
-
-        .btn-prox-novo {
-            color: #777;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.2s;
-        }
-        .btn-prox-novo:not(.disabled):hover {
-            color: var(--status-danger, #ff2d35);
-        }
-        .btn-prox-novo.disabled {
-            color: #444;
-            cursor: not-allowed;
-            opacity: 0.8;
-        }
     </style>
 </head>
 
@@ -361,22 +165,23 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
         <!-- Header -->
         <?php require __DIR__ . '/../components/header.php'; ?>
 
-        <!-- Botões e Pesquisa com Classes Únicas -->
-        <div class="preventiva-search-header">
-            <form action="" method="GET" class="preventiva-form">
-                <div class="preventiva-search-box">
-                    <i class="bi bi-search search-icon"></i>
+        <!-- Barra de Ações — Padrão Unificado do Sistema -->
+        <div class="page-actions-bar">
+            <form action="" method="GET" class="page-search-form">
+                <div class="page-search-box <?php echo $busca_atual ? 'has-content' : ''; ?>">
                     <input type="text" name="search" id="pesquisa"
-                        value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar NI ou Nome..."
-                        class="preventiva-input">
+                        value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar NI ou Nome...">
                     <?php if ($busca_atual): ?>
-                        <a href="?filtro-status=<?php echo urlencode($status_atual); ?>" class="btn-clear-search"><i class="bi bi-x-lg"></i></a>
+                        <a href="?filtro-status=<?php echo urlencode($status_atual); ?>" class="page-clear-btn"><i class="bi bi-x-lg"></i></a>
                     <?php endif; ?>
                 </div>
+                <button type="submit" class="btn-search">
+                    <i class="bi bi-search"></i>
+                </button>
 
-                <div class="preventiva-select-box">
-                    <label>STATUS:</label>
-                    <select name="filtro-status" onchange="this.form.submit()">
+                <div class="page-filter-box">
+                    <label for="filtro-status-prev">Status:</label>
+                    <select id="filtro-status-prev" name="filtro-status" onchange="this.form.submit()">
                         <option value="todos" <?php echo $status_atual == 'todos' ? 'selected' : ''; ?>>Todos</option>
                         <option value="ok" <?php echo $status_atual == 'ok' ? 'selected' : ''; ?>>Em Dia</option>
                         <option value="proximos" <?php echo $status_atual == 'proximos' ? 'selected' : ''; ?>>Próximos / Pendentes</option>
@@ -384,7 +189,9 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
                     </select>
                 </div>
             </form>
-            <button class="btn btn-novo-registro" onclick="showModal('preventiva')">Novo Registro <i class="bi bi-plus-circle"></i></button>
+            <button class="btn-page-action" onclick="showModal('preventiva')">
+                <i class="bi bi-plus-circle"></i> Novo Registro
+            </button>
         </div>
 
         <div class="tabela-bg2" id="tabe">
@@ -446,20 +253,20 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
                 </table>
             </div>
 
-            <!-- Paginação Moderna -->
-            <div class="preventiva-paginacao">
+            <!-- Paginação Unificada -->
+            <div class="page-pagination">
                 <?php if ($pagina_atual > 1): ?>
-                    <a href="?search=<?php echo urlencode($busca_atual); ?>&filtro-status=<?php echo urlencode($status_atual); ?>&page=<?php echo $pagina_atual - 1; ?>" class="btn-ant-novo"><i class="bi bi-chevron-left"></i> Anterior</a>
+                    <a href="?search=<?php echo urlencode($busca_atual); ?>&filtro-status=<?php echo urlencode($status_atual); ?>&page=<?php echo $pagina_atual - 1; ?>" class="pag-btn"><i class="bi bi-chevron-left"></i> Anterior</a>
                 <?php else: ?>
-                    <span class="btn-ant-novo disabled"><i class="bi bi-chevron-left"></i> Anterior</span>
+                    <span class="pag-btn disabled"><i class="bi bi-chevron-left"></i> Anterior</span>
                 <?php endif; ?>
 
-                <span class="pagina-atual-texto">Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
+                <span class="pag-current">Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
 
                 <?php if ($pagina_atual < $total_paginas): ?>
-                    <a href="?search=<?php echo urlencode($busca_atual); ?>&filtro-status=<?php echo urlencode($status_atual); ?>&page=<?php echo $pagina_atual + 1; ?>" class="btn-prox-novo">Próxima <i class="bi bi-chevron-right"></i></a>
+                    <a href="?search=<?php echo urlencode($busca_atual); ?>&filtro-status=<?php echo urlencode($status_atual); ?>&page=<?php echo $pagina_atual + 1; ?>" class="pag-btn">Próxima <i class="bi bi-chevron-right"></i></a>
                 <?php else: ?>
-                    <span class="btn-prox-novo disabled">Próxima <i class="bi bi-chevron-right"></i></span>
+                    <span class="pag-btn disabled">Próxima <i class="bi bi-chevron-right"></i></span>
                 <?php endif; ?>
             </div>
         </div>
@@ -468,19 +275,6 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
 
     <!-- Scripts de Funcionalidade -->
     <script src="../../js/scripts.js"></script>
-    <script>
-        // Funções para manter o modal abrindo
-        function openChecklist(nome, id) {
-            if (typeof window.openChecklist === 'function') {
-                window.openChecklist(nome, id);
-            }
-        }
-        function openHistory(nome, id) {
-            if (typeof window.openHistory === 'function') {
-                window.openHistory(nome, id);
-            }
-        }
-    </script>
 </body>
 
 </html>

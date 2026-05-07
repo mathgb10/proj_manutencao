@@ -66,8 +66,8 @@ $permissao_usuario = $_SESSION['user_permissao'] ?? $_SESSION['colaborador_permi
 
             <div class="submenu" id="submenu-maquinas">
 
-                <a href="tipo_maquina.php"
-                    class="<?php if ($atualmente_em == 'tipo_maquina.php')
+                <a href="descricao_maquina.php"
+                    class="<?php if ($atualmente_em == 'descricao_maquina.php')
     echo 'ativo'; ?> links-sub">
                     <i class="bi bi-tags-fill"></i> Descrição Máquinas
                 </a>
@@ -151,7 +151,7 @@ $permissao_usuario = $_SESSION['user_permissao'] ?? $_SESSION['colaborador_permi
             {
                 btnId: "btn-maquinas",
                 submenuId: "submenu-maquinas",
-                paginas: ["tipo_maquinas.php", "maquinas.php"]
+                paginas: ["descricao_maquina.php", "maquinas.php"]
             }
         ];
 

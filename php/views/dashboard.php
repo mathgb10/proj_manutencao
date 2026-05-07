@@ -30,14 +30,13 @@ if ($resMaq) {
     while ($m = $resMaq->fetch_assoc()) {
         $int = $m['intervalo'] ?: 30;
         $m['data_venc'] = 'S/ DATA'; // Default
-        if (!$m['ultima']) { 
-            $vencidas[] = $m; 
-        }
-        else {
+        if (!$m['ultima']) {
+            $vencidas[] = $m;
+        } else {
             $proxima = date('Y-m-d', strtotime($m['ultima'] . " + $int days"));
-            if ($proxima < $hoje) { 
-                $m['data_venc'] = date('d/m', strtotime($proxima)); 
-                $vencidas[] = $m; 
+            if ($proxima < $hoje) {
+                $m['data_venc'] = date('d/m', strtotime($proxima));
+                $vencidas[] = $m;
             }
         }
 
@@ -74,7 +73,7 @@ $sqlTopMaq = "SELECT patrimonio, COUNT(*) as total
 $resTopMaq = $conn->query($sqlTopMaq);
 $topMaqLabels = [];
 $topMaqData = [];
-while($tm = $resTopMaq->fetch_assoc()) {
+while ($tm = $resTopMaq->fetch_assoc()) {
     $topMaqLabels[] = $tm['patrimonio'] ?: 'N/A';
     $topMaqData[] = $tm['total'];
 }
@@ -84,11 +83,12 @@ while($tm = $resTopMaq->fetch_assoc()) {
 
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Sistema de Manutenção</title>
-    
+
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="../../css/nav.css">
     <link rel="stylesheet" href="../../css/header.css">
@@ -112,15 +112,18 @@ while($tm = $resTopMaq->fetch_assoc()) {
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
         }
+
         .btn-alert-action:hover {
             background: var(--corBase);
             transform: translateY(-2px);
         }
+
         .btn-alert-checklist {
             background: var(--corDestaque);
         }
     </style>
 </head>
+
 <body>
     <?php require __DIR__ . '/../components/nav.php'; ?>
 
@@ -162,15 +165,16 @@ while($tm = $resTopMaq->fetch_assoc()) {
 
         <!-- GRID PRINCIPAL -->
         <div class="dashboard-grid">
-            
+
             <!-- COLUNA PRINCIPAL: OPERAÇÕES E RECORRÊNCIA -->
             <div class="main-col" style="display: flex; flex-direction: column; gap: 25px;">
-                
+
                 <!-- CENTRO DE OPERAÇÕES -->
                 <div class="dash-panel">
                     <div class="dash-panel-header">
                         <h2><i class="bi bi-activity"></i> Centro de Manutenção Corretiva</h2>
-                        <button class="btn-dash-action" onclick="window.location.href='gerencias_os.php'">Nova O.S.</button>
+                        <button class="btn-dash-action" onclick="window.location.href='gerencias_os.php'">Nova
+                            O.S.</button>
                     </div>
                     <div class="dash-panel-content">
                         <table class="os-table">
@@ -184,20 +188,25 @@ while($tm = $resTopMaq->fetch_assoc()) {
                             </thead>
                             <tbody>
                                 <?php if ($resOS && $resOS->num_rows > 0): ?>
-                                    <?php while($os = $resOS->fetch_assoc()): ?>
+                                    <?php while ($os = $resOS->fetch_assoc()): ?>
                                         <tr>
                                             <td class="os-patrimonio"><?= htmlspecialchars($os['patrimonio'] ?: 'N/A') ?></td>
                                             <td><?= htmlspecialchars(mb_strimwidth($os['descricao'], 0, 50, "...")) ?></td>
-                                            <td style="opacity: 0.8;"><?= htmlspecialchars($os['tecnico'] ?: 'A definir') ?></td>
+                                            <td style="opacity: 0.8;"><?= htmlspecialchars($os['tecnico'] ?: 'A definir') ?>
+                                            </td>
                                             <td>
-                                                <span class="os-status-badge <?= $os['status'] == 'Aceita' ? 'status-aceito' : 'status-aberto' ?>">
+                                                <span
+                                                    class="os-status-badge <?= $os['status'] == 'Aceita' ? 'status-aceito' : 'status-aberto' ?>">
                                                     <?= $os['status'] ?>
                                                 </span>
                                             </td>
                                         </tr>
                                     <?php endwhile; ?>
                                 <?php else: ?>
-                                    <tr><td colspan="4" style="text-align: center; padding: 40px; opacity: 0.5;">Nenhuma operação ativa no momento.</td></tr>
+                                    <tr>
+                                        <td colspan="4" style="text-align: center; padding: 40px; opacity: 0.5;">Nenhuma
+                                            operação ativa no momento.</td>
+                                    </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
@@ -221,7 +230,7 @@ while($tm = $resTopMaq->fetch_assoc()) {
 
             <!-- COLUNA DIREITA: ANALYTICS E ALERTAS -->
             <div class="side-analytics">
-                
+
                 <!-- ANALYTICS: DISTRIBUIÇÃO -->
                 <div class="dash-panel">
                     <div class="dash-panel-header">
@@ -241,9 +250,10 @@ while($tm = $resTopMaq->fetch_assoc()) {
                     </div>
                     <div class="dash-panel-content">
                         <div class="alert-list">
-                            <?php if($resRecente && $resRecente->num_rows > 0): ?>
-                                <?php while($h = $resRecente->fetch_assoc()): ?>
-                                    <div class="alert-item" style="background: rgba(40, 167, 69, 0.05); border-color: rgba(40, 167, 69, 0.1);">
+                            <?php if ($resRecente && $resRecente->num_rows > 0): ?>
+                                <?php while ($h = $resRecente->fetch_assoc()): ?>
+                                    <div class="alert-item"
+                                        style="background: rgba(40, 167, 69, 0.05); border-color: rgba(40, 167, 69, 0.1);">
                                         <i class="bi bi-check-circle-fill" style="color: #28a745;"></i>
                                         <div class="alert-info">
                                             <strong><?= htmlspecialchars($h['denominacao']) ?></strong>
@@ -252,7 +262,8 @@ while($tm = $resTopMaq->fetch_assoc()) {
                                     </div>
                                 <?php endwhile; ?>
                             <?php else: ?>
-                                <p style="text-align: center; font-size: 0.8rem; opacity: 0.5;">Nenhum histórico encontrado.</p>
+                                <p style="text-align: center; font-size: 0.8rem; opacity: 0.5;">Nenhum histórico encontrado.
+                                </p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -261,13 +272,14 @@ while($tm = $resTopMaq->fetch_assoc()) {
                 <!-- ALERTAS CRÍTICOS -->
                 <div class="dash-panel" style="margin-top: 20px;">
                     <div class="dash-panel-header">
-                        <h2><i class="bi bi-shield-fill-exclamation" style="color: var(--status-danger);"></i> Alertas Críticos</h2>
+                        <h2><i class="bi bi-shield-fill-exclamation" style="color: var(--status-danger);"></i> Alertas
+                            Críticos</h2>
                         <button class="btn-link" onclick="window.location.href='preventiva.php'">Ver Todos</button>
                     </div>
                     <div class="dash-panel-content">
                         <div class="alert-list">
-                            <?php if(count($vencidas) > 0): ?>
-                                <?php foreach(array_slice($vencidas, 0, 3) as $v): ?>
+                            <?php if (count($vencidas) > 0): ?>
+                                <?php foreach (array_slice($vencidas, 0, 3) as $v): ?>
                                     <div class="alert-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
                                         <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
                                             <i class="bi bi-exclamation-triangle-fill" style="color: var(--status-danger);"></i>
@@ -275,20 +287,23 @@ while($tm = $resTopMaq->fetch_assoc()) {
                                                 <strong><?= htmlspecialchars($v['denominacao']) ?></strong>
                                                 <small><?= htmlspecialchars($v['numero_identificacao']) ?></small>
                                             </div>
-                                            <div class="alert-date"><?= $v['data_venc'] ?: 'Vencido' ?></div>
                                         </div>
-                                        <div style="display: flex; gap: 8px; width: 100%; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
-                                            <button class="btn-alert-action btn-alert-checklist" onclick="openChecklist('<?= addslashes($v['denominacao']) ?>', <?= $v['id'] ?>)">
+                                        <div
+                                            style="display: flex; gap: 8px; width: 100%; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                                            <button class="btn-alert-action btn-alert-checklist"
+                                                onclick="openChecklist('<?= addslashes($v['denominacao']) ?>', <?= $v['id'] ?>)">
                                                 <i class="bi bi-list-check"></i> Abrir Checklist
                                             </button>
-                                            <button class="btn-alert-action" onclick="openHistory('<?= addslashes($v['denominacao']) ?>', <?= $v['id'] ?>)">
+                                            <button class="btn-alert-action"
+                                                onclick="openHistory('<?= addslashes($v['denominacao']) ?>', <?= $v['id'] ?>)">
                                                 <i class="bi bi-clock-history"></i>
                                             </button>
                                         </div>
                                     </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <p style="text-align: center; font-size: 0.8rem; opacity: 0.5;">Sistema operando normalmente.</p>
+                                <p style="text-align: center; font-size: 0.8rem; opacity: 0.5;">Sistema operando
+                                    normalmente.</p>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -301,7 +316,7 @@ while($tm = $resTopMaq->fetch_assoc()) {
 
     <script src="../../js/scripts.js" defer></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Cores padrão
             const colorBase = getComputedStyle(document.documentElement).getPropertyValue('--corBase').trim() || '#fc2323';
 
@@ -316,9 +331,9 @@ while($tm = $resTopMaq->fetch_assoc()) {
                         borderWidth: 0
                     }]
                 },
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     cutout: '80%',
                     plugins: { legend: { position: 'bottom', labels: { color: '#fff', font: { size: 10 } } } }
                 }
@@ -351,13 +366,14 @@ while($tm = $resTopMaq->fetch_assoc()) {
     </script>
 
 
-    <?php if (isset($_SESSION['user_senha_padrao']) && $_SESSION['user_senha_padrao'] == 1) : ?>
+    <?php if (isset($_SESSION['user_senha_padrao']) && $_SESSION['user_senha_padrao'] == 1): ?>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const modal = document.getElementById('changePassword');
                 if (modal) modal.style.display = 'flex';
             });
         </script>
     <?php endif; ?>
 </body>
+
 </html>

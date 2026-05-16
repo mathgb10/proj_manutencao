@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     require __DIR__ . '/../configs/conexao.php';
 
@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $_SESSION['user_nome'] = $infos_db['nome'];
             $_SESSION['user_permissao'] = $infos_db['permissao'];
             $_SESSION['user_senha_padrao'] = $infos_db['senha_padrao'];
+            $_SESSION['user_foto'] = $infos_db['foto'];
 
 
             header("Location: ../views/dashboard.php");

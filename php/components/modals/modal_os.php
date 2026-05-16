@@ -61,6 +61,16 @@
                 <input type="hidden" id="os_maquina_id">
             </div>
 
+            <!-- Anexo -->
+            <div class="modal-input">
+                <label for="os_anexo">Anexo (Opcional):</label>
+                <div class="input-wrapper">
+                    <input type="file" id="os_anexo" name="anexo" 
+                        style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
+                </div>
+                <small style="opacity:.6; font-size:.75rem;">Formatos aceitos: JPG, PNG, PDF (Máx 5MB)</small>
+            </div>
+
             <div class="modal-footer" style="margin-top:12px;">
                 <button type="button" class="btn-confirmar-full confirmar" onclick="criarOS()">
                     Abrir O.S. <i class="bi bi-send"></i>

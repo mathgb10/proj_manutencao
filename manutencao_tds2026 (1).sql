@@ -4481,24 +4481,26 @@ CREATE TABLE `usuarios` (
   `email` varchar(200) NOT NULL,
   `senha` varchar(245) NOT NULL,
   `senha_padrao` int(11) NOT NULL DEFAULT 1,
-  `permissao` enum('ADMIN','GESTOR','NORMAL') NOT NULL DEFAULT 'NORMAL'
+  `permissao` enum('ADMIN','GESTOR','NORMAL') NOT NULL DEFAULT 'NORMAL',
+  `foto` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `senha_padrao`, `permissao`) VALUES
-(1, 'Beneguiguiris', 'matheus@email.com', '$2y$10$/pkrY1YW3pnwuHi2D87ex.4QIvA/pJmniCjWp/Zd3w9Lre5R8iSkq', 1, 'ADMIN'),
-(2, 'Miguel', 'miguel@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
-(3, 'Ruan Duas Torres', 'ruan@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
-(4, 'Pereira', 'pereira@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
-(5, 'Lais', 'lais@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
-(6, 'Gideao', 'gideao@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
-(7, 'Pedro', 'pedro@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN'),
-(8, 'Kaua Reis', 'kaua@email.com', '$2y$10$A2AhXY8vrgisCyOimxkfT.HnJUlneIvxqgEvEUJ0Rep8hRMB1FgBK', 0, 'ADMIN'),
-(9, 'Rafael', 'rafael@email.com', '$2y$10$A2AhXY8vrgisCyOimxkfT.HnJUlneIvxqgEvEUJ0Rep8hRMB1FgBK', 0, 'ADMIN'),
-(10, 'Admin', 'ola@gmail.com', '$2y$10$Jo4bXucSLiVsZIEUBQyQBO6.9jg0pz5beTuH3PaVqJKPSiiZCwIJ2', 0, 'ADMIN');
+INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `senha_padrao`, `permissao`, `foto`) VALUES
+(1, 'Matheus', 'matheus@email.com', '$2y$10$PrNTBI8sWsSPdGVnYkb4lO2JJSWmHSMb7RLb8yPzyX3.1SU3813uy', 0, 'ADMIN', NULL),
+(2, 'Miguel', 'miguel@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN', NULL),
+(3, 'Ruan Duas Torres', 'ruan@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN', NULL),
+(4, 'Pereira', 'pereira@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN', NULL),
+(5, 'Lais', 'lais@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN', NULL),
+(6, 'Gideao', 'gideao@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN', NULL),
+(7, 'Pedro', 'pedro@email.com', '$2b$12$ZEdrFyLzc.prScThSUw9leyeRLeNUkQsuJxOC1BpjusJ74au5dg9m', 0, 'ADMIN', NULL),
+(8, 'Kaua Reis', 'kaua@email.com', '$2y$10$A2AhXY8vrgisCyOimxkfT.HnJUlneIvxqgEvEUJ0Rep8hRMB1FgBK', 0, 'ADMIN', NULL),
+(9, 'Rafael', 'rafael@email.com', '$2y$10$A2AhXY8vrgisCyOimxkfT.HnJUlneIvxqgEvEUJ0Rep8hRMB1FgBK', 0, 'ADMIN', NULL),
+(10, 'Admin', 'ola@gmail.com', '$2y$10$Jo4bXucSLiVsZIEUBQyQBO6.9jg0pz5beTuH3PaVqJKPSiiZCwIJ2', 0, 'ADMIN', NULL),
+(11, 'Matheus', 'matheus@email.com', '$2y$10$PrNTBI8sWsSPdGVnYkb4lO2JJSWmHSMb7RLb8yPzyX3.1SU3813uy', 1, 'ADMIN', NULL);
 
 --
 -- Índices para tabelas despejadas

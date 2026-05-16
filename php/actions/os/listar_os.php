@@ -86,15 +86,16 @@ if ($aba === 'abertas') {
     $where .= " AND os.status = 'Em Aberto'";
 }
 
-// Filtro de busca por texto
+// Filtro de busca por texto (incluindo número da O.S.)
 if (!empty($busca)) {
-    $where .= " AND (os.descricao LIKE ? OR sol.nome LIKE ? OR resp.nome LIKE ? OR os.patrimonio LIKE ?)";
+    $where .= " AND (os.id LIKE ? OR os.descricao LIKE ? OR sol.nome LIKE ? OR resp.nome LIKE ? OR os.patrimonio LIKE ?)";
     $termo    = "%$busca%";
     $params[] = $termo;
     $params[] = $termo;
     $params[] = $termo;
     $params[] = $termo;
-    $types   .= "ssss";
+    $params[] = $termo;
+    $types   .= "sssss";
 }
 
 $sql = "SELECT

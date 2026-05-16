@@ -115,6 +115,10 @@ $permissao_usuario = $_SESSION['user_permissao'] ?? $_SESSION['colaborador_permi
                 ?>
                 <div class="div-noti" style="color: var(--corFundo2);"><?= $totalNoti ?></div>
             </button>
+
+            <a href="perfil.php" class="configs dont-rotate" title="Perfil">
+                <i class="bi bi-person-fill"></i>
+            </a>
         </div>
 
         <button onclick="window.location.href='../actions/logout.php'" class="btn sair"

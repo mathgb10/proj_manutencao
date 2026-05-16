@@ -1337,12 +1337,14 @@ async function carregarNotificacoes() {
 
     try {
         // Usamos listar_os.php com a aba 'abertas' que já traz o que precisamos
-        const res = await fetch(`${window.location.origin}/juntos/manutencao/php/actions/os/listar_os.php?aba=abertas`);
+        // Caminho relativo — funciona independente do diretório raiz
+        const basePath = window.location.pathname.substring(0, window.location.pathname.indexOf('/manutencao/') + '/manutencao/'.length);
+        const res = await fetch(`${basePath}php/actions/os/listar_os.php?aba=abertas`);
         const data = await res.json();
 
         if (data.success && data.dados.length > 0) {
             lista.innerHTML = data.dados.map(os => `
-                <div class="noti-item" onclick="window.location.href='${window.location.origin}/juntos/manutencao/php/views/gerencias_os.php?os_id=${os.id}'" 
+                <div class="noti-item" onclick="window.location.href='${basePath}php/views/gerencias_os.php?os_id=${os.id}'" 
                      style="padding: 15px; border-bottom: 1px solid var(--corBordas); cursor: pointer; transition: 0.2s; position: relative;">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(252, 35, 35, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">

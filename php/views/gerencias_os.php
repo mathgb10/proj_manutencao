@@ -388,23 +388,26 @@
             const descricao = document.getElementById('os_descricao').value.trim();
             const tipo = document.getElementById('os_tipo').value;
             const patrimonio = document.getElementById('os_patrimonio').value.trim();
+            const anexoInput = document.getElementById('os_anexo');
+            const anexo = anexoInput ? anexoInput.files[0] : null;
 
             if (!descricao || !tipo) {
                 alert('Preencha Descrição e Tipo!');
                 return;
             }
 
+            const formData = new FormData();
+            formData.append('descricao', descricao);
+            formData.append('tipo', tipo);
+            formData.append('patrimonio', patrimonio);
+            if (anexo) {
+                formData.append('anexo', anexo);
+            }
+
             try {
                 const res = await fetch('../actions/os/criar_os.php', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        descricao,
-                        tipo,
-                        patrimonio
-                    })
+                    body: formData
                 });
                 const data = await res.json();
 

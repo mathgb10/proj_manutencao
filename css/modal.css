@@ -282,6 +282,24 @@ h1 {
     color: var(--corBordas);
 }
 
+html[data-tema='claro'] .modal-box {
+    border: 1px solid var(--corBordas);
+}
+
+html[data-tema='claro'] .modal-input input,
+html[data-tema='claro'] .modal-input textarea,
+html[data-tema='claro'] .modal-input select {
+    background: #fff;
+    color: var(--corTxt3);
+}
+
+html[data-tema='claro'] .modal-input input:focus,
+html[data-tema='claro'] .modal-input textarea:focus,
+html[data-tema='claro'] .modal-input select:focus {
+    border-color: var(--corBase);
+    box-shadow: 0 0 0 3px rgba(252, 35, 35, .12);
+}
+
 .modal-row {
     display: flex;
     width: 100%;

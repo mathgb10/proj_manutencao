@@ -1,18 +1,18 @@
 
 :root {
     /* MODO DIA (LIMPO & ELEGANTE) */
-    --bg-bg: radial-gradient(circle at 50% 50%, #ffffff 0%, #e0e0e0 100%);
-    --bg-dark: #fcfcfc;
+    --bg-bg: linear-gradient(135deg, #eef2f6 0%, #e4eaf1 100%);
+    --bg-dark: #eef2f6;
     --senai-red: #ff2b2b;
     --senai-red-dark: #cc0000;
-    --glass-bg: #ffffff;
-    --glass-bg-rgba: rgba(255, 255, 255, 0.85);
+    --glass-bg: #f8fafc;
+    --glass-bg-rgba: rgba(248, 250, 252, 0.94);
     /* Mais opaco para leitura */
-    --glass-border: rgba(0, 0, 0, 0.1);
-    --text-primary: #1a1a1b;
-    --text-secondary: #555557;
-    --sombra-glow: 0 15px 45px rgba(0, 0, 0, 0.08);
-    --particle-color: #333333;
+    --glass-border: rgba(185, 28, 28, 0.14);
+    --text-primary: #172033;
+    --text-secondary: #526070;
+    --sombra-glow: 0 24px 60px rgba(15, 23, 42, 0.12);
+    --particle-color: #b91c1c;
     --transition-theme: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

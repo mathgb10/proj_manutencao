@@ -219,8 +219,8 @@ body.sidebar-collapsed .submenu {
 }
 
 .links-sub.ativo {
-    background: var();
-    color: var();
+    background: var(--hoverTr);
+    color: var(--txtClaro);
 }
 
 /* ===================== */
@@ -598,4 +598,33 @@ img {
         width: 42px;
         height: 42px;
     }
+}
+
+html[data-tema='claro'] .sidebar,
+html[data-tema='claro'] .botao-fechar button {
+    background: linear-gradient(180deg, #c82323 0%, #a31717 100%);
+    border-color: rgba(255, 255, 255, .22);
+    box-shadow: 0 16px 36px rgba(185, 28, 28, .18);
+}
+
+html[data-tema='claro'] .links,
+html[data-tema='claro'] .links-sub {
+    color: #fff;
+}
+
+html[data-tema='claro'] .links:hover,
+html[data-tema='claro'] .links-sub:hover,
+html[data-tema='claro'] .links.ativo,
+html[data-tema='claro'] .links-sub.ativo,
+html[data-tema='claro'] .sidebar .ativo {
+    background: rgba(255, 255, 255, .16);
+    color: #fff;
+}
+
+html[data-tema='claro'] .submenu {
+    border-left-color: rgba(255, 255, 255, .24);
+}
+
+html[data-tema='claro'] .div-configs {
+    border-top-color: rgba(255, 255, 255, .26);
 }

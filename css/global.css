@@ -149,17 +149,97 @@ html[data-tema='escuro'] {
 }
 
 html[data-tema='claro'] {
-    --corFundo: #f4f7f6;
-    --corFundo2: #ffffff;
-    --sombra: 0 2px 10px rgba(0, 0, 0, .05);
-    --sombra2: 0 2px 10px rgba(0, 0, 0, .05);
+    --corFundo: #eef2f6;
+    --corFundo2: #f8fafc;
+    --sombra: 0 12px 30px rgba(15, 23, 42, .08);
+    --sombra2: 0 8px 20px rgba(15, 23, 42, .08);
 
-    --corTxt2: #1e1e1e;
+    --corTxt2: #111827;
     --corTxt: #FFFFFF;  /* Mantido — usado em fundos coloridos (botões vermelhos, etc.) */
-    --corTxt3: #1a1a1a; /* Antes era #000 — levemente suavizado */
+    --corTxt3: #172033; /* Antes era #000 — levemente suavizado */
 
-    --corBordas: #e0e0e0;
-    --corBarra: #ca2525;
+    --corBordas: #d3dce7;
+    --corBarra: #b91c1c;
+    --hoverTr: rgba(185, 28, 28, .08);
+    --cinzafundo: #e7edf4;
+}
+
+html[data-tema='claro'] body {
+    background: var(--corFundo);
+    color: var(--corTxt3);
+}
+
+html[data-tema='claro'] .sidebar {
+    background: linear-gradient(180deg, #c82323 0%, #a31717 100%);
+    border-color: rgba(255, 255, 255, .22);
+    box-shadow: 0 16px 36px rgba(185, 28, 28, .18);
+}
+
+html[data-tema='claro'] .links,
+html[data-tema='claro'] .links-sub {
+    color: #fff;
+}
+
+html[data-tema='claro'] .links:hover,
+html[data-tema='claro'] .links-sub:hover,
+html[data-tema='claro'] .links.ativo,
+html[data-tema='claro'] .links-sub.ativo,
+html[data-tema='claro'] .sidebar .ativo {
+    background: rgba(255, 255, 255, .16);
+    color: #fff;
+}
+
+html[data-tema='claro'] input,
+html[data-tema='claro'] select,
+html[data-tema='claro'] textarea {
+    background-color: #f9fbfd;
+    border-color: var(--corBordas);
+    color: var(--corTxt3);
+}
+
+html[data-tema='claro'] input::placeholder,
+html[data-tema='claro'] textarea::placeholder {
+    color: rgba(23, 32, 51, .48);
+}
+
+html[data-tema='claro'] input:focus,
+html[data-tema='claro'] select:focus,
+html[data-tema='claro'] textarea:focus {
+    border-color: var(--corBase);
+    box-shadow: 0 0 0 3px rgba(252, 35, 35, .12);
+    outline: none;
+}
+
+html[data-tema='claro'] .div-header,
+html[data-tema='claro'] .tabela-bg,
+html[data-tema='claro'] .tabela-bg2,
+html[data-tema='claro'] .doc-card,
+html[data-tema='claro'] .doc-hero,
+html[data-tema='claro'] .welcome-box,
+html[data-tema='claro'] .modal-box,
+html[data-tema='claro'] .card-box-filho {
+    border-color: var(--corBordas);
+    box-shadow: var(--sombra);
+}
+
+html[data-tema='claro'] table thead,
+html[data-tema='claro'] .tabela-titulo {
+    background: #f1f5f9;
+}
+
+html[data-tema='claro'] table tbody tr:hover {
+    background: var(--hoverTr);
+    box-shadow: none;
+}
+
+html[data-tema='claro'] .modal-box {
+    border: 1px solid var(--corBordas);
+}
+
+html[data-tema='claro'] .modal-input input,
+html[data-tema='claro'] .modal-input textarea,
+html[data-tema='claro'] .modal-input select {
+    background: #f9fbfd;
 }
 
 @keyframes showBody {

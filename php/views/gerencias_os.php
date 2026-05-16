@@ -2,6 +2,16 @@
 <?php require __DIR__ . '/../configs/conexao.php'; ?>
 <?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 <?php require __DIR__ . '/../components/modals/modal_os.php'; ?>
+<?php
+// Queries leves para filtros rápidos da O.S.
+$tipos_os_lista = [];
+$r = $conn->query("SELECT DISTINCT tipo FROM ordens_servico WHERE tipo IS NOT NULL AND tipo != '' ORDER BY tipo ASC");
+if ($r) { while ($row = $r->fetch_assoc()) $tipos_os_lista[] = $row['tipo']; }
+
+$responsaveis_os_lista = [];
+$r = $conn->query("SELECT DISTINCT u.nome FROM ordens_servico os INNER JOIN usuarios u ON os.responsavel_id = u.id ORDER BY u.nome ASC");
+if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome']; }
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="">
@@ -59,6 +69,28 @@
                         <option value="arquivadas">Arquivadas</option>
                     </select>
                 </div>
+                <?php if (!empty($tipos_os_lista)): ?>
+                <div class="page-filter-box">
+                    <label>Tipo:</label>
+                    <select id="select-filtro-tipo-os" onchange="carregarOS(1)">
+                        <option value="">Todos</option>
+                        <?php foreach ($tipos_os_lista as $t): ?>
+                            <option value="<?= htmlspecialchars($t) ?>"><?= htmlspecialchars($t) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
+                <?php if (!empty($responsaveis_os_lista)): ?>
+                <div class="page-filter-box">
+                    <label>Responsável:</label>
+                    <select id="select-filtro-responsavel-os" onchange="carregarOS(1)">
+                        <option value="">Todos</option>
+                        <?php foreach ($responsaveis_os_lista as $resp): ?>
+                            <option value="<?= htmlspecialchars($resp) ?>"><?= htmlspecialchars($resp) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
             </form>
             <button class="btn-page-action" onclick="showModal('novaOS')">
                 <i class="bi bi-plus-lg"></i> Nova O.S.
@@ -173,6 +205,12 @@
                 page: paginaAtualOS
             });
             if (busca) params.append('search', busca);
+
+            // Filtros rápidos
+            const filtroTipo = document.getElementById('select-filtro-tipo-os');
+            const filtroResp = document.getElementById('select-filtro-responsavel-os');
+            if (filtroTipo && filtroTipo.value) params.append('filtro_tipo', filtroTipo.value);
+            if (filtroResp && filtroResp.value) params.append('filtro_responsavel', filtroResp.value);
 
             try {
                 const res = await fetch(`../actions/os/listar_os.php?${params.toString()}`);

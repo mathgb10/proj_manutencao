@@ -3,19 +3,35 @@ require __DIR__ . '/../controllers/validar_acesso.php';
 require __DIR__ . '/../configs/conexao.php';
 require __DIR__ . '/../components/modals/all_modals.php';
 
-// --- Lógica de Paginação e Busca (Padrão Unificado) ---
+// --- Lógica de Paginação, Busca e Filtros ---
 $busca_atual = isset($_GET['search']) ? trim($_GET['search']) : '';
+$filtro_permissao = isset($_GET['filtro-permissao']) ? trim($_GET['filtro-permissao']) : '';
 $pagina_atual = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 if ($pagina_atual < 1)
     $pagina_atual = 1;
 $limite = 8;
 
-// 1. Contar total de registros com filtro
-$sql_count = "SELECT COUNT(*) as total FROM usuarios";
+// Buscar valores únicos para filtro rápido
+$permissoes_lista = [];
+$r = $conn->query("SELECT DISTINCT permissao FROM usuarios WHERE permissao IS NOT NULL AND permissao != '' ORDER BY permissao ASC");
+if ($r) { while ($row = $r->fetch_assoc()) $permissoes_lista[] = $row['permissao']; }
+
+// 1. Construir WHERE
+$where = "";
+$conditions = [];
 if (!empty($busca_atual)) {
     $termo = mysqli_real_escape_string($conn, $busca_atual);
-    $sql_count .= " WHERE nome LIKE '%$termo%' OR email LIKE '%$termo%' OR permissao LIKE '%$termo%'";
+    $conditions[] = "(nome LIKE '%$termo%' OR email LIKE '%$termo%' OR permissao LIKE '%$termo%')";
 }
+if ($filtro_permissao !== '') {
+    $conditions[] = "permissao = '" . mysqli_real_escape_string($conn, $filtro_permissao) . "'";
+}
+if (!empty($conditions)) {
+    $where = " WHERE " . implode(" AND ", $conditions);
+}
+
+// 2. Contar total de registros com filtro
+$sql_count = "SELECT COUNT(*) as total FROM usuarios" . $where;
 $res_count = $conn->query($sql_count);
 $total_registros = $res_count->fetch_assoc()['total'];
 $total_paginas = ceil($total_registros / $limite);
@@ -26,13 +42,8 @@ if ($pagina_atual > $total_paginas)
 
 $offset = ($pagina_atual - 1) * $limite;
 
-// 2. Buscar registros paginados
-$sql = "SELECT * FROM usuarios";
-if (!empty($busca_atual)) {
-    $termo = mysqli_real_escape_string($conn, $busca_atual);
-    $sql .= " WHERE nome LIKE '%$termo%' OR email LIKE '%$termo%' OR permissao LIKE '%$termo%'";
-}
-$sql .= " ORDER BY nome ASC LIMIT $limite OFFSET $offset";
+// 3. Buscar registros paginados
+$sql = "SELECT * FROM usuarios" . $where . " ORDER BY nome ASC LIMIT $limite OFFSET $offset";
 $resultado = $conn->query($sql);
 ?>
 
@@ -75,6 +86,17 @@ $resultado = $conn->query($sql);
                 <button type="submit" class="btn-search">
                     <i class="bi bi-search"></i>
                 </button>
+                <?php if (!empty($permissoes_lista)): ?>
+                <div class="page-filter-box">
+                    <label>Permissão:</label>
+                    <select name="filtro-permissao" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        <?php foreach ($permissoes_lista as $p): ?>
+                            <option value="<?= htmlspecialchars($p) ?>" <?= $filtro_permissao === $p ? 'selected' : '' ?>><?= htmlspecialchars($p) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
             </form>
             <button class="btn-page-action" onclick="showModal('adicaoUser')">
                 <i class="bi bi-person-add"></i> Adicionar Usuário
@@ -124,9 +146,14 @@ $resultado = $conn->query($sql);
 
             <!-- Paginação Unificada -->
             <div class="page-pagination">
+                <?php
+                    $pag_params = http_build_query(array_filter([
+                        'search' => $busca_atual,
+                        'filtro-permissao' => $filtro_permissao,
+                    ], fn($v) => $v !== ''));
+                ?>
                 <?php if ($pagina_atual > 1): ?>
-                    <a href="?search=<?php echo urlencode($busca_atual); ?>&page=<?php echo $pagina_atual - 1; ?>"
-                        class="pag-btn"><i class="bi bi-chevron-left"></i> Anterior</a>
+                    <a href="?<?= $pag_params ?>&page=<?= $pagina_atual - 1 ?>" class="pag-btn"><i class="bi bi-chevron-left"></i> Anterior</a>
                 <?php else: ?>
                     <span class="pag-btn disabled"><i class="bi bi-chevron-left"></i> Anterior</span>
                 <?php endif; ?>
@@ -134,8 +161,7 @@ $resultado = $conn->query($sql);
                 <span class="pag-current">Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
 
                 <?php if ($pagina_atual < $total_paginas): ?>
-                    <a href="?search=<?php echo urlencode($busca_atual); ?>&page=<?php echo $pagina_atual + 1; ?>"
-                        class="pag-btn">Próxima <i class="bi bi-chevron-right"></i></a>
+                    <a href="?<?= $pag_params ?>&page=<?= $pagina_atual + 1 ?>" class="pag-btn">Próxima <i class="bi bi-chevron-right"></i></a>
                 <?php else: ?>
                     <span class="pag-btn disabled">Próxima <i class="bi bi-chevron-right"></i></span>
                 <?php endif; ?>
@@ -152,24 +178,24 @@ $resultado = $conn->query($sql);
             if (urlParams.has('msg')) {
                 const msg = urlParams.get('msg');
                 if (msg === 'senha_alterada') {
-                    alert('âœ“ Senha do usuário alterada com sucesso!');
+                    alert('✔ Senha do usuário alterada com sucesso!');
                 } else if (msg === 'senha_resetada') {
                     alert('Senha alterada para senaisp por padrão.');
                 }
-                // Remove o parÃ¢metro da URL
+                // Remove o parâmetro da URL
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
             if (urlParams.has('erro')) {
                 const erro = urlParams.get('erro');
                 if (erro === 'senhas_nao_coincidem') {
-                    alert('âœ— As senhas informadas não coincidem!');
+                    alert('✗ As senhas informadas não coincidem!');
                 } else if (erro === 'sem_permissao') {
-                    alert('âœ— Você não tem permissão para realizar esta ação!');
+                    alert('✗ Você não tem permissão para realizar esta ação!');
                 } else if (erro === 'erro_banco') {
-                    alert('âœ— Erro ao processar a requisição no banco de dados!');
+                    alert('✗ Erro ao processar a requisição no banco de dados!');
                 }
-                // Remove o parÃ¢metro da URL
+                // Remove o parâmetro da URL
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         });

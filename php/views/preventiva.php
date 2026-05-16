@@ -28,9 +28,15 @@ function calcularStatusArray($lastDate, $intervalo)
 // Pegar filtros e paginação
 $busca_atual = isset($_GET['search']) ? trim($_GET['search']) : '';
 $status_atual = isset($_GET['filtro-status']) ? $_GET['filtro-status'] : 'todos';
+$filtro_setor = isset($_GET['filtro-setor']) ? trim($_GET['filtro-setor']) : '';
 $pagina_atual = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($pagina_atual < 1) $pagina_atual = 1;
 $limite = 8;
+
+// Query para filtro rápido de Setor
+$setores_lista = [];
+$r = $conn->query("SELECT DISTINCT setor FROM maquinas WHERE setor IS NOT NULL AND setor != '' ORDER BY setor ASC");
+if ($r) { while ($row = $r->fetch_assoc()) $setores_lista[] = $row['setor']; }
 
 // Buscar máquinas
 $sql = "
@@ -65,6 +71,11 @@ if ($resMaquinas && $resMaquinas->num_rows > 0) {
         if ($filterStatus == 'vencido') $filterStatus = 'vencidos';
 
         if ($status_atual != 'todos' && $status_atual != $filterStatus) {
+            continue;
+        }
+
+        // Filtro de Setor
+        if ($filtro_setor !== '' && $maquina['setor'] !== $filtro_setor) {
             continue;
         }
 
@@ -127,7 +138,7 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
             <form action="" method="GET" class="page-search-form">
                 <div class="page-search-box <?php echo $busca_atual ? 'has-content' : ''; ?>">
                     <input type="text" name="search" id="pesquisa" value="<?php echo htmlspecialchars($busca_atual); ?>" placeholder="Pesquisar NI ou Nome...">
-                    <?php if ($busca_atual): ?> <a href="?filtro-status=<?php echo urlencode($status_atual); ?>" class="page-clear-btn"><i class="bi bi-x-lg"></i></a> <?php endif; ?>
+                    <?php if ($busca_atual): ?> <a href="?filtro-status=<?php echo urlencode($status_atual); ?>&filtro-setor=<?= urlencode($filtro_setor) ?>" class="page-clear-btn"><i class="bi bi-x-lg"></i></a> <?php endif; ?>
                 </div>
                 <button type="submit" class="btn-search"><i class="bi bi-search"></i></button>
                 <div class="page-filter-box">
@@ -139,6 +150,17 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
                         <option value="vencidos" <?php echo $status_atual == 'vencidos' ? 'selected' : ''; ?>>Vencidos</option>
                     </select>
                 </div>
+                <?php if (!empty($setores_lista)): ?>
+                <div class="page-filter-box">
+                    <label>Setor:</label>
+                    <select name="filtro-setor" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        <?php foreach ($setores_lista as $s): ?>
+                            <option value="<?= htmlspecialchars($s) ?>" <?= $filtro_setor === $s ? 'selected' : '' ?>><?= htmlspecialchars($s) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
             </form>
             <button class="btn-page-action" onclick="showModal('preventiva')"><i class="bi bi-plus-circle"></i> Novo Registro</button>
             <button class="btn-page-action" style="background: #198754;" onclick="exportarCSV()"><i class="bi bi-file-earmark-spreadsheet-fill"></i> Exportar CSV</button>
@@ -169,10 +191,17 @@ $maquinas_paginadas = array_slice($maquinas_filtradas, $offset, $limite);
                     </tbody>
                 </table>
             </div>
+            <?php
+                $pag_params = http_build_query(array_filter([
+                    'search' => $busca_atual,
+                    'filtro-status' => $status_atual !== 'todos' ? $status_atual : '',
+                    'filtro-setor' => $filtro_setor,
+                ], fn($v) => $v !== ''));
+            ?>
             <div class="page-pagination">
-                <?php if ($pagina_atual > 1): ?><a href="?search=<?php echo urlencode($busca_atual); ?>&filtro-status=<?php echo urlencode($status_atual); ?>&page=<?php echo $pagina_atual - 1; ?>" class="pag-btn">Anterior</a><?php endif; ?>
+                <?php if ($pagina_atual > 1): ?><a href="?<?= $pag_params ?>&page=<?= $pagina_atual - 1 ?>" class="pag-btn">Anterior</a><?php endif; ?>
                 <span class="pag-current">Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
-                <?php if ($pagina_atual < $total_paginas): ?><a href="?search=<?php echo urlencode($busca_atual); ?>&filtro-status=<?php echo urlencode($status_atual); ?>&page=<?php echo $pagina_atual + 1; ?>" class="pag-btn">Próxima</a><?php endif; ?>
+                <?php if ($pagina_atual < $total_paginas): ?><a href="?<?= $pag_params ?>&page=<?= $pagina_atual + 1 ?>" class="pag-btn">Próxima</a><?php endif; ?>
             </div>
         </div>
     </section>

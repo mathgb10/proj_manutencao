@@ -28,6 +28,8 @@ $permissao         = $_SESSION['user_permissao'] ?? 'NORMAL';
 
 $aba   = isset($_GET['aba'])    ? trim($_GET['aba'])    : 'abertas';
 $busca = isset($_GET['search']) ? trim($_GET['search']) : '';
+$filtro_tipo = isset($_GET['filtro_tipo']) ? trim($_GET['filtro_tipo']) : '';
+$filtro_responsavel = isset($_GET['filtro_responsavel']) ? trim($_GET['filtro_responsavel']) : '';
 $pagina_atual = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($pagina_atual < 1) $pagina_atual = 1;
 $limite = 10;
@@ -96,6 +98,20 @@ if (!empty($busca)) {
     $params[] = $termo;
     $params[] = $termo;
     $types   .= "sssss";
+}
+
+// Filtro rápido por Tipo
+if (!empty($filtro_tipo)) {
+    $where .= " AND os.tipo = ?";
+    $params[] = $filtro_tipo;
+    $types .= "s";
+}
+
+// Filtro rápido por Responsável
+if (!empty($filtro_responsavel)) {
+    $where .= " AND resp.nome = ?";
+    $params[] = $filtro_responsavel;
+    $types .= "s";
 }
 
 $sql = "SELECT

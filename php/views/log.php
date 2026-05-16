@@ -3,19 +3,35 @@ require __DIR__ . '/../controllers/validar_acesso.php';
 require __DIR__ . '/../configs/conexao.php';
 require __DIR__ . '/../components/modals/all_modals.php'; 
 
-// --- Lógica de Paginação e Busca (Padrão Unificado) ---
+// --- Lógica de Paginação, Busca e Filtros ---
 $busca_atual = isset($_GET['search']) ? trim($_GET['search']) : '';
+$filtro_usuario = isset($_GET['filtro-usuario']) ? trim($_GET['filtro-usuario']) : '';
 $pagina_atual = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($pagina_atual < 1) $pagina_atual = 1;
-$limite = 10; // Logs podem mostrar um pouco mais
+$limite = 10;
+
+// Query para filtro rápido de Usuário
+$usuarios_lista = [];
+$r = $conn->query("SELECT DISTINCT u.nome FROM logs l INNER JOIN usuarios u ON l.usuario_id = u.id ORDER BY u.nome ASC");
+if ($r) { while ($row = $r->fetch_assoc()) $usuarios_lista[] = $row['nome']; }
+
+// Construir WHERE
+$where = "";
+$conditions = [];
+if (!empty($busca_atual)) {
+    $termo = mysqli_real_escape_string($conn, $busca_atual);
+    $conditions[] = "(usuarios.nome LIKE '%$termo%' OR logs.ip_address LIKE '%$termo%' OR logs.sql_command LIKE '%$termo%')";
+}
+if ($filtro_usuario !== '') {
+    $conditions[] = "usuarios.nome = '" . mysqli_real_escape_string($conn, $filtro_usuario) . "'";
+}
+if (!empty($conditions)) {
+    $where = " WHERE " . implode(" AND ", $conditions);
+}
 
 // 1. Contar total de registros com filtro
 $sql_count = "SELECT COUNT(*) as total FROM logs 
-              LEFT JOIN usuarios ON logs.usuario_id = usuarios.id";
-if (!empty($busca_atual)) {
-    $termo = mysqli_real_escape_string($conn, $busca_atual);
-    $sql_count .= " WHERE usuarios.nome LIKE '%$termo%' OR logs.ip_address LIKE '%$termo%' OR logs.sql_command LIKE '%$termo%'";
-}
+              LEFT JOIN usuarios ON logs.usuario_id = usuarios.id" . $where;
 $res_count = $conn->query($sql_count);
 $total_registros = $res_count->fetch_assoc()['total'];
 $total_paginas = ceil($total_registros / $limite);
@@ -27,11 +43,7 @@ $offset = ($pagina_atual - 1) * $limite;
 // 2. Buscar registros paginados
 $sql = "SELECT logs.*, usuarios.nome AS nome_real 
         FROM logs 
-        LEFT JOIN usuarios ON logs.usuario_id = usuarios.id";
-if (!empty($busca_atual)) {
-    $termo = mysqli_real_escape_string($conn, $busca_atual);
-    $sql .= " WHERE usuarios.nome LIKE '%$termo%' OR logs.ip_address LIKE '%$termo%' OR logs.sql_command LIKE '%$termo%'";
-}
+        LEFT JOIN usuarios ON logs.usuario_id = usuarios.id" . $where;
 $sql .= " ORDER BY logs.id DESC LIMIT $limite OFFSET $offset";
 $resultado = $conn->query($sql);
 ?>
@@ -74,6 +86,17 @@ $resultado = $conn->query($sql);
                 <button type="submit" class="btn-search">
                     <i class="bi bi-search"></i>
                 </button>
+                <?php if (!empty($usuarios_lista)): ?>
+                <div class="page-filter-box">
+                    <label>Usuário:</label>
+                    <select name="filtro-usuario" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        <?php foreach ($usuarios_lista as $u): ?>
+                            <option value="<?= htmlspecialchars($u) ?>" <?= $filtro_usuario === $u ? 'selected' : '' ?>><?= htmlspecialchars($u) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <?php endif; ?>
             </form>
         </div>
 
@@ -116,8 +139,14 @@ $resultado = $conn->query($sql);
 
             <!-- Paginação Unificada -->
             <div class="page-pagination">
+                <?php
+                    $pag_params = http_build_query(array_filter([
+                        'search' => $busca_atual,
+                        'filtro-usuario' => $filtro_usuario,
+                    ], fn($v) => $v !== ''));
+                ?>
                 <?php if ($pagina_atual > 1): ?>
-                    <a href="?search=<?php echo urlencode($busca_atual); ?>&page=<?php echo $pagina_atual - 1; ?>" class="pag-btn"><i class="bi bi-chevron-left"></i> Anterior</a>
+                    <a href="?<?= $pag_params ?>&page=<?= $pagina_atual - 1 ?>" class="pag-btn"><i class="bi bi-chevron-left"></i> Anterior</a>
                 <?php else: ?>
                     <span class="pag-btn disabled"><i class="bi bi-chevron-left"></i> Anterior</span>
                 <?php endif; ?>
@@ -125,7 +154,7 @@ $resultado = $conn->query($sql);
                 <span class="pag-current">Página <?php echo $pagina_atual; ?> de <?php echo $total_paginas; ?></span>
 
                 <?php if ($pagina_atual < $total_paginas): ?>
-                    <a href="?search=<?php echo urlencode($busca_atual); ?>&page=<?php echo $pagina_atual + 1; ?>" class="pag-btn">Próxima <i class="bi bi-chevron-right"></i></a>
+                    <a href="?<?= $pag_params ?>&page=<?= $pagina_atual + 1 ?>" class="pag-btn">Próxima <i class="bi bi-chevron-right"></i></a>
                 <?php else: ?>
                     <span class="pag-btn disabled">Próxima <i class="bi bi-chevron-right"></i></span>
                 <?php endif; ?>

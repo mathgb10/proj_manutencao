@@ -28,7 +28,11 @@ if ($pagina_atual > $total_paginas) $pagina_atual = $total_paginas;
 $offset = ($pagina_atual - 1) * $limite;
 
 // Buscar dados paginados
-$sql = "SELECT * FROM maquinas $where ORDER BY id DESC LIMIT $offset, $limite";
+$sql = "SELECT id, denominacao, marca, modelo, numero_identificacao, ano_fabricacao, setor, criado_em
+        FROM maquinas
+        $where
+        ORDER BY id DESC
+        LIMIT $offset, $limite";
 $resultado = $conn->query($sql);
 ?>
 
@@ -126,7 +130,6 @@ $resultado = $conn->query($sql);
                         <th>Denominação</th>
                         <th>Marca</th>
                         <th>N° Identificação</th>
-                        <th>N° Série</th>
                         <th>Ano</th>
                         <th>Setor</th>
                         <th>Criado em</th>
@@ -149,7 +152,6 @@ $resultado = $conn->query($sql);
 
                                 echo "<td>" . htmlspecialchars($linha["marca"]) . "</td>";
                                 echo "<td>" . htmlspecialchars($linha["numero_identificacao"]) . "</td>";
-                                echo "<td>" . htmlspecialchars($linha["numero_serie"]) . "</td>";
                                 echo "<td>" . htmlspecialchars($linha["ano_fabricacao"]) . "</td>";
                                 echo "<td>" . htmlspecialchars($linha["setor"]) . "</td>";
                                 echo "<td>" . date('d/m/Y H:i', strtotime($linha["criado_em"])) . "</td>";
@@ -178,7 +180,7 @@ $resultado = $conn->query($sql);
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='8' style='text-align:center; padding: 20px;'>Nenhuma máquina encontrada para o termo pesquisado.</td></tr>";
+                            echo "<tr><td colspan='7' style='text-align:center; padding: 20px;'>Nenhuma máquina encontrada para o termo pesquisado.</td></tr>";
                         }
                         ?>
                     </tbody>

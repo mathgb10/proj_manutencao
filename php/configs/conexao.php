@@ -3,7 +3,7 @@ $sv = "localhost";
 $user = "root";
 $pass = "";
 $db = "manutencao_tds2026";
-$port = 3306;
+$port = 3308;
 
 // Tente Conectar sem Porta definida, Se não der Entre pela Porta definida.
 

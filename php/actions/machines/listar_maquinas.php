@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -17,15 +17,15 @@ $dados  = [];
 
 // Se search vazio â†’ lista tudo (limite 50). Se tem texto â†’ filtra.
 if ($search === '') {
-    $sqlM = "SELECT id, denominacao, numero_identificacao, numero_serie, setor
+    $sqlM = "SELECT id, denominacao, numero_identificacao, setor
              FROM maquinas
              ORDER BY denominacao ASC LIMIT 50";
     $stmtM = $conn->prepare($sqlM);
 } else {
     $termo = "%$search%";
-    $sqlM  = "SELECT id, denominacao, numero_identificacao, numero_serie, setor
+    $sqlM  = "SELECT id, denominacao, numero_identificacao, setor
               FROM maquinas
-              WHERE denominacao LIKE ? OR numero_identificacao LIKE ? OR numero_serie LIKE ?
+              WHERE denominacao LIKE ? OR numero_identificacao LIKE ? OR setor LIKE ?
               ORDER BY denominacao ASC LIMIT 20";
     $stmtM = $conn->prepare($sqlM);
     if ($stmtM) {
@@ -40,7 +40,7 @@ if ($stmtM) {
         $dados[] = [
             'id'         => $row['id'],
             'nome'       => $row['denominacao'],
-            'patrimonio' => $row['numero_identificacao'] ?: ($row['numero_serie'] ?: (string)$row['id']),
+            'patrimonio' => $row['numero_identificacao'] ?: (string)$row['id'],
             'setor'      => $row['setor'] ?? '',
             'tipo'       => 'maquina'
         ];

@@ -1,4 +1,4 @@
-const API_BASE_LOTE = '../../../nr12/php/apis/processa_lote/';
+const API_BASE_LOTE = '../actions/machines/';
 
 async function processarLote(formId, inputId, apiPath) {
     const form = document.getElementById(formId);

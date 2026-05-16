@@ -292,8 +292,7 @@
                                 ${btns}
                             </div>
                         </td>
-                    </tr>`;
-            }).join('');
+                    </tr>`).join('');
         }
 
         function atualizarContadores(contadores) {
@@ -757,9 +756,13 @@
         // =============================================
         // MODAL PESQUISA DE MÃQUINA
         // =============================================
-        let _maquinasTodas = []; // cache da lista completa
+        let _maquinasTodas = []; // cache da lista inicial
+        let _maquinasBuscaTimeout = null;
+        let _maquinasBuscaSeq = 0;
 
         async function abrirModalMaquinas() {
+            clearTimeout(_maquinasBuscaTimeout);
+            _maquinasBuscaSeq++;
             document.getElementById('maquina-modal-busca').value = '';
             showModal('modalPesquisaMaquina');
 
@@ -789,18 +792,46 @@
             }
         }
 
-        function filtrarMaquinasModal(termo) {
-            if (termo.trim() === '') {
+        async function filtrarMaquinasModal(termo) {
+            clearTimeout(_maquinasBuscaTimeout);
+            const busca = termo.trim();
+
+            if (busca === '') {
+                _maquinasBuscaSeq++;
                 _renderMaquinas(_maquinasTodas);
                 return;
             }
-            const t = termo.toLowerCase();
-            const filtradas = _maquinasTodas.filter(m =>
-                m.nome.toLowerCase().includes(t) ||
-                m.patrimonio.toString().toLowerCase().includes(t) ||
-                (m.setor || '').toLowerCase().includes(t)
-            );
-            _renderMaquinas(filtradas);
+
+            const buscaSeq = ++_maquinasBuscaSeq;
+            _maquinasBuscaTimeout = setTimeout(async () => {
+                const lista = document.getElementById('maquina-modal-lista');
+                lista.innerHTML = `<div style="text-align:center;padding:30px;opacity:.5;">
+                    <i class="bi bi-hourglass-split" style="font-size:2rem;"></i>
+                    <p style="margin-top:8px;">Buscando mÃ¡quinas...</p></div>`;
+
+                try {
+                    const res = await fetch(`../actions/machines/listar_maquinas.php?search=${encodeURIComponent(busca)}`);
+                    const data = await res.json();
+                    if (buscaSeq !== _maquinasBuscaSeq) return;
+                    _renderMaquinas(data.dados || []);
+                } catch (e) {
+                    if (buscaSeq !== _maquinasBuscaSeq) return;
+                    lista.innerHTML = `<div style="text-align:center;padding:20px;color:var(--corBase);">
+                        <i class="bi bi-exclamation-triangle" style="font-size:2rem;"></i>
+                        <p>Erro ao buscar mÃ¡quinas.</p></div>`;
+                }
+            }, 250);
+        }
+
+        function limparBuscaMaquinasModal() {
+            const input = document.getElementById('maquina-modal-busca');
+            if (input) {
+                input.value = '';
+                input.focus();
+            }
+            clearTimeout(_maquinasBuscaTimeout);
+            _maquinasBuscaSeq++;
+            _renderMaquinas(_maquinasTodas);
         }
 
         function _renderMaquinas(lista) {

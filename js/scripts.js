@@ -518,7 +518,6 @@ function editarMaquina(id) {
                 document.getElementById('edit_marca').value = data.marca;
                 document.getElementById('edit_modelo').value = data.modelo;
                 document.getElementById('edit_numero_identificacao').value = data.numero_identificacao;
-                document.getElementById('edit_numero_serie').value = data.numero_serie;
                 document.getElementById('edit_ano_fabricacao').value = data.ano_fabricacao;
                 document.getElementById('edit_setor').value = data.setor;
 

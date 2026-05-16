@@ -145,15 +145,6 @@ $user_data = $stmt->get_result()->fetch_assoc();
                         </div>
                     </div>
                 </div>
-
-                <div class="modal-footer" style="justify-content: center; gap: 20px;">
-                    <button type="button" class="btn-confirmar" onclick="window.location.href='home.php'" style="background: var(--corEscura);">
-                        Voltar
-                    </button>
-                    <button type="button" class="btn-confirmar deletar" onclick="window.location.href='../actions/logout.php'">
-                        Sair <i class="bi bi-door-closed-fill"></i>
-                    </button>
-                </div>
             </form>
         </div>
     </section>

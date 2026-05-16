@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 require_once __DIR__ . '/../../configs/conexao.php';
 
@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $marca = mysqli_real_escape_string($conn, $_POST['marca']);
     $modelo = mysqli_real_escape_string($conn, $_POST['modelo']);
     $numero_identificacao = mysqli_real_escape_string($conn, $_POST['numero_identificacao']);
-    $numero_serie = mysqli_real_escape_string($conn, $_POST['numero_serie']);
     $ano_fabricacao = isset($_POST['ano_fabricacao']) && $_POST['ano_fabricacao'] !== '' ? intval($_POST['ano_fabricacao']) : null;
     $setor = mysqli_real_escape_string($conn, $_POST['setor']);
 
@@ -28,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     marca = ?,
                     modelo = ?,
                     numero_identificacao = ?,
-                    numero_serie = ?,
                     ano_fabricacao = ?,
                     setor = ?
                 WHERE id = ?";
@@ -38,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Erro ao preparar atualização da máquina: " . mysqli_error($conn));
         }
 
-        $stmt->bind_param("sssssisi", $denominacao, $marca, $modelo, $numero_identificacao, $numero_serie, $ano_fabricacao, $setor, $id);
+        $stmt->bind_param("ssssisi", $denominacao, $marca, $modelo, $numero_identificacao, $ano_fabricacao, $setor, $id);
         $stmt->execute();
 
         // Atualizar Checklist (Logica inteligente para manter histórico)

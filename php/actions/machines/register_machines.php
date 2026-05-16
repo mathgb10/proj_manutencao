@@ -11,7 +11,7 @@ $denominacao = mysqli_real_escape_string($conn, $_POST['denominacao'] ?? '');
 $marca = mysqli_real_escape_string($conn, $_POST['marca'] ?? '');
 $modelo = mysqli_real_escape_string($conn, $_POST['modelo'] ?? '');
 $numero_identificacao = mysqli_real_escape_string($conn, $_POST['numero_identificacao'] ?? '');
-$numero_serie = mysqli_real_escape_string($conn, $_POST['numero_serie'] ?? '');
+$tipomaquina_id = isset($_POST['tipomaquina_id']) && $_POST['tipomaquina_id'] !== 'semValor' ? intval($_POST['tipomaquina_id']) : null;
 $ano_fabricacao = mysqli_real_escape_string($conn, $_POST['ano_fabricacao'] ?? '');
 $setor = mysqli_real_escape_string($conn, $_POST['setor'] ?? '');
 
@@ -19,9 +19,7 @@ $setor = mysqli_real_escape_string($conn, $_POST['setor'] ?? '');
 // echo($marca);
 // echo($modelo);
 // echo($numero_identificacao);
-// echo($numero_serie);
 // echo($ano_fabricacao);
-// echo($numero_serie);
 // echo($ano_fabricacao);
 // echo($setor);
 
@@ -32,12 +30,12 @@ if (empty($denominacao) || empty($numero_identificacao)) {
     // exit();
 }
 
-$sql = "INSERT INTO maquinas (denominacao, marca, modelo, numero_identificacao, numero_serie, ano_fabricacao, setor) 
+$sql = "INSERT INTO maquinas (denominacao, marca, modelo, numero_identificacao, tipomaquina_id, ano_fabricacao, setor) 
         VALUES (?, ?, ?, ?, ?, ?, ?)";
 $stmt = mysqli_prepare($conn, $sql);
 
 if ($stmt) {
-    $stmt->bind_param("sssssis", $denominacao, $marca, $modelo, $numero_identificacao, $numero_serie, $ano_fabricacao, $setor);
+    $stmt->bind_param("ssssiis", $denominacao, $marca, $modelo, $numero_identificacao, $tipomaquina_id, $ano_fabricacao, $setor);
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {

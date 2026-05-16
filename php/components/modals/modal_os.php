@@ -96,11 +96,11 @@
                 <div style="flex:1;position:relative;">
                     <i class="bi bi-search" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--corTxt3);opacity:.5;"></i>
                     <input type="text" id="maquina-modal-busca"
-                        placeholder="Buscar por nome, patrimônio ou série..."
+                        placeholder="Buscar por nome, NI ou setor..."
                         oninput="filtrarMaquinasModal(this.value)"
                         style="width:100%;padding:10px 10px 10px 36px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);font-family:inherit;box-sizing:border-box;">
                 </div>
-                <button type="button" onclick="filtrarMaquinasModal('')" style="
+                <button type="button" onclick="limparBuscaMaquinasModal()" style="
                     padding:10px 14px;border-radius:8px;border:1px solid var(--corBordas);
                     background:var(--corFundo2);color:var(--corTxt3);cursor:pointer;font-size:.85rem;">
                     <i class="bi bi-arrow-clockwise"></i>

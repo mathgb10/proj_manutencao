@@ -206,7 +206,7 @@
             <div class="modal-row">
                 <div class="modal-input">
                     <label for="maquina">Descrição Máquina:</label>
-                    <select name="setor" id="setor">
+                    <select name="tipomaquina_id" id="tipomaquina_id">
                         <option value="semValor">Selecione uma Opção</option>
                         <?php
                         $sql = "SELECT * FROM tipomaquina";
@@ -250,10 +250,6 @@
                     <label for="ni">NI:</label>
                     <input type="text" name="numero_identificacao" id="numero_identificacao"
                         placeholder="1052694 SENAI">
-                </div>
-                <div class="modal-input">
-                    <label for="nserie">N° Série:</label>
-                    <input type="text" name="numero_serie" id="numero_serie" placeholder="016-016057-452">
                 </div>
                 <div class="modal-input">
                     <label for="setor">Setor:</label>
@@ -375,10 +371,6 @@
                 <div class="modal-input">
                     <label for="edit_numero_identificacao">NI:</label>
                     <input type="text" name="numero_identificacao" id="edit_numero_identificacao" required>
-                </div>
-                <div class="modal-input">
-                    <label for="edit_numero_serie">N° Série:</label>
-                    <input type="text" name="numero_serie" id="edit_numero_serie">
                 </div>
                 <div class="modal-input">
                     <label for="edit_ano_fabricacao">Ano:</label>

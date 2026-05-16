@@ -4,10 +4,11 @@ CREATE TABLE IF NOT EXISTS maquinas (
     marca VARCHAR(255),
     modelo VARCHAR(255),
     numero_identificacao VARCHAR(100),
-    numero_serie VARCHAR(100),
+    tipomaquina_id INT NULL,
     ano_fabricacao INT,
     setor VARCHAR(100),
-    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+    data_proxima_manutencao DATE NULL
 );
 
 CREATE TABLE IF NOT EXISTS checklist_itens (

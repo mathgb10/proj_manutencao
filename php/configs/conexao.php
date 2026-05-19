@@ -3,17 +3,20 @@ $sv = "localhost";
 $user = "root";
 $pass = "";
 $db = "manutencao_tds2026";
-$port = 3308;
 
 // Tente Conectar sem Porta definida, Se não der Entre pela Porta definida.
 
-$conn = mysqli_connect($sv, $user, $pass, $db, $port);
+$conn = mysqli_connect($sv, $user, $pass, $db);
+if ($conn) {
+    mysqli_set_charset($conn, "utf8mb4");
+}
 
 // Conexão com o banco de dados do projeto NR12
 $db_nr12 = "nr12";
-$conn_nr12 = mysqli_connect($sv, $user, $pass, $db_nr12, $port);
-
-// Fiz pq no do Senai precisa mas em my house não precisa. OBS: TIRA ESSE COMENTARIO NA HORA DE APRESENTAR
+$conn_nr12 = mysqli_connect($sv, $user, $pass, $db_nr12);
+if ($conn_nr12) {
+    mysqli_set_charset($conn_nr12, "utf8mb4");
+}
 
 function salvarLog($conn, $sql_command)
 {

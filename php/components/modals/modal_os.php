@@ -63,12 +63,46 @@
 
             <!-- Anexo -->
             <div class="modal-input">
-                <label for="os_anexo">Anexo (Opcional):</label>
-                <div class="input-wrapper">
-                    <input type="file" id="os_anexo" name="anexo" 
-                        style="width:100%;padding:10px;border:1px solid var(--corBordas);border-radius:8px;background:var(--corFundo);color:var(--corTxt3);cursor:pointer;">
+                <label>Anexo (Opcional):</label>
+                
+                <!-- Área de Clique para Upload -->
+                <div id="anexo-upload-container" onclick="document.getElementById('os_anexo').click()" style="
+                    display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    padding: 20px; border: 1.5px dashed var(--corBordas); border-radius: 10px;
+                    background: var(--corFundo); cursor: pointer; transition: all 0.2s ease-in-out;
+                    text-align: center; gap: 8px;"
+                    onmouseenter="this.style.borderColor='var(--corBase)'; this.style.background='rgba(252,35,35,0.03)';"
+                    onmouseleave="this.style.borderColor='var(--corBordas)'; this.style.background='var(--corFundo)';"
+                >
+                    <i class="bi bi-cloud-arrow-up" style="font-size: 1.8rem; color: var(--corBase);"></i>
+                    <span style="font-size: 0.85rem; font-weight: 500; color: var(--corTxt3);">Clique para fazer upload de um arquivo</span>
+                    <span style="font-size: 0.75rem; color: var(--corTxt3); opacity: 0.6;">JPG, PNG ou PDF (Máx. 5MB)</span>
                 </div>
-                <small style="opacity:.6; font-size:.75rem;">Formatos aceitos: JPG, PNG, PDF (Máx 5MB)</small>
+
+                <!-- Input oculto -->
+                <input type="file" id="os_anexo" name="anexo" accept=".jpg,.jpeg,.png,.pdf" onchange="atualizarFeedbackAnexo(this)" style="display: none;">
+
+                <!-- Área de visualização do arquivo selecionado -->
+                <div id="anexo-selecionado-box" style="
+                    display: none; align-items: center; justify-content: space-between;
+                    padding: 12px 16px; border: 1.5px solid var(--corBordas); border-radius: 10px;
+                    background: var(--corFundo); margin-top: 8px;"
+                >
+                    <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
+                        <i id="anexo-icon" class="bi bi-file-earmark" style="font-size: 1.3rem; color: var(--corBase); flex-shrink: 0;"></i>
+                        <span id="anexo-nome-arquivo" style="font-size: 0.85rem; font-weight: 500; color: var(--corTxt3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1;">
+                            Nome do arquivo.pdf
+                        </span>
+                    </div>
+                    <button type="button" onclick="removerAnexoSelecionado()" style="
+                        background: none; border: none; padding: 4px; cursor: pointer;
+                        color: var(--corBase); transition: opacity 0.2s; display: flex; align-items: center; justify-content: center;"
+                        onmouseenter="this.style.opacity='0.7'"
+                        onmouseleave="this.style.opacity='1'"
+                    >
+                        <i class="bi bi-x-circle-fill" style="font-size: 1.2rem;"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="modal-footer" style="margin-top:12px;">
@@ -269,6 +303,50 @@
                 </div>
             </div>
 
+            <!-- Anexo do Encaminhamento -->
+            <div class="modal-input" style="margin-bottom: 14px;">
+                <label>Anexo (Opcional):</label>
+                
+                <!-- Área de Clique para Upload -->
+                <div id="enc-anexo-upload-container" onclick="document.getElementById('enc_anexo').click()" style="
+                    display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    padding: 16px; border: 1.5px dashed var(--corBordas); border-radius: 10px;
+                    background: var(--corFundo); cursor: pointer; transition: all 0.2s ease-in-out;
+                    text-align: center; gap: 6px;"
+                    onmouseenter="this.style.borderColor='var(--corBase)'; this.style.background='rgba(252,35,35,0.03)';"
+                    onmouseleave="this.style.borderColor='var(--corBordas)'; this.style.background='var(--corFundo)';"
+                >
+                    <i class="bi bi-cloud-arrow-up" style="font-size: 1.6rem; color: var(--corBase);"></i>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: var(--corTxt3);">Clique para anexar um arquivo</span>
+                    <span style="font-size: 0.7rem; color: var(--corTxt3); opacity: 0.6;">JPG, PNG ou PDF (Máx. 5MB)</span>
+                </div>
+
+                <!-- Input oculto -->
+                <input type="file" id="enc_anexo" name="anexo" accept=".jpg,.jpeg,.png,.pdf" onchange="atualizarFeedbackEncAnexo(this)" style="display: none;">
+
+                <!-- Área de visualização do arquivo selecionado -->
+                <div id="enc-anexo-selecionado-box" style="
+                    display: none; align-items: center; justify-content: space-between;
+                    padding: 10px 14px; border: 1.5px solid var(--corBordas); border-radius: 10px;
+                    background: var(--corFundo); margin-top: 8px;"
+                >
+                    <div style="display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1;">
+                        <i id="enc-anexo-icon" class="bi bi-file-earmark" style="font-size: 1.2rem; color: var(--corBase); flex-shrink: 0;"></i>
+                        <span id="enc-anexo-nome-arquivo" style="font-size: 0.8rem; font-weight: 500; color: var(--corTxt3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1;">
+                            Nome do arquivo.pdf
+                        </span>
+                    </div>
+                    <button type="button" onclick="removerEncAnexoSelecionado()" style="
+                        background: none; border: none; padding: 4px; cursor: pointer;
+                        color: var(--corBase); transition: opacity 0.2s; display: flex; align-items: center; justify-content: center;"
+                        onmouseenter="this.style.opacity='0.7'"
+                        onmouseleave="this.style.opacity='1'"
+                    >
+                        <i class="bi bi-x-circle-fill" style="font-size: 1.1rem;"></i>
+                    </button>
+                </div>
+            </div>
+
             <div class="modal-footer">
                 <button type="button" class="os-btn-premium os-btn-encaminhar" onclick="encaminharOS()">
                     Confirmar Encaminhamento <i class="bi bi-send-check"></i>
@@ -379,7 +457,7 @@
         <div class="modal-form">
             <input type="hidden" id="obs_os_id">
             
-            <div class="modal-input">
+            <div class="modal-input" style="margin-bottom: 14px;">
                 <label for="campo_observacao">Sua Anotação:</label>
                 <div class="input-wrapper">
                     <textarea id="campo_observacao" placeholder="Digite aqui sua observação sobre esta O.S...." rows="4"
@@ -387,7 +465,51 @@
                 </div>
             </div>
 
-            <div class="modal-footer" style="gap: 10px; display:flex;">
+            <!-- Anexo da Observação -->
+            <div class="modal-input" style="margin-bottom: 14px;">
+                <label>Anexo (Opcional):</label>
+                
+                <!-- Área de Clique para Upload -->
+                <div id="obs-anexo-upload-container" onclick="document.getElementById('obs_anexo').click()" style="
+                    display: flex; flex-direction: column; align-items: center; justify-content: center;
+                    padding: 16px; border: 1.5px dashed var(--corBordas); border-radius: 10px;
+                    background: var(--corFundo); cursor: pointer; transition: all 0.2s ease-in-out;
+                    text-align: center; gap: 6px;"
+                    onmouseenter="this.style.borderColor='var(--corBase)'; this.style.background='rgba(252,35,35,0.03)';"
+                    onmouseleave="this.style.borderColor='var(--corBordas)'; this.style.background='var(--corFundo)';"
+                >
+                    <i class="bi bi-cloud-arrow-up" style="font-size: 1.6rem; color: var(--corBase);"></i>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: var(--corTxt3);">Clique para anexar um arquivo</span>
+                    <span style="font-size: 0.7rem; color: var(--corTxt3); opacity: 0.6;">JPG, PNG ou PDF (Máx. 5MB)</span>
+                </div>
+
+                <!-- Input oculto -->
+                <input type="file" id="obs_anexo" name="anexo" accept=".jpg,.jpeg,.png,.pdf" onchange="atualizarFeedbackObsAnexo(this)" style="display: none;">
+
+                <!-- Área de visualização do arquivo selecionado -->
+                <div id="obs-anexo-selecionado-box" style="
+                    display: none; align-items: center; justify-content: space-between;
+                    padding: 10px 14px; border: 1.5px solid var(--corBordas); border-radius: 10px;
+                    background: var(--corFundo); margin-top: 8px;"
+                >
+                    <div style="display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1;">
+                        <i id="obs-anexo-icon" class="bi bi-file-earmark" style="font-size: 1.2rem; color: var(--corBase); flex-shrink: 0;"></i>
+                        <span id="obs-anexo-nome-arquivo" style="font-size: 0.8rem; font-weight: 500; color: var(--corTxt3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; flex: 1;">
+                            Nome do arquivo.pdf
+                        </span>
+                    </div>
+                    <button type="button" onclick="removerObsAnexoSelecionado()" style="
+                        background: none; border: none; padding: 4px; cursor: pointer;
+                        color: var(--corBase); transition: opacity 0.2s; display: flex; align-items: center; justify-content: center;"
+                        onmouseenter="this.style.opacity='0.7'"
+                        onmouseleave="this.style.opacity='1'"
+                    >
+                        <i class="bi bi-x-circle-fill" style="font-size: 1.1rem;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="gap: 10px; display:flex; margin-top: 16px;">
                 <button onclick="salvarObservacao()" class="btn-confirmar-full confirmar" style="background:#607d8b;">
                     <i class="bi bi-save"></i> Salvar Observação
                 </button>

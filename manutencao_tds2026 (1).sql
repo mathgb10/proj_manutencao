@@ -4440,6 +4440,7 @@ INSERT INTO `ordens_servico` (`id`, `descricao`, `tipo`, `patrimonio`, `status`,
 CREATE TABLE `os_anexos` (
   `id` int(11) NOT NULL,
   `os_id` int(11) NOT NULL,
+  `historico_id` int(11) DEFAULT NULL,
   `nome_arquivo` varchar(255) NOT NULL,
   `caminho` varchar(500) NOT NULL,
   `criado_em` datetime DEFAULT current_timestamp()
@@ -4701,7 +4702,8 @@ ALTER TABLE `ordens_servico`
 -- Restrições para tabelas `os_anexos`
 --
 ALTER TABLE `os_anexos`
-  ADD CONSTRAINT `os_anexos_ibfk_1` FOREIGN KEY (`os_id`) REFERENCES `ordens_servico` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `os_anexos_ibfk_1` FOREIGN KEY (`os_id`) REFERENCES `ordens_servico` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `os_anexos_ibfk_2` FOREIGN KEY (`historico_id`) REFERENCES `os_historico` (`id`) ON DELETE SET NULL;
 
 --
 -- Restrições para tabelas `os_historico`

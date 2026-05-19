@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -44,16 +44,17 @@ if ($resOS->num_rows === 0) {
 
 $os = $resOS->fetch_assoc();
 
-// Apenas o responsável atual pode aceitar
-if ($os['responsavel_id'] != $usuario_id) {
-    echo json_encode(['success' => false, 'message' => 'Apenas o responsável atual pode aceitar esta O.S.']);
+// Apenas o responsável atual pode aceitar (ou qualquer um se estiver Em Aberto, ou ADMIN/GESTOR)
+$permissao = $_SESSION['user_permissao'] ?? 'NORMAL';
+if ($os['status'] !== 'Em Aberto' && $os['responsavel_id'] != $usuario_id && $permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
+    echo json_encode(['success' => false, 'message' => 'Apenas o responsável designado pode aceitar esta O.S.']);
     exit;
 }
 
-// Atualizar status para Aceita (responsavel_id permanece o mesmo, que já é o aceitante)
-$sqlUpdate = "UPDATE ordens_servico SET status = 'Aceita', anterior_responsavel_id = responsavel_id WHERE id = ?";
+// Atualizar status para Aceita, definindo o usuário atual como responsável e guardando o anterior
+$sqlUpdate = "UPDATE ordens_servico SET status = 'Aceita', responsavel_id = ?, anterior_responsavel_id = responsavel_id WHERE id = ?";
 $stmtUpdate = $conn->prepare($sqlUpdate);
-$stmtUpdate->bind_param("i", $os_id);
+$stmtUpdate->bind_param("ii", $usuario_id, $os_id);
 
 if ($stmtUpdate->execute()) {
     // Registrar no histórico

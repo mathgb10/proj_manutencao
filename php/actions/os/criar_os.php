@@ -51,8 +51,12 @@ try {
         $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
 
         if (in_array($ext, $allowed)) {
+            $diretorio = "../../../uploads/anexos_os/";
+            if (!is_dir($diretorio)) {
+                mkdir($diretorio, 0777, true);
+            }
             $novo_nome = "os_" . $os_id . "_" . time() . "." . $ext;
-            $destino = "../../../uploads/anexos_os/" . $novo_nome;
+            $destino = $diretorio . $novo_nome;
 
             if (move_uploaded_file($file['tmp_name'], $destino)) {
                 $sqlAnexo = "INSERT INTO os_anexos (os_id, nome_arquivo, caminho) VALUES (?, ?, ?)";
@@ -68,13 +72,13 @@ try {
     $desc_hist  = "O.S. criada por $solicitante_nome e encaminhada automaticamente para o gestor $responsavel_nome.";
     $sqlHist  = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, 'OS Criada', ?, ?, ?)";
     $stmtH = $conn->prepare($sqlHist);
-    $stmtH->bind_param("isiss", $os_id, $solicitante_id, $responsavel_id, $desc_hist);
+    $stmtH->bind_param("iiis", $os_id, $solicitante_id, $responsavel_id, $desc_hist);
     $stmtH->execute();
 
     $conn->commit();
     echo json_encode(['success' => true, 'message' => 'Ordem de Serviço criada com sucesso!', 'os_id' => $os_id]);
 
-} catch (Exception $e) {
+} catch (Throwable $e) {
     $conn->rollback();
     echo json_encode(['success' => false, 'message' => 'Erro ao criar O.S.: ' . $e->getMessage()]);
 }

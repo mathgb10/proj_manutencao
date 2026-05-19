@@ -1,0 +1,4 @@
+[20-May-2026 00:09:52 Europe/Berlin] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in C:\xampp\htdocs\senai\manutencao\php\actions\os\listar_os.php on line 16
+[20-May-2026 01:19:06 Europe/Berlin] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in C:\xampp\htdocs\senai\manutencao\php\actions\os\listar_os.php on line 16
+[20-May-2026 01:19:50 Europe/Berlin] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in C:\xampp\htdocs\senai\manutencao\php\actions\os\listar_os.php on line 16
+[20-May-2026 01:20:39 Europe/Berlin] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in C:\xampp\htdocs\senai\manutencao\php\actions\os\listar_os.php on line 16

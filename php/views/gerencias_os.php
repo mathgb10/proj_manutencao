@@ -98,7 +98,7 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
         </div>
 
         <!-- Tabela de O.S. -->
-        <div class="tabela-bg2" style="height: 55vh;">
+        <div class="tabela-bg2">
             <div class="tabela-titulo">
                 <i class="bi bi-file-earmark-text"></i>
                 <h2 id="os-titulo-tabela">Ordens de Serviço - Abertas</h2>
@@ -127,10 +127,11 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                     </tbody>
                 </table>
             </div>
+            <!-- Paginação AJAX Unificada -->
+            <div class="div-btns-change" style="border-top: 1px solid var(--corBordas); padding: 10px 25px;">
+                <div id="pagination-os-container" class="page-pagination" style="padding: 0;"></div>
+            </div>
         </div>
-
-        <!-- Paginação AJAX Unificada -->
-        <div id="pagination-os-container" class="page-pagination" style="margin-top: 15px;"></div>
     </section>
 
     <script src="../../js/scripts.js" defer></script>
@@ -230,11 +231,6 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
             const container = document.getElementById('pagination-os-container');
             if (!container) return;
 
-            if (total <= 1) {
-                container.innerHTML = '';
-                return;
-            }
-
             let html = '';
             
             // Botão Anterior
@@ -317,10 +313,27 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                     </button>`;
                 }
 
+                let maquinaInfo = '';
+                if (os.maquina_nome) {
+                    maquinaInfo = `<br><span style="font-size:0.75rem; color:var(--corTxt2); opacity:0.75; display:inline-flex; align-items:center; gap:4px; margin-top:2px;">
+                        <i class="bi bi-gear" style="font-size:0.7rem;"></i> ${os.maquina_nome} ${os.patrimonio ? `(${os.patrimonio})` : ''}
+                    </span>`;
+                } else if (os.patrimonio) {
+                    maquinaInfo = `<br><span style="font-size:0.75rem; color:var(--corTxt2); opacity:0.75; display:inline-flex; align-items:center; gap:4px; margin-top:2px;">
+                        <i class="bi bi-tag" style="font-size:0.7rem;"></i> NI/Patrimônio: ${os.patrimonio}
+                    </span>`;
+                }
+
                 return `
                     <tr>
-                        <td style="font-weight: bold; color: var(--corBase);">#${os.id}</td>
-                        <td style="text-align: left; padding-left: 10px;" title="${os.descricao}">${descResumida}</td>
+                        <td style="font-weight: bold; color: var(--corBase); white-space: nowrap;">
+                            #${os.id}
+                            ${parseInt(os.total_anexos || 0) > 0 ? '<i class="bi bi-paperclip" title="Possui anexo" style="color:var(--corBase); font-size:1.15rem; margin-left:4px; vertical-align: middle;"></i>' : ''}
+                        </td>
+                        <td style="text-align: left; padding-left: 10px;" title="${os.descricao}">
+                            ${descResumida}
+                            ${maquinaInfo}
+                        </td>
                         <td><span class="os-tipo-badge os-tipo-${os.tipo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')}">${os.tipo}</span></td>
                         <td>${os.solicitante_nome}</td>
                         <td>${os.responsavel_nome}</td>
@@ -330,7 +343,8 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                                 ${btns}
                             </div>
                         </td>
-                    </tr>`).join('');
+                    </tr>`;
+            }).join('');
         }
 
         function atualizarContadores(contadores) {
@@ -357,7 +371,7 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
             });
         }
 
-        // ---------- BUSCA DE PATRIMÔNIO NA MODAL ----------
+        // ---------- BUSCA DE PATRIMÔNIO ----------
         let patrimonioTimeout = null;
 
         async function buscarPatrimonio(termo) {
@@ -365,7 +379,7 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
             const container = document.getElementById('patrimonio-resultados');
 
             if (!termo || termo.length < 2) {
-                container.style.display = 'none';
+                if (container) container.style.display = 'none';
                 return;
             }
 
@@ -374,23 +388,34 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                     const res = await fetch(`../actions/machines/listar_maquinas.php?search=${encodeURIComponent(termo)}`);
                     const data = await res.json();
 
+                    if (!container) return;
+
                     if (data.success && data.dados && data.dados.length > 0) {
-                        container.innerHTML = data.dados.slice(0, 8).map(m =>
-                            `<div onclick="selecionarPatrimonio('${m.patrimonio || m.id}', '${(m.nome || m.descricao || 'Equipamento').replace(/'/g,"\\'")}')
+                        container.innerHTML = data.dados.slice(0, 8).map(m => {
+                            const mNome = m.nome || m.descricao || 'Equipamento';
+                            const mPatrimonio = m.patrimonio !== null && m.patrimonio !== undefined ? m.patrimonio.toString() : m.id.toString();
+                            const safeNome = mNome.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                            const safePatrimonio = mPatrimonio.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                            return `
+                            <div onclick="selecionarPatrimonioDesteElemento(this)"
+                                data-valor="${safePatrimonio}"
+                                data-label="${safeNome}"
                                 style="padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--corBordas);transition:.2s;"
                                 onmouseenter="this.style.background='var(--corFundo2)'"
                                 onmouseleave="this.style.background=''"
                             >
-                                <strong>${m.nome || m.descricao || 'Equipamento'}</strong>
-                                <span style="font-size:.8rem;opacity:.7;margin-left:8px;">${m.patrimonio || '#' + m.id}</span>
-                            </div>`
-                        ).join('');
+                                <strong>${mNome}</strong>
+                                <span style="font-size:.8rem;opacity:.7;margin-left:8px;">${mPatrimonio}</span>
+                            </div>
+                            `;
+                        }).join('');
                         container.style.display = 'block';
                     } else {
-                        // Permite digitar livremente mesmo sem resultado
+                        const safeTermo = termo.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
                         container.innerHTML = `<div style="padding:10px 14px;opacity:.6;">
                             <i class="bi bi-info-circle"></i> Nenhum equipamento encontrado. Clique abaixo para usar o texto digitado.
-                            <div onclick="selecionarPatrimonio('${termo}','${termo}')"
+                            <div onclick="selecionarPatrimonio('${safeTermo}','${safeTermo}')"
                                 style="margin-top:6px;padding:6px 10px;background:var(--corBase);color:#fff;border-radius:6px;cursor:pointer;text-align:center;font-size:.85rem;">
                                 Usar: "${termo}"
                             </div>
@@ -398,18 +423,32 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                         container.style.display = 'block';
                     }
                 } catch (e) {
-                    // Falha silenciosa na busca
-                    container.style.display = 'none';
+                    if (container) container.style.display = 'none';
                 }
             }, 350);
         }
 
+        function selecionarPatrimonioDesteElemento(el) {
+            const valor = el.getAttribute('data-valor');
+            const label = el.getAttribute('data-label');
+            selecionarPatrimonio(valor, label);
+        }
+
         function selecionarPatrimonio(valor, label) {
-            document.getElementById('os_patrimonio').value = valor;
-            document.getElementById('os_patrimonio_busca').value = label;
-            document.getElementById('patrimonio-resultados').style.display = 'none';
-            document.getElementById('patrimonio-selecionado').style.display = 'block';
-            document.getElementById('patrimonio-selecionado-texto').textContent = label + ' (NÃo: ' + valor + ')';
+            const inputPat = document.getElementById('os_patrimonio');
+            if (inputPat) inputPat.value = valor;
+
+            const inputBusca = document.getElementById('os_patrimonio_busca');
+            if (inputBusca) inputBusca.value = label;
+
+            const container = document.getElementById('patrimonio-resultados');
+            if (container) container.style.display = 'none';
+
+            const selecionado = document.getElementById('patrimonio-selecionado');
+            if (selecionado) selecionado.style.display = 'block';
+
+            const texto = document.getElementById('patrimonio-selecionado-texto');
+            if (texto) texto.textContent = label + ' (Nº: ' + valor + ')';
         }
 
         // Fechar dropdown ao clicar fora
@@ -454,13 +493,14 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                     document.getElementById('os_tipo').value = '';
                     document.getElementById('os_patrimonio').value = '';
                     document.getElementById('os_maquina_id').value = '';
+                    removerAnexoSelecionado();
                     // Reset display da máquina selecionada
                     const txt = document.getElementById('maquina-selecionada-texto');
                     if (txt) {
                         txt.textContent = 'Clique para selecionar uma máquina...';
                         txt.style.opacity = '.55';
                     }
-                    carregarOS();
+                    trocarAba('abertas');
                     exibirSucesso(data.message);
                 } else {
                     alert(data.message);
@@ -487,7 +527,8 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                     document.getElementById('detalhe-os-solicitante').textContent = os.solicitante_nome;
                     document.getElementById('detalhe-os-tipo').textContent = os.tipo;
                     document.getElementById('detalhe-os-status').innerHTML = `<span class="os-status-badge ${getStatusClass(os.status)}">${os.status}</span>`;
-                    document.getElementById('detalhe-os-patrimonio').textContent = os.patrimonio || 'Não informado';
+                    const maquinaInfoStr = os.maquina_nome ? `${os.maquina_nome} (${os.patrimonio || 'Sem NI'})` : (os.patrimonio || 'Não informado');
+                    document.getElementById('detalhe-os-patrimonio').textContent = maquinaInfoStr;
                     document.getElementById('detalhe-os-descricao').textContent = os.descricao;
                     document.getElementById('detalhe-os-origem').textContent = os.solicitante_nome;
                     document.getElementById('detalhe-os-destino').textContent = os.responsavel_nome;
@@ -574,23 +615,26 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
             const os_id = document.getElementById('encaminhar_os_id').value || osIdSelecionada;
             const responsavel_id = document.getElementById('encaminhar_responsavel').value;
             const motivo = document.getElementById('encaminhar_motivo').value.trim();
+            const anexoInput = document.getElementById('enc_anexo');
+            const anexo = anexoInput ? anexoInput.files[0] : null;
 
             if (!responsavel_id || !motivo) {
                 alert('Preencha todos os campos!');
                 return;
             }
 
+            const formData = new FormData();
+            formData.append('os_id', os_id);
+            formData.append('responsavel_id', responsavel_id);
+            formData.append('motivo', motivo);
+            if (anexo) {
+                formData.append('anexo', anexo);
+            }
+
             try {
                 const res = await fetch('../actions/os/encaminhar_os.php', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        os_id: parseInt(os_id),
-                        responsavel_id: parseInt(responsavel_id),
-                        motivo
-                    })
+                    body: formData
                 });
                 const data = await res.json();
 
@@ -598,6 +642,7 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                 closeModal('detalheOS');
                 document.getElementById('encaminhar_motivo').value = '';
                 document.getElementById('encaminhar_responsavel').value = '';
+                removerEncAnexoSelecionado();
 
                 if (data.success) {
                     trocarAba('andamento');
@@ -710,39 +755,49 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
         function abrirModalObservacao() {
             document.getElementById('obs_os_id').value = osIdSelecionada;
             document.getElementById('campo_observacao').value = '';
+            removerObsAnexoSelecionado();
             showModal('observacaoOSModal');
         }
 
         async function salvarObservacao() {
             const id = document.getElementById('obs_os_id').value;
             const obs = document.getElementById('campo_observacao').value.trim();
+            const anexoInput = document.getElementById('obs_anexo');
+            const anexo = anexoInput ? anexoInput.files[0] : null;
 
             if (!obs) {
                 alert('Digite uma observação para salvar!');
                 return;
             }
 
+            const formData = new FormData();
+            formData.append('os_id', id);
+            formData.append('observacao', obs);
+            if (anexo) {
+                formData.append('anexo', anexo);
+            }
+
             try {
                 const res = await fetch('../actions/os/adicionar_observacao.php', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        os_id: parseInt(id),
-                        observacao: obs
-                    })
+                    body: formData
                 });
                 const data = await res.json();
 
                 closeModal('observacaoOSModal');
+                removerObsAnexoSelecionado();
+                
                 if (data.success) {
                     exibirSucesso(data.message);
+                    if (typeof verDetalheOS === 'function' && typeof osIdSelecionada !== 'undefined' && osIdSelecionada) {
+                        verDetalheOS(osIdSelecionada);
+                    }
                 } else {
                     alert(data.message);
                 }
             } catch (err) {
                 console.error('Erro ao salvar observação:', err);
+                alert('Erro ao salvar observação');
             }
         }
 
@@ -770,6 +825,24 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                                 h.status.includes('Recusada') ? 'os-hist-recusada' :
                                 h.status.includes('Observação') ? 'os-hist-observacao' : '';
 
+                            let anexosHtml = '';
+                            if (h.anexos) {
+                                const listaAnexos = h.anexos.split(';;');
+                                anexosHtml = `<div class="os-hist-anexos" style="margin-top:10px; display:flex; flex-direction:column; gap:6px; border-top:1px dashed var(--corBordas); padding-top:8px;">
+                                    <span style="font-size:0.75rem; font-weight:bold; color:var(--corTxt3); opacity:0.7; display:flex; align-items:center; gap:4px;">
+                                        <i class="bi bi-paperclip"></i> Anexos vinculados:
+                                    </span>
+                                    ${listaAnexos.map(anexoStr => {
+                                        const partes = anexoStr.split('||');
+                                        const nome = partes[0] || 'Arquivo';
+                                        const caminho = partes[1] || '#';
+                                        return `<a href="${caminho}" target="_blank" class="os-anexo-link" style="font-size:0.8rem; color:var(--corBase); text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:0.2s;" onmouseenter="this.style.opacity=0.8" onmouseleave="this.style.opacity=1">
+                                            <i class="bi bi-file-earmark-arrow-down"></i> ${nome}
+                                        </a>`;
+                                    }).join('')}
+                                </div>`;
+                            }
+
                             return `
                                 <div class="os-timeline-item ${statusClass}">
                                     <div class="os-timeline-header">
@@ -779,6 +852,7 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                                     <div class="os-timeline-body">
                                         <p><strong>De:</strong> ${h.origem_nome} &nbsp;|&nbsp; <strong>Para:</strong> ${h.destino_nome}</p>
                                         <p class="os-timeline-desc">${h.descricao}</p>
+                                        ${anexosHtml}
                                     </div>
                                 </div>
                             `;
@@ -882,8 +956,17 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                 return;
             }
 
-            el.innerHTML = lista.map(m => `
-                <div onclick="selecionarMaquina(${m.id}, '${m.nome.replace(/'/g,"\\'")}', '${m.patrimonio.toString().replace(/'/g,"\\'")}')"
+            el.innerHTML = lista.map(m => {
+                const mNome = m.nome || '';
+                const mPatrimonio = m.patrimonio !== null && m.patrimonio !== undefined ? m.patrimonio.toString() : '';
+                const safeNome = mNome.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                const safePatrimonio = mPatrimonio.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+                return `
+                <div onclick="selecionarMaquinaDesteElemento(this)"
+                    data-id="${m.id}"
+                    data-nome="${safeNome}"
+                    data-patrimonio="${safePatrimonio}"
                     style="
                         display:flex;align-items:center;gap:14px;
                         padding:12px 16px;border-radius:10px;
@@ -896,37 +979,161 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                         <i class="bi bi-cpu" style="font-size:1.3rem;color:var(--corBase);"></i>
                     </div>
                     <div style="flex:1;min-width:0;">
-                        <div style="font-weight:700;color:var(--corTxt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.nome}</div>
+                        <div style="font-weight:700;color:var(--corTxt3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${mNome || 'Sem Nome'}</div>
                         <div style="font-size:.8rem;color:var(--corTxt3);opacity:.6;">
-                            NI: ${m.patrimonio}
+                            NI: ${mPatrimonio || 'Não informado'}
                             ${m.setor ? ' &nbsp;|&nbsp; Setor: ' + m.setor : ''}
                         </div>
                     </div>
                     <i class="bi bi-chevron-right" style="color:var(--corBase);opacity:.5;"></i>
                 </div>
-            `).join('');
+                `;
+            }).join('');
+        }
+
+        function selecionarMaquinaDesteElemento(el) {
+            const id = el.getAttribute('data-id');
+            const nome = el.getAttribute('data-nome');
+            const patrimonio = el.getAttribute('data-patrimonio');
+            selecionarMaquina(id, nome, patrimonio);
         }
 
         function selecionarMaquina(id, nome, patrimonio) {
             // Preenche os campos hidden
-            document.getElementById('os_maquina_id').value = id;
-            document.getElementById('os_patrimonio').value = patrimonio;
+            const inputId = document.getElementById('os_maquina_id');
+            if (inputId) inputId.value = id;
+
+            const inputPat = document.getElementById('os_patrimonio');
+            if (inputPat) inputPat.value = patrimonio;
 
             // Atualiza o display
             const box = document.getElementById('maquina-selecionada-texto');
-            box.textContent = '';
-            box.style.opacity = '1';
+            if (box) {
+                box.textContent = '';
+                box.style.opacity = '1';
 
-            // Ãcone check + nome + patrimônio
-            const icon = document.createElement('i');
-            icon.className = 'bi bi-check-circle-fill';
-            icon.style.color = 'var(--confirmar)';
-            icon.style.marginRight = '6px';
-            box.appendChild(icon);
-            box.appendChild(document.createTextNode(`${nome}  â€”  NI: ${patrimonio}`));
+                // Ícone check + nome + patrimônio
+                const icon = document.createElement('i');
+                icon.className = 'bi bi-check-circle-fill';
+                icon.style.color = 'var(--confirmar)';
+                icon.style.marginRight = '6px';
+                box.appendChild(icon);
+                box.appendChild(document.createTextNode(`${nome}  —  NI: ${patrimonio}`));
+            }
 
             // Fecha modal de pesquisa
             closeModal('modalPesquisaMaquina');
+        }
+
+        function atualizarFeedbackAnexo(input) {
+            const container = document.getElementById('anexo-upload-container');
+            const box = document.getElementById('anexo-selecionado-box');
+            const nomeSpan = document.getElementById('anexo-nome-arquivo');
+            const icon = document.getElementById('anexo-icon');
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                nomeSpan.textContent = file.name;
+                
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (ext === 'pdf') {
+                    icon.className = 'bi bi-file-earmark-pdf-fill';
+                } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
+                    icon.className = 'bi bi-file-earmark-image-fill';
+                } else {
+                    icon.className = 'bi bi-file-earmark-fill';
+                }
+
+                if (container) container.style.display = 'none';
+                if (box) box.style.display = 'flex';
+            } else {
+                removerAnexoSelecionado();
+            }
+        }
+
+        function removerAnexoSelecionado() {
+            const input = document.getElementById('os_anexo');
+            if (input) input.value = '';
+
+            const container = document.getElementById('anexo-upload-container');
+            const box = document.getElementById('anexo-selecionado-box');
+
+            if (container) container.style.display = 'flex';
+            if (box) box.style.display = 'none';
+        }
+
+        function atualizarFeedbackObsAnexo(input) {
+            const container = document.getElementById('obs-anexo-upload-container');
+            const box = document.getElementById('obs-anexo-selecionado-box');
+            const nomeSpan = document.getElementById('obs-anexo-nome-arquivo');
+            const icon = document.getElementById('obs-anexo-icon');
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                nomeSpan.textContent = file.name;
+                
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (ext === 'pdf') {
+                    icon.className = 'bi bi-file-earmark-pdf-fill';
+                } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
+                    icon.className = 'bi bi-file-earmark-image-fill';
+                } else {
+                    icon.className = 'bi bi-file-earmark-fill';
+                }
+
+                if (container) container.style.display = 'none';
+                if (box) box.style.display = 'flex';
+            } else {
+                removerObsAnexoSelecionado();
+            }
+        }
+
+        function removerObsAnexoSelecionado() {
+            const input = document.getElementById('obs_anexo');
+            if (input) input.value = '';
+
+            const container = document.getElementById('obs-anexo-upload-container');
+            const box = document.getElementById('obs-anexo-selecionado-box');
+
+            if (container) container.style.display = 'flex';
+            if (box) box.style.display = 'none';
+        }
+
+        function atualizarFeedbackEncAnexo(input) {
+            const container = document.getElementById('enc-anexo-upload-container');
+            const box = document.getElementById('enc-anexo-selecionado-box');
+            const nomeSpan = document.getElementById('enc-anexo-nome-arquivo');
+            const icon = document.getElementById('enc-anexo-icon');
+
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                nomeSpan.textContent = file.name;
+                
+                const ext = file.name.split('.').pop().toLowerCase();
+                if (ext === 'pdf') {
+                    icon.className = 'bi bi-file-earmark-pdf-fill';
+                } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
+                    icon.className = 'bi bi-file-earmark-image-fill';
+                } else {
+                    icon.className = 'bi bi-file-earmark-fill';
+                }
+
+                if (container) container.style.display = 'none';
+                if (box) box.style.display = 'flex';
+            } else {
+                removerEncAnexoSelecionado();
+            }
+        }
+
+        function removerEncAnexoSelecionado() {
+            const input = document.getElementById('enc_anexo');
+            if (input) input.value = '';
+
+            const container = document.getElementById('enc-anexo-upload-container');
+            const box = document.getElementById('enc-anexo-selecionado-box');
+
+            if (container) container.style.display = 'flex';
+            if (box) box.style.display = 'none';
         }
     </script>
 

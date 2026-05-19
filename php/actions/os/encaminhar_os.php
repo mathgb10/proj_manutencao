@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -12,16 +12,25 @@ require __DIR__ . '/../../configs/conexao.php';
 
 header('Content-Type: application/json');
 
-$input = json_decode(file_get_contents('php://input'), true);
+$os_id               = 0;
+$novo_responsavel_id = 0;
+$motivo              = '';
 
-if (!$input) {
-    echo json_encode(['success' => false, 'message' => 'Dados inválidos']);
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST)) {
+        $os_id               = intval($_POST['os_id'] ?? 0);
+        $novo_responsavel_id = intval($_POST['responsavel_id'] ?? 0);
+        $motivo              = trim($_POST['motivo'] ?? '');
+    } else {
+        $input = json_decode(file_get_contents('php://input'), true);
+        if ($input) {
+            $os_id               = intval($input['os_id'] ?? 0);
+            $novo_responsavel_id = intval($input['responsavel_id'] ?? 0);
+            $motivo              = trim($input['motivo'] ?? '');
+        }
+    }
 }
 
-$os_id               = intval($input['os_id'] ?? 0);
-$novo_responsavel_id = intval($input['responsavel_id'] ?? 0);
-$motivo              = trim($input['motivo'] ?? '');
 $usuario_id          = $_SESSION['user_id'] ?? 0;
 $usuario_nome        = $_SESSION['user_nome'] ?? 'Desconhecido';
 
@@ -37,7 +46,7 @@ if (empty($motivo)) {
 
 // Buscar OS atual
 $sqlOS = "SELECT os.*, resp.nome AS responsavel_nome FROM ordens_servico os
-          INNER JOIN usuarios resp ON os.responsavel_id = resp.id
+          LEFT JOIN usuarios resp ON os.responsavel_id = resp.id
           WHERE os.id = ?";
 $stmtOS = $conn->prepare($sqlOS);
 $stmtOS->bind_param("i", $os_id);
@@ -72,24 +81,66 @@ if ($resResp->num_rows === 0) {
 
 $novo_resp_nome = $resResp->fetch_assoc()['nome'];
 
-// Atualizar OS: salvar quem encaminhou como anterior_responsavel_id
-$sqlUpdate = "UPDATE ordens_servico SET status = 'Aguardando Aprovação', responsavel_id = ?, anterior_responsavel_id = ? WHERE id = ?";
-$stmtUpdate = $conn->prepare($sqlUpdate);
-$stmtUpdate->bind_param("iii", $novo_responsavel_id, $usuario_id, $os_id);
+// Iniciar Transação
+$conn->begin_transaction();
 
-if ($stmtUpdate->execute()) {
+try {
+    // Processar Anexo preliminarmente se houver
+    $anexo_dados = null;
+    if (isset($_FILES['anexo']) && $_FILES['anexo']['error'] === UPLOAD_ERR_OK) {
+        $file = $_FILES['anexo'];
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $allowed = ['jpg', 'jpeg', 'png', 'pdf'];
+
+        if (in_array($ext, $allowed)) {
+            $diretorio = "../../../uploads/anexos_os/";
+            if (!is_dir($diretorio)) {
+                mkdir($diretorio, 0777, true);
+            }
+            $novo_nome = "os_" . $os_id . "_" . time() . "_" . uniqid() . "." . $ext;
+            $destino = $diretorio . $novo_nome;
+
+            if (move_uploaded_file($file['tmp_name'], $destino)) {
+                $caminho_db = "../../uploads/anexos_os/" . $novo_nome;
+                $anexo_dados = [
+                    'nome' => $file['name'],
+                    'caminho' => $caminho_db
+                ];
+            }
+        }
+    }
+
+    // Atualizar OS: salvar quem encaminhou como anterior_responsavel_id
+    $sqlUpdate = "UPDATE ordens_servico SET status = 'Aguardando Aprovação', responsavel_id = ?, anterior_responsavel_id = ? WHERE id = ?";
+    $stmtUpdate = $conn->prepare($sqlUpdate);
+    $stmtUpdate->bind_param("iii", $novo_responsavel_id, $usuario_id, $os_id);
+    $stmtUpdate->execute();
+
     $desc_hist  = "O.S. encaminhada por $usuario_nome para $novo_resp_nome em " . date('d/m/Y H:i') . ". Motivo: $motivo";
+    if ($anexo_dados) {
+        $desc_hist .= "\n\n[Anexo adicionado: " . $anexo_dados['nome'] . "]";
+    }
     $status_hist = "OS Encaminhada";
 
     $sqlHist  = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
     $stmtHist = $conn->prepare($sqlHist);
-    if ($stmtHist) {
-        $stmtHist->bind_param("isiss", $os_id, $status_hist, $usuario_id, $novo_responsavel_id, $desc_hist);
-        $stmtHist->execute();
+    $stmtHist->bind_param("isiis", $os_id, $status_hist, $usuario_id, $novo_responsavel_id, $desc_hist);
+    $stmtHist->execute();
+    
+    $historico_id = $stmtHist->insert_id;
+
+    // Gravar anexo no banco se houver e estiver associado
+    if ($anexo_dados && $historico_id) {
+        $sqlAnexo = "INSERT INTO os_anexos (os_id, historico_id, nome_arquivo, caminho) VALUES (?, ?, ?, ?)";
+        $stmtA = $conn->prepare($sqlAnexo);
+        $stmtA->bind_param("iiss", $os_id, $historico_id, $anexo_dados['nome'], $anexo_dados['caminho']);
+        $stmtA->execute();
     }
 
+    $conn->commit();
     echo json_encode(['success' => true, 'message' => "O.S. encaminhada para $novo_resp_nome com sucesso!"]);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Erro ao encaminhar O.S.: ' . $conn->error]);
+} catch (Throwable $e) {
+    $conn->rollback();
+    echo json_encode(['success' => false, 'message' => 'Erro ao encaminhar O.S.: ' . $e->getMessage()]);
 }
 ?>

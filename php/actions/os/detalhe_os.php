@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Suprimir warnings/notices que quebram JSON
 error_reporting(0);
 ini_set('display_errors', 0);
@@ -35,10 +35,12 @@ $sql = "SELECT
             os.responsavel_id,
             os.anterior_responsavel_id,
             sol.nome AS solicitante_nome,
-            resp.nome AS responsavel_nome
+            resp.nome AS responsavel_nome,
+            maq.denominacao AS maquina_nome
         FROM ordens_servico os
-        INNER JOIN usuarios sol ON os.solicitante_id = sol.id
-        INNER JOIN usuarios resp ON os.responsavel_id = resp.id
+        LEFT JOIN usuarios sol ON os.solicitante_id = sol.id
+        LEFT JOIN usuarios resp ON os.responsavel_id = resp.id
+        LEFT JOIN maquinas maq ON os.patrimonio = maq.numero_identificacao
         WHERE os.id = ?";
 
 $stmt = $conn->prepare($sql);

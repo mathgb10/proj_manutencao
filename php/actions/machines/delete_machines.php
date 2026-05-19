@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../../configs/conexao.php');
+require_once __DIR__ . '/../../configs/conexao.php';
 
 $response = array('success' => false, 'message' => 'Erro desconhecido.');
 

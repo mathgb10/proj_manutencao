@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Suprimir warnings/notices que quebram JSON
 error_reporting(0);
 ini_set('display_errors', 0);
@@ -25,11 +25,12 @@ $sql = "SELECT
             h.status,
             h.descricao,
             h.criado_em,
-            ori.nome AS origem_nome,
-            dest.nome AS destino_nome
+            COALESCE(ori.nome, 'Usuário Excluído') AS origem_nome,
+            COALESCE(dest.nome, 'Usuário Excluído') AS destino_nome,
+            (SELECT GROUP_CONCAT(CONCAT(nome_arquivo, '||', caminho) SEPARATOR ';;') FROM os_anexos WHERE historico_id = h.id) AS anexos
         FROM os_historico h
-        INNER JOIN usuarios ori ON h.origem_id = ori.id
-        INNER JOIN usuarios dest ON h.destino_id = dest.id
+        LEFT JOIN usuarios ori ON h.origem_id = ori.id
+        LEFT JOIN usuarios dest ON h.destino_id = dest.id
         WHERE h.os_id = ?
         ORDER BY h.criado_em DESC";
 

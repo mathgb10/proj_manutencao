@@ -57,30 +57,27 @@ $types  = "";
  */
 
 if ($aba === 'abertas') {
-    $where .= " AND os.status IN ('Em Aberto', 'Aguardando Aprovação')";
-    if ($permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
-        $where .= " AND (os.solicitante_id = ? OR os.responsavel_id = ?)";
-        $params[] = $usuario_logado_id;
-        $params[] = $usuario_logado_id;
-        $types .= "ii";
-    }
+    $where .= " AND os.status = 'Em Aberto'";
+
 
 } elseif ($aba === 'andamento') {
-    $where .= " AND os.status = 'Aceita'";
+    $where .= " AND os.status IN ('Aceita', 'Aguardando Aprovação')";
     if ($permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
-        $where .= " AND (os.responsavel_id = ? OR os.solicitante_id = ?)";
+        $where .= " AND (os.responsavel_id = ? OR os.solicitante_id = ? OR os.anterior_responsavel_id = ?)";
         $params[] = $usuario_logado_id;
         $params[] = $usuario_logado_id;
-        $types .= "ii";
+        $params[] = $usuario_logado_id;
+        $types .= "iii";
     }
 
 } elseif ($aba === 'arquivadas') {
     $where .= " AND os.status = 'Arquivada'";
     if ($permissao !== 'ADMIN' && $permissao !== 'GESTOR') {
-        $where .= " AND (os.solicitante_id = ? OR os.responsavel_id = ?)";
+        $where .= " AND (os.solicitante_id = ? OR os.responsavel_id = ? OR os.anterior_responsavel_id = ?)";
         $params[] = $usuario_logado_id;
         $params[] = $usuario_logado_id;
-        $types .= "ii";
+        $params[] = $usuario_logado_id;
+        $types .= "iii";
     }
 
 } else {
@@ -90,14 +87,15 @@ if ($aba === 'abertas') {
 
 // Filtro de busca por texto (incluindo número da O.S.)
 if (!empty($busca)) {
-    $where .= " AND (os.id LIKE ? OR os.descricao LIKE ? OR sol.nome LIKE ? OR resp.nome LIKE ? OR os.patrimonio LIKE ?)";
+    $where .= " AND (os.id LIKE ? OR os.descricao LIKE ? OR sol.nome LIKE ? OR resp.nome LIKE ? OR os.patrimonio LIKE ? OR maq.denominacao LIKE ?)";
     $termo    = "%$busca%";
     $params[] = $termo;
     $params[] = $termo;
     $params[] = $termo;
     $params[] = $termo;
     $params[] = $termo;
-    $types   .= "sssss";
+    $params[] = $termo;
+    $types   .= "ssssss";
 }
 
 // Filtro rápido por Tipo
@@ -128,18 +126,22 @@ $sql = "SELECT
             os.responsavel_id,
             os.anterior_responsavel_id,
             sol.nome AS solicitante_nome,
-            resp.nome AS responsavel_nome
+            resp.nome AS responsavel_nome,
+            maq.denominacao AS maquina_nome,
+            (SELECT COUNT(*) FROM os_anexos WHERE os_id = os.id) AS total_anexos
         FROM ordens_servico os
-        INNER JOIN usuarios sol  ON os.solicitante_id = sol.id
-        INNER JOIN usuarios resp ON os.responsavel_id = resp.id
+        LEFT JOIN usuarios sol  ON os.solicitante_id = sol.id
+        LEFT JOIN usuarios resp ON os.responsavel_id = resp.id
+        LEFT JOIN maquinas maq   ON os.patrimonio = maq.numero_identificacao
         $where
         ORDER BY os.criado_em DESC";
 
 // --- Cálculo de Paginação ---
 $sql_count = "SELECT COUNT(*) as total 
               FROM ordens_servico os
-              INNER JOIN usuarios sol  ON os.solicitante_id = sol.id
-              INNER JOIN usuarios resp ON os.responsavel_id = resp.id
+              LEFT JOIN usuarios sol  ON os.solicitante_id = sol.id
+              LEFT JOIN usuarios resp ON os.responsavel_id = resp.id
+              LEFT JOIN maquinas maq   ON os.patrimonio = maq.numero_identificacao
               $where";
 $stmt_count = $conn->prepare($sql_count);
 if ($stmt_count) {
@@ -153,6 +155,11 @@ if ($stmt_count) {
     $total_paginas = 1;
 }
 if ($total_paginas == 0) $total_paginas = 1;
+
+if ($pagina_atual > $total_paginas) {
+    $pagina_atual = $total_paginas;
+    $offset = ($pagina_atual - 1) * $limite;
+}
 
 $sql .= " LIMIT $limite OFFSET $offset";
 
@@ -178,19 +185,19 @@ while ($linha = $resultado->fetch_assoc()) {
 // ---- Contadores para as 3 abas (respeitando visibilidade) ----
 if ($permissao === 'ADMIN' || $permissao === 'GESTOR') {
     $sqlCount = "SELECT
-        SUM(CASE WHEN status IN ('Em Aberto', 'Aguardando Aprovação') THEN 1 ELSE 0 END) AS abertas,
-        SUM(CASE WHEN status = 'Aceita' THEN 1 ELSE 0 END) AS andamento,
+        SUM(CASE WHEN status = 'Em Aberto' THEN 1 ELSE 0 END) AS abertas,
+        SUM(CASE WHEN status IN ('Aceita', 'Aguardando Aprovação') THEN 1 ELSE 0 END) AS andamento,
         SUM(CASE WHEN status = 'Arquivada' THEN 1 ELSE 0 END) AS arquivadas
     FROM ordens_servico";
     $resCount = $conn->query($sqlCount);
 } else {
     $sqlCount = "SELECT
-        SUM(CASE WHEN status IN ('Em Aberto', 'Aguardando Aprovação') 
-                 AND (solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS abertas,
-        SUM(CASE WHEN status = 'Aceita'
-                 AND (responsavel_id = $usuario_logado_id OR solicitante_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS andamento,
+        SUM(CASE WHEN status = 'Em Aberto' 
+                 AND (solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id OR anterior_responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS abertas,
+        SUM(CASE WHEN status IN ('Aceita', 'Aguardando Aprovação')
+                 AND (responsavel_id = $usuario_logado_id OR solicitante_id = $usuario_logado_id OR anterior_responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS andamento,
         SUM(CASE WHEN status = 'Arquivada'
-                 AND (solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS arquivadas
+                 AND (solicitante_id = $usuario_logado_id OR responsavel_id = $usuario_logado_id OR anterior_responsavel_id = $usuario_logado_id) THEN 1 ELSE 0 END) AS arquivadas
     FROM ordens_servico";
     $resCount = $conn->query($sqlCount);
 }

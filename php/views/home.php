@@ -1,5 +1,5 @@
-﻿<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
-<?php require_once __DIR__ . "\..\configs\conexao.php"; ?>
+<?php require __DIR__ . '/../controllers/validar_acesso.php'; ?>
+<?php require_once __DIR__ . "/../configs/conexao.php"; ?>
 <?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-br" data-tema="">

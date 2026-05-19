@@ -135,10 +135,12 @@ CREATE TABLE IF NOT EXISTS os_historico (
 CREATE TABLE IF NOT EXISTS os_anexos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     os_id INT NOT NULL,
+    historico_id INT NULL,
     nome_arquivo VARCHAR(255) NOT NULL,
     caminho VARCHAR(500) NOT NULL,
     criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (os_id) REFERENCES ordens_servico(id) ON DELETE CASCADE
+    FOREIGN KEY (os_id) REFERENCES ordens_servico(id) ON DELETE CASCADE,
+    FOREIGN KEY (historico_id) REFERENCES os_historico(id) ON DELETE SET NULL
 );
 
 -- =============================================

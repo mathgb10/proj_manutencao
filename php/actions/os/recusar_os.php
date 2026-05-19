@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 error_reporting(0);
 ini_set('display_errors', 0);
 
@@ -82,7 +82,7 @@ if ($stmtUpdate->execute()) {
     $sqlHist  = "INSERT INTO os_historico (os_id, status, origem_id, destino_id, descricao) VALUES (?, ?, ?, ?, ?)";
     $stmtHist = $conn->prepare($sqlHist);
     if ($stmtHist) {
-        $stmtHist->bind_param("isiss", $os_id, $status_hist, $usuario_id, $volta_para_id, $desc_hist);
+        $stmtHist->bind_param("isiis", $os_id, $status_hist, $usuario_id, $volta_para_id, $desc_hist);
         $stmtHist->execute();
     }
 

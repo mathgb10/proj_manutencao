@@ -40,7 +40,7 @@
         <div class="login-box">
             <form class="login-form" action="php/actions/auth_login.php" method="POST">
                 <div class="div-img">
-                    <img src="assets/imgs/senailogo1.png" alt="Logo Senai" id="senai-logo" style="width: 70%;">
+                    <img src="assets/imgs/senailogo.png" alt="Logo Senai" id="senai-logo" style="width: 70%;">
                 </div>
                 <?php if (isset($erro))
                     echo $erro; ?>

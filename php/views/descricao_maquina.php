@@ -48,7 +48,7 @@ $resultado = $conn_nr12->query($sql);
     <link rel="stylesheet" href="../../css/modal.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="shortcut icon" href="../../../favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../../assets/icons/favicon.ico" type="image/x-icon">
     <script src="../../js/scripts.js" defer></script>
 
 </head>

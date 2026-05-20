@@ -27,7 +27,7 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
     <link rel="stylesheet" href="../../css/modal.css">
     <link rel="stylesheet" href="../../css/global.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../../assets/icons/favicon.ico" type="image/x-icon">
     <style>
         .os-hist-observacao {
             border-left: 4px solid #607d8b !important;

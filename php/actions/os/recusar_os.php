@@ -58,8 +58,8 @@ if ($os['responsavel_id'] != $usuario_id) {
     exit;
 }
 
-// Determinar para quem volta: anterior_responsavel_id ou solicitante como fallback
-$volta_para_id = intval($os['anterior_responsavel_id'] ?? $os['solicitante_id']);
+// Determinar para quem volta: solicitante
+$volta_para_id = intval($os['solicitante_id']);
 
 // Buscar nome de quem vai receber de volta
 $sqlPrev = "SELECT nome FROM usuarios WHERE id = ?";
@@ -69,10 +69,10 @@ $stmtPrev->execute();
 $resPrev = $stmtPrev->get_result();
 $prev_nome = ($resPrev->num_rows > 0) ? $resPrev->fetch_assoc()['nome'] : 'Anterior';
 
-// Atualizar OS: volta o responsável ao anterior, status = Em Aberto, anterior_responsavel_id = quem recusou (para cadeia)
-$sqlUpdate = "UPDATE ordens_servico SET status = 'Em Aberto', responsavel_id = ?, anterior_responsavel_id = ? WHERE id = ?";
+// Atualizar OS: volta o responsável, status = Em Aberto
+$sqlUpdate = "UPDATE ordens_servico SET status = 'Em Aberto', responsavel_id = ? WHERE id = ?";
 $stmtUpdate = $conn->prepare($sqlUpdate);
-$stmtUpdate->bind_param("iii", $volta_para_id, $usuario_id, $os_id);
+$stmtUpdate->bind_param("ii", $volta_para_id, $os_id);
 
 if ($stmtUpdate->execute()) {
     // Registrar no histórico

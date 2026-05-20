@@ -67,6 +67,7 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                         <option value="abertas">Abertas</option>
                         <option value="andamento">Andamento</option>
                         <option value="arquivadas">Arquivadas</option>
+                        <option value="todas">Todas</option>
                     </select>
                 </div>
                 <?php if (!empty($tipos_os_lista)): ?>
@@ -128,7 +129,7 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                 </table>
             </div>
             <!-- Paginação AJAX Unificada -->
-            <div class="div-btns-change" style="border-top: 1px solid var(--corBordas); padding: 10px 25px;">
+            <div class="div-btns-change" style="display: flex; justify-content: center; width: 100%; border-top: 1px solid var(--corBordas); padding: 10px 25px;">
                 <div id="pagination-os-container" class="page-pagination" style="padding: 0;"></div>
             </div>
         </div>
@@ -153,10 +154,17 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
         const TITULOS_ABA = {
             abertas: 'Ordens de Serviço - Abertas',
             andamento: 'Ordens de Serviço - Em Andamento',
-            arquivadas: 'Ordens de Serviço - Arquivadas'
+            arquivadas: 'Ordens de Serviço - Arquivadas',
+            todas: 'Ordens de Serviço - Todas'
         };
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Sincroniza a aba atual com o select (navegador pode manter o valor no F5)
+            const selectAba = document.getElementById('select-filtro-os');
+            if (selectAba) {
+                abaAtual = selectAba.value;
+                document.getElementById('os-titulo-tabela').textContent = TITULOS_ABA[abaAtual] || 'Ordens de Serviço';
+            }
             carregarOS();
 
             // Verifica se há um ID de O.S. na URL para abrir automaticamente (vindo das notificações)
@@ -595,7 +603,8 @@ if ($r) { while ($row = $r->fetch_assoc()) $responsaveis_os_lista[] = $row['nome
                 closeModal('detalheOS');
 
                 if (data.success) {
-                    trocarAba('andamento');
+                    if (abaAtual !== 'todas') trocarAba('andamento');
+                    else carregarOS();
                     exibirSucesso(data.message);
                 } else {
                     alert(data.message);

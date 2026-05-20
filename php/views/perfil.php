@@ -149,6 +149,7 @@ $user_data = $stmt->get_result()->fetch_assoc();
         </div>
     </section>
 
+    <?php require __DIR__ . '/../components/modals/all_modals.php'; ?>
     <script src="../../js/scripts.js" defer></script>
 </body>
 

@@ -52,7 +52,7 @@ if ($os['status'] !== 'Em Aberto' && $os['responsavel_id'] != $usuario_id && $pe
 }
 
 // Atualizar status para Aceita, definindo o usuário atual como responsável e guardando o anterior
-$sqlUpdate = "UPDATE ordens_servico SET status = 'Aceita', responsavel_id = ?, anterior_responsavel_id = responsavel_id WHERE id = ?";
+$sqlUpdate = "UPDATE ordens_servico SET status = 'Aceita', responsavel_id = ? WHERE id = ?";
 $stmtUpdate = $conn->prepare($sqlUpdate);
 $stmtUpdate->bind_param("ii", $usuario_id, $os_id);
 

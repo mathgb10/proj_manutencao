@@ -37,10 +37,10 @@ $responsavel_nome = $gestor['nome'];
 $conn->begin_transaction();
 
 try {
-    $sql = "INSERT INTO ordens_servico (descricao, tipo, patrimonio, status, solicitante_id, responsavel_id, anterior_responsavel_id)
-            VALUES (?, ?, ?, 'Em Aberto', ?, ?, ?)";
+    $sql = "INSERT INTO ordens_servico (descricao, tipo, patrimonio, status, solicitante_id, responsavel_id)
+            VALUES (?, ?, ?, 'Em Aberto', ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssiii", $descricao, $tipo, $patrimonio, $solicitante_id, $responsavel_id, $solicitante_id);
+    $stmt->bind_param("sssii", $descricao, $tipo, $patrimonio, $solicitante_id, $responsavel_id);
     $stmt->execute();
     $os_id = $stmt->insert_id;
 

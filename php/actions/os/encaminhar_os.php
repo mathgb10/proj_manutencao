@@ -110,10 +110,10 @@ try {
         }
     }
 
-    // Atualizar OS: salvar quem encaminhou como anterior_responsavel_id
-    $sqlUpdate = "UPDATE ordens_servico SET status = 'Aguardando Aprovação', responsavel_id = ?, anterior_responsavel_id = ? WHERE id = ?";
+    // Atualizar OS
+    $sqlUpdate = "UPDATE ordens_servico SET status = 'Aguardando Aprovação', responsavel_id = ? WHERE id = ?";
     $stmtUpdate = $conn->prepare($sqlUpdate);
-    $stmtUpdate->bind_param("iii", $novo_responsavel_id, $usuario_id, $os_id);
+    $stmtUpdate->bind_param("ii", $novo_responsavel_id, $os_id);
     $stmtUpdate->execute();
 
     $desc_hist  = "O.S. encaminhada por $usuario_nome para $novo_resp_nome em " . date('d/m/Y H:i') . ". Motivo: $motivo";

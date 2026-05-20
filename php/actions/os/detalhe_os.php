@@ -33,7 +33,6 @@ $sql = "SELECT
             os.atualizado_em,
             os.solicitante_id,
             os.responsavel_id,
-            os.anterior_responsavel_id,
             sol.nome AS solicitante_nome,
             resp.nome AS responsavel_nome,
             maq.denominacao AS maquina_nome
